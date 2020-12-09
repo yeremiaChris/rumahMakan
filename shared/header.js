@@ -1,7 +1,6 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-
-import {IconButton, Colors, Searchbar} from 'react-native-paper';
+import {IconButton, Colors, Searchbar, Badge} from 'react-native-paper';
 export default function homeMakan({navigation}) {
   const [searchQuery, setSearchQuery] = React.useState('');
 
@@ -11,10 +10,23 @@ export default function homeMakan({navigation}) {
       <View style={styles.headerSatu}>
         <IconButton
           icon="menu"
-          color="black"
+          color="white"
           size={25}
           onPress={() => navigation.openDrawer()}
         />
+        <View style={styles.badge}>
+          <IconButton
+            style={styles.icon}
+            icon="basket"
+            color="white"
+            size={25}
+            onPress={() => navigation.openDrawer()}
+          />
+          {/* <Text>2</Text> */}
+          <Badge style={styles.badgeContent} size={10} icon="basket">
+            2
+          </Badge>
+        </View>
       </View>
       <View style={styles.searchWrap}>
         <Searchbar
@@ -29,9 +41,24 @@ export default function homeMakan({navigation}) {
 }
 
 const styles = StyleSheet.create({
+  badgeContent: {
+    alignSelf: 'center',
+    position: 'relative',
+    right: 10,
+    bottom: 10,
+  },
+  badge: {
+    width: 50,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignContent: 'center',
+  },
   headerSatu: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
   },
   textHeader: {
     color: 'black',
@@ -46,6 +73,9 @@ const styles = StyleSheet.create({
   },
   searchWrap: {
     alignItems: 'center',
-    marginTop: 20,
+  },
+  wrap: {
+    backgroundColor: '#114444',
+    height: 130,
   },
 });

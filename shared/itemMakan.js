@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, View, Text, FlatList} from 'react-native';
+import {StyleSheet, View, Text, ScrollView} from 'react-native';
 import {
   Avatar,
   Button,
@@ -9,46 +9,51 @@ import {
   IconButton,
   Colors,
 } from 'react-native-paper';
-export default function itemMakan(item) {
+export default function itemMakan({data}) {
   return (
-    <View style={styles.wrapContent}>
-      <Card style={styles.card}>
-        <Card.Cover
-          source={{
-            uri:
-              'https://images.unsplash.com/photo-1509042239860-f550ce710b93?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80',
-          }}
-        />
-        <Card.Content style={styles.cardContent}>
-          <Paragraph style={styles.textTitle}>{item.name}</Paragraph>
-          <Text style={styles.price}>{item.price} K</Text>
-        </Card.Content>
-        <Card.Actions style={styles.cardAction}>
-          <View style={styles.jumlah}>
-            <IconButton
-              style={styles.iconButton}
-              icon="plus"
-              color="white"
-              size={15}
-              onPress={() => console.log('Pressed')}
+    <ScrollView
+      contentContainerStyle={styles.wrapContent}
+      showsVerticalScrollIndicator={false}>
+      {data &&
+        data.map((item) => (
+          <Card style={styles.card} key={item.key}>
+            <Card.Cover
+              source={{
+                uri:
+                  'https://images.unsplash.com/photo-1509042239860-f550ce710b93?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80',
+              }}
             />
-            <Text>0</Text>
-            <IconButton
-              style={styles.iconButton}
-              icon="minus"
-              color="white"
-              size={15}
-              onPress={() => console.log('Pressed')}
-            />
-          </View>
-        </Card.Actions>
-        <Card.Actions style={styles.cardAction}>
-          <View style={styles.addCard}>
-            <Text style={styles.textAddCard}>Add To Card</Text>
-          </View>
-        </Card.Actions>
-      </Card>
-    </View>
+            <Card.Content style={styles.cardContent}>
+              <Paragraph style={styles.textTitle}>{item.name}</Paragraph>
+              <Text style={styles.price}>{item.price} K</Text>
+            </Card.Content>
+            <Card.Actions style={styles.cardAction}>
+              <View style={styles.jumlah}>
+                <IconButton
+                  style={styles.iconButton}
+                  icon="plus"
+                  color="white"
+                  size={15}
+                  onPress={() => console.log('Pressed')}
+                />
+                <Text>0</Text>
+                <IconButton
+                  style={styles.iconButton}
+                  icon="minus"
+                  color="white"
+                  size={15}
+                  onPress={() => console.log('Pressed')}
+                />
+              </View>
+            </Card.Actions>
+            <Card.Actions style={styles.cardAction}>
+              <View style={styles.addCard}>
+                <Text style={styles.textAddCard}>Add To Card</Text>
+              </View>
+            </Card.Actions>
+          </Card>
+        ))}
+    </ScrollView>
   );
 }
 
