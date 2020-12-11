@@ -9,7 +9,7 @@ import {
   Badge,
 } from 'react-native-paper';
 import {StyleSheet, View} from 'react-native';
-export default function modal() {
+function modal() {
   return (
     <Provider>
       <Portal>
@@ -23,3 +23,5 @@ export default function modal() {
     </Provider>
   );
 }
+
+export default React.memo(modal);

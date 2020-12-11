@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {IconButton, Colors, Searchbar, Badge} from 'react-native-paper';
 import Modal from '../shared/modal';
-export default function homeMakan({navigation}) {
+function header({navigation}) {
   const [searchQuery, setSearchQuery] = React.useState('');
 
   const onChangeSearch = (query) => setSearchQuery(query);
@@ -43,6 +43,7 @@ export default function homeMakan({navigation}) {
   );
 }
 
+export default React.memo(header);
 const styles = StyleSheet.create({
   badge: {
     width: 50,

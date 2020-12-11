@@ -1,49 +1,81 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Card, Title, Paragraph, IconButton} from 'react-native-paper';
-import {StyleSheet, View, Text, Image, FlatList} from 'react-native';
-export default function makanan({item, add}) {
+import {
+  StyleSheet,
+  View,
+  Text,
+  Image,
+  FlatList,
+  TouchableOpacity,
+} from 'react-native';
+function item({item, increment, decrement, orderColor, cancelOrder}) {
   return (
     <View style={styles.container}>
       <FlatList
         contentContainerStyle={styles.cardWrap}
         data={item}
         keyExtractor={(item) => item.key}
-        renderItem={({item}) => (
-          <Card style={styles.card}>
-            <Card.Content style={styles.contentCard}>
-              <View>
-                <Title>{item.name}</Title>
-                <Paragraph>Rp {item.price} K</Paragraph>
-              </View>
-              <View>
-                <View style={styles.jumlah}>
-                  <IconButton
-                    style={styles.iconButton}
-                    icon="plus"
-                    color="white"
-                    size={15}
-                    onPress={() => add()}
-                  />
-                  <Text>{item.quantity}</Text>
-                  <IconButton
-                    style={styles.iconButton}
-                    icon="minus"
-                    color="white"
-                    size={15}
-                    onPress={() => console.log('Pressed')}
-                  />
+        renderItem={({item}) => {
+          return (
+            <Card style={styles.card}>
+              <Card.Content style={styles.contentCard}>
+                <View>
+                  <Title>{item.name}</Title>
+                  <Paragraph>Rp {item.price} K</Paragraph>
                 </View>
-                <View style={styles.addCard}>
-                  <Text style={styles.textAddCard}>Order</Text>
+                <View>
+                  <View style={styles.jumlah}>
+                    <IconButton
+                      style={styles.iconButton}
+                      icon="plus"
+                      color="white"
+                      size={15}
+                      onPress={() => {
+                        item.order === false ? increment(item.key) : null;
+                      }}
+                    />
+                    <Text>{item.quantity}</Text>
+                    <IconButton
+                      style={styles.iconButton}
+                      icon="minus"
+                      color="white"
+                      size={15}
+                      onPress={() => {
+                        item.order === false ? decrement(item.key) : null;
+                      }}
+                    />
+                  </View>
+                  <TouchableOpacity
+                    activeOpacity={0.9}
+                    onPress={() => {
+                      item.order === false
+                        ? orderColor(
+                            item.key,
+                            item.quantity,
+                            item.quantity * item.price,
+                            item.name,
+                          )
+                        : cancelOrder(item.key);
+                    }}>
+                    <View
+                      style={[
+                        styles.addCard,
+                        {backgroundColor: item.orderColor},
+                      ]}>
+                      <Text style={styles.textAddCard}>{item.orderText}</Text>
+                    </View>
+                  </TouchableOpacity>
                 </View>
-              </View>
-            </Card.Content>
-          </Card>
-        )}
+              </Card.Content>
+            </Card>
+          );
+        }}
       />
     </View>
   );
 }
+
+export default React.memo(item);
 
 const styles = StyleSheet.create({
   cardWrap: {
@@ -66,7 +98,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   addCard: {
-    backgroundColor: 'orange',
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'space-between',

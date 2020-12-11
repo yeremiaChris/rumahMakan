@@ -1,21 +1,27 @@
 import React from 'react';
 import {StyleSheet, View, Text} from 'react-native';
 
-export default function bottomBar() {
+function bottomBar({totalHarga}) {
   return (
     <View style={styles.containerDuaBottom}>
       <View style={styles.wrapTotal}>
         <View style={styles.totalCard}>
           <Text>Total</Text>
-          <Text style={styles.price}>Rp. 0 K</Text>
+          <Text style={styles.price}>Rp. {totalHarga} K</Text>
         </View>
-        <View style={styles.addCardDua}>
-          <Text style={styles.textAddCard}>Make Order</Text>
+        <View style={styles.wrapButton}>
+          <View style={[styles.addCardDua, {marginBottom: 2}]}>
+            <Text style={styles.textAddCard}>Make Order</Text>
+          </View>
+          <View style={[styles.addCardDua, {backgroundColor: 'tan'}]}>
+            <Text style={styles.textAddCard}>Reset</Text>
+          </View>
         </View>
       </View>
     </View>
   );
 }
+export default React.memo(bottomBar);
 
 const styles = StyleSheet.create({
   containerDua: {
@@ -23,12 +29,12 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   wrapTotal: {
-    justifyContent: 'center',
+    justifyContent: 'space-around',
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'white',
     width: '95%',
-    padding: 10,
+    padding: 4,
     elevation: 20,
     borderRadius: 20,
     position: 'relative',
@@ -48,10 +54,9 @@ const styles = StyleSheet.create({
   },
   addCardDua: {
     backgroundColor: '#114444',
-    width: '50%',
     borderRadius: 10,
     alignItems: 'center',
-    padding: 10,
+    padding: 8,
   },
   textAddCard: {
     color: 'white',

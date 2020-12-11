@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
 import {Chip} from 'react-native-paper';
 import {StyleSheet, View, FlatList, Text} from 'react-native';
-export default function chip({setItem, minum, makan}) {
+
+function chip({setItem, minum, makan}) {
   const data = [
     {
       chip: 'Makanan',
@@ -46,6 +47,7 @@ export default function chip({setItem, minum, makan}) {
     </View>
   );
 }
+export default React.memo(chip);
 
 const styles = StyleSheet.create({
   chipChild: {
