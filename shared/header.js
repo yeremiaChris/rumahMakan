@@ -1,10 +1,19 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {IconButton, Colors, Searchbar, Badge} from 'react-native-paper';
+import Modal from '../shared/modal';
 export default function homeMakan({navigation}) {
   const [searchQuery, setSearchQuery] = React.useState('');
 
   const onChangeSearch = (query) => setSearchQuery(query);
+
+  // modal
+  const [visible, setVisible] = React.useState(false);
+
+  const showModal = () => setVisible(true);
+  const hideModal = () => setVisible(false);
+  const containerStyle = {backgroundColor: 'white', padding: 20};
+
   return (
     <View style={styles.wrap}>
       <View style={styles.headerSatu}>
@@ -15,13 +24,7 @@ export default function homeMakan({navigation}) {
           onPress={() => navigation.openDrawer()}
         />
         <View style={styles.badge}>
-          <IconButton
-            style={styles.icon}
-            icon="basket"
-            color="white"
-            size={25}
-            onPress={() => navigation.openDrawer()}
-          />
+          <IconButton icon="basket" color="white" size={25} />
           {/* <Text>2</Text> */}
           <Badge style={styles.badgeContent} size={10} icon="basket">
             2
@@ -41,12 +44,6 @@ export default function homeMakan({navigation}) {
 }
 
 const styles = StyleSheet.create({
-  badgeContent: {
-    alignSelf: 'center',
-    position: 'relative',
-    right: 10,
-    bottom: 10,
-  },
   badge: {
     width: 50,
     flexDirection: 'row',
@@ -54,6 +51,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignContent: 'center',
     alignContent: 'center',
+  },
+  badgeContent: {
+    alignSelf: 'center',
+    position: 'relative',
+    right: 10,
+    bottom: 10,
   },
   headerSatu: {
     flexDirection: 'row',

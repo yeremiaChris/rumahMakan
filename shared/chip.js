@@ -1,34 +1,29 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Chip} from 'react-native-paper';
 import {StyleSheet, View, FlatList, Text} from 'react-native';
-export default function chip({setData, dataDua}) {
+export default function chip({setItem, minum, makan}) {
   const data = [
     {
       chip: 'Makanan',
       id: '1',
-      item: dataDua,
+      item: makan,
+      select: false,
     },
-    // {
-    //   chip: 'Minuman',
-    //   id: '2',
-    // },
-    // {
-    //   chip: 'Penutup',
-    //   id: '3',
-    // },
-    // {
-    //   chip: 'Cemilan',
-    //   id: '4',
-    // },
-    // {
-    //   chip: 'Ice Cream',
-    //   id: '5',
-    // },
+    {
+      chip: 'Minuman',
+      id: '2',
+      item: minum,
+      select: false,
+    },
   ];
 
+  // untuk mengganti item
+  const [chip, setChip] = useState(data);
   const chipPress = (items) => {
-    setData(items);
+    setItem(items);
   };
+  // selected chip
+  const selectChip = () => {};
 
   return (
     <View style={styles.containerChip}>
@@ -37,11 +32,14 @@ export default function chip({setData, dataDua}) {
         showsHorizontalScrollIndicator={false}
         style={styles.chip}
         horizontal
-        data={data}
+        data={chip}
         keyExtractor={(item) => item.id}
         renderItem={({item}) => (
-          <Chip onPress={() => chipPress(item.item)} style={styles.chipChild}>
-            {item.chip}
+          <Chip
+            selected={item.select}
+            onPress={() => chipPress(item.item)}
+            style={styles.chipChild}>
+            <Text style={styles.text}>{item.chip}</Text>
           </Chip>
         )}
       />
@@ -50,14 +48,14 @@ export default function chip({setData, dataDua}) {
 }
 
 const styles = StyleSheet.create({
-  chip: {
-    marginBottom: 10,
-  },
   chipChild: {
     marginRight: 20,
     alignItems: 'center',
   },
   containerChip: {
     padding: 10,
+  },
+  text: {
+    color: 'grey',
   },
 });
