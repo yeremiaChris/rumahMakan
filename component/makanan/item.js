@@ -8,7 +8,15 @@ import {
   FlatList,
   TouchableOpacity,
 } from 'react-native';
-function item({item, increment, decrement, orderColor, cancelOrder}) {
+function item({
+  item,
+  increment,
+  decrement,
+  orderColor,
+  cancelOrder,
+  totalUang,
+  orderan,
+}) {
   return (
     <View style={styles.container}>
       <FlatList
@@ -55,7 +63,7 @@ function item({item, increment, decrement, orderColor, cancelOrder}) {
                             item.quantity * item.price,
                             item.name,
                           )
-                        : cancelOrder(item.key);
+                        : cancelOrder(item.key, item.quantity * item.price);
                     }}>
                     <View
                       style={[
@@ -89,9 +97,11 @@ const styles = StyleSheet.create({
   },
   card: {
     borderRadius: 10,
-    elevation: 3,
+    elevation: 0,
     flexDirection: 'row',
     marginBottom: 10,
+    borderColor: 'grey',
+    borderWidth: 0.3,
   },
   contentCard: {
     flexDirection: 'row',

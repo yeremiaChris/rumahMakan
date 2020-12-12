@@ -1,7 +1,7 @@
 import React from 'react';
-import {StyleSheet, View, Text} from 'react-native';
+import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 
-function bottomBar({totalHarga}) {
+function bottomBar({totalHarga, reset}) {
   return (
     <View style={styles.containerDuaBottom}>
       <View style={styles.wrapTotal}>
@@ -13,9 +13,11 @@ function bottomBar({totalHarga}) {
           <View style={[styles.addCardDua, {marginBottom: 2}]}>
             <Text style={styles.textAddCard}>Make Order</Text>
           </View>
-          <View style={[styles.addCardDua, {backgroundColor: 'tan'}]}>
-            <Text style={styles.textAddCard}>Reset</Text>
-          </View>
+          <TouchableOpacity activeOpacity={0.9} onPress={() => reset()}>
+            <View style={[styles.addCardDua, {backgroundColor: 'tan'}]}>
+              <Text style={styles.textAddCard}>Reset</Text>
+            </View>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
@@ -35,10 +37,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     width: '95%',
     padding: 4,
-    elevation: 20,
-    borderRadius: 20,
+    elevation: 0,
+    borderRadius: 25,
     position: 'relative',
-    bottom: 20,
+    bottom: 25,
+    borderColor: '#e1e3e3',
   },
   containerDuaBottom: {
     backgroundColor: 'white',
