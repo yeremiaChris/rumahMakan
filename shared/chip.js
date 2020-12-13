@@ -14,6 +14,21 @@ function chip({dispatch}) {
       id: '2',
       select: false,
     },
+    {
+      chip: 'Minuman',
+      id: '3',
+      select: false,
+    },
+    {
+      chip: 'Minuman',
+      id: '4',
+      select: false,
+    },
+    {
+      chip: 'Minuman',
+      id: '5',
+      select: false,
+    },
   ];
   // untuk mengganti item
   const [chip, setChip] = useState(data);
@@ -51,7 +66,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   containerChip: {
-    padding: 10,
+    paddingLeft: 30,
+    paddingRight: 30,
     marginTop: -20,
   },
   text: {

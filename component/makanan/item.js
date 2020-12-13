@@ -8,6 +8,9 @@ import {
   FlatList,
   TouchableOpacity,
 } from 'react-native';
+
+import {convertToRupiah} from '../../shared/rupiah';
+
 function item({
   item,
   increment,
@@ -29,7 +32,7 @@ function item({
               <Card.Content style={styles.contentCard}>
                 <View>
                   <Title>{item.name}</Title>
-                  <Paragraph>Rp {item.price} K</Paragraph>
+                  <Paragraph>{convertToRupiah(item.price)} </Paragraph>
                 </View>
                 <View>
                   <View style={styles.jumlah}>

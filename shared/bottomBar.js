@@ -1,19 +1,25 @@
 import React from 'react';
 import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
-
-function bottomBar({totalHarga, reset}) {
+import {convertToRupiah} from './rupiah';
+function bottomBar({totalHarga, reset, showModal}) {
   return (
     <View style={styles.containerDuaBottom}>
       <View style={styles.wrapTotal}>
         <View style={styles.totalCard}>
-          <Text>Total</Text>
-          <Text style={styles.price}>Rp. {totalHarga} K</Text>
+          <Text style={styles.price}>Total</Text>
+          <Text style={styles.price}>{convertToRupiah(totalHarga)} </Text>
         </View>
         <View style={styles.wrapButton}>
-          <View style={[styles.addCardDua, {marginBottom: 2}]}>
-            <Text style={styles.textAddCard}>Make Order</Text>
-          </View>
-          <TouchableOpacity activeOpacity={0.9} onPress={() => reset()}>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={() => {
+              totalHarga > 0 ? showModal() : null;
+            }}>
+            <View style={[styles.addCardDua, {marginBottom: 2}]}>
+              <Text style={styles.textAddCard}>Bayar</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity activeOpacity={0.5} onPress={() => reset()}>
             <View style={[styles.addCardDua, {backgroundColor: 'tan'}]}>
               <Text style={styles.textAddCard}>Reset</Text>
             </View>
@@ -35,10 +41,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'white',
-    width: '95%',
+    width: '100%',
     padding: 4,
     elevation: 0,
-    borderRadius: 25,
+    borderTopRightRadius: 25,
+    borderTopLeftRadius: 25,
     position: 'relative',
     bottom: 25,
     borderColor: '#e1e3e3',
@@ -59,7 +66,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#114444',
     borderRadius: 10,
     alignItems: 'center',
-    padding: 8,
+    padding: 5,
+    width: 100,
   },
   textAddCard: {
     color: 'white',

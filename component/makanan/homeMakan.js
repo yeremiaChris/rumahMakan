@@ -4,16 +4,16 @@ import Header from '../../shared/header';
 import BottomBar from '../../shared/bottomBar';
 import Chip from '../../shared/chip';
 // import TabNavigation from '../../navigation/tabNavigation';
-
 import Items from './item';
-
+import Modal from '../../shared/modal';
 import {reducer} from '../../reducer/orderReducer';
+import ModalPay from '../../shared/modalPay';
 
 // dummy data
 const makan = [
   {
     name: 'Nasi Goreng',
-    price: 10,
+    price: 10000,
     key: '1',
     quantity: 0,
     jenis: 'Makanan',
@@ -23,7 +23,7 @@ const makan = [
   },
   {
     name: 'Mie Goreng',
-    price: 5,
+    price: 5000,
     key: '2',
     quantity: 0,
     jenis: 'Makanan',
@@ -33,7 +33,7 @@ const makan = [
   },
   {
     name: 'Geprek',
-    price: 8,
+    price: 8000,
     key: '3',
     quantity: 0,
     jenis: 'Makanan',
@@ -43,7 +43,7 @@ const makan = [
   },
   {
     name: 'Ayam Penyet',
-    price: 12,
+    price: 12000,
     key: '4',
     quantity: 0,
     jenis: 'Makanan',
@@ -53,7 +53,7 @@ const makan = [
   },
   {
     name: 'Kopi Panas',
-    price: 4,
+    price: 4000,
     key: '5',
     quantity: 0,
     jenis: 'Minuman',
@@ -63,7 +63,7 @@ const makan = [
   },
   {
     name: 'Teh Panas',
-    price: 3,
+    price: 3000,
     key: '6',
     quantity: 0,
     jenis: 'Minuman',
@@ -73,7 +73,7 @@ const makan = [
   },
   {
     name: 'Americano',
-    price: 15,
+    price: 15000,
     key: '7',
     quantity: 0,
     jenis: 'Minuman',
@@ -83,7 +83,7 @@ const makan = [
   },
   {
     name: 'Es Jeruk',
-    price: 5,
+    price: 5000,
     key: '8',
     quantity: 0,
     jenis: 'Minuman',
@@ -194,14 +194,25 @@ export default function homeMakan({navigation}) {
     // ]);
   };
 
-  // urutkan
-  // berdasarkan makanan
+  // modal pay
+  const [visible, setVisible] = useState(false);
+  const showModal = () => setVisible(true);
+  const hideModal = () => setVisible(false);
+
+  // modal struk
+  const [visibleDua, setVisibleDua] = useState(false);
+  const showModalDua = () => setVisibleDua(true);
+  const hideModalDua = () => setVisibleDua(false);
 
   return (
     <>
       <View style={styles.container}>
-        <Header navigation={navigation} />
-        <BottomBar totalHarga={totalHarga} reset={reset} />
+        <Header navigation={navigation} showModal={showModal} />
+        <BottomBar
+          totalHarga={totalHarga}
+          reset={reset}
+          showModal={showModal}
+        />
         <Chip dispatch={dispatch} />
         <Items
           item={state.makan}
@@ -214,6 +225,13 @@ export default function homeMakan({navigation}) {
         />
         {/* <TabNavigation data={item} /> */}
         {/* <ItemMakan data={item} /> */}
+        <ModalPay
+          visible={visible}
+          hideModal={hideModal}
+          showModalDua={showModalDua}
+          totalHarga={totalHarga}
+        />
+        <Modal visibleDua={visibleDua} hideModalDua={hideModalDua} />
       </View>
     </>
   );

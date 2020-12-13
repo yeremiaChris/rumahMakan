@@ -2,18 +2,10 @@ import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {IconButton, Colors, Searchbar, Badge} from 'react-native-paper';
 import Modal from '../shared/modal';
-function header({navigation}) {
+function header({navigation, showModal}) {
   const [searchQuery, setSearchQuery] = React.useState('');
 
   const onChangeSearch = (query) => setSearchQuery(query);
-
-  // modal
-  const [visible, setVisible] = React.useState(false);
-
-  const showModal = () => setVisible(true);
-  const hideModal = () => setVisible(false);
-  const containerStyle = {backgroundColor: 'white', padding: 20};
-
   return (
     <View style={styles.wrap}>
       <View style={styles.headerSatu}>
@@ -24,7 +16,12 @@ function header({navigation}) {
           onPress={() => navigation.openDrawer()}
         />
         <View style={styles.badge}>
-          <IconButton icon="basket" color="white" size={25} />
+          <IconButton
+            icon="basket"
+            color="white"
+            size={25}
+            onPress={() => showModal()}
+          />
           {/* <Text>2</Text> */}
           <Badge style={styles.badgeContent} size={10} icon="basket">
             2
@@ -34,7 +31,7 @@ function header({navigation}) {
       <View style={styles.searchWrap}>
         <Searchbar
           style={styles.search}
-          placeholder="Search"
+          placeholder="Cari..."
           onChangeText={onChangeSearch}
           value={searchQuery}
         />
@@ -80,6 +77,6 @@ const styles = StyleSheet.create({
   },
   wrap: {
     backgroundColor: '#114444',
-    height: 130,
+    height: 150,
   },
 });
