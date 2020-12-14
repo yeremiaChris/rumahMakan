@@ -6,9 +6,19 @@ import {
   Modal,
   ScrollView,
   TouchableOpacity,
+  FlatList,
 } from 'react-native';
 import {DataTable, Button} from 'react-native-paper';
-export default function modal({visibleDua, hideModalDua}) {
+import {convertToRupiah} from './rupiah';
+export default function modal({
+  visibleDua,
+  hideModalDua,
+  orderan,
+  kembalian,
+  totalHarga,
+  uangBayar,
+  reset,
+}) {
   return (
     <View>
       <Modal visible={visibleDua} animationType="slide">
@@ -36,44 +46,25 @@ export default function modal({visibleDua, hideModalDua}) {
                   <Text style={styles.text}>Total Harga</Text>
                 </DataTable.Title>
               </DataTable.Header>
-              <ScrollView style={styles.scroll}>
-                <DataTable.Row>
-                  <DataTable.Cell>Frozen yogurt</DataTable.Cell>
-                  <DataTable.Cell numeric>2</DataTable.Cell>
-                  <DataTable.Cell numeric>Rp. 20 K</DataTable.Cell>
-                  <DataTable.Cell numeric>Rp. 40 K</DataTable.Cell>
-                </DataTable.Row>
-                <DataTable.Row>
-                  <DataTable.Cell>Frozen yogurt</DataTable.Cell>
-                  <DataTable.Cell numeric>2</DataTable.Cell>
-                  <DataTable.Cell numeric>Rp. 20 K</DataTable.Cell>
-                  <DataTable.Cell numeric>Rp. 40 K</DataTable.Cell>
-                </DataTable.Row>
-                <DataTable.Row>
-                  <DataTable.Cell>Frozen yogurt</DataTable.Cell>
-                  <DataTable.Cell numeric>2</DataTable.Cell>
-                  <DataTable.Cell numeric>Rp. 20 K</DataTable.Cell>
-                  <DataTable.Cell numeric>Rp. 40 K</DataTable.Cell>
-                </DataTable.Row>
-                <DataTable.Row>
-                  <DataTable.Cell>Frozen yogurt</DataTable.Cell>
-                  <DataTable.Cell numeric>2</DataTable.Cell>
-                  <DataTable.Cell numeric>Rp. 20 K</DataTable.Cell>
-                  <DataTable.Cell numeric>Rp. 40 K</DataTable.Cell>
-                </DataTable.Row>
-                <DataTable.Row>
-                  <DataTable.Cell>Frozen yogurt</DataTable.Cell>
-                  <DataTable.Cell numeric>2</DataTable.Cell>
-                  <DataTable.Cell numeric>Rp. 20 K</DataTable.Cell>
-                  <DataTable.Cell numeric>Rp. 40 K</DataTable.Cell>
-                </DataTable.Row>
-                <DataTable.Row>
-                  <DataTable.Cell>Frozen yogurt</DataTable.Cell>
-                  <DataTable.Cell numeric>2</DataTable.Cell>
-                  <DataTable.Cell numeric>Rp. 20 K</DataTable.Cell>
-                  <DataTable.Cell numeric>Rp. 40 K</DataTable.Cell>
-                </DataTable.Row>
-              </ScrollView>
+              <FlatList
+                contentContainerStyle={styles.scroll}
+                data={orderan}
+                keyExtractor={(item) => item.key}
+                renderItem={({item}) => (
+                  <DataTable.Row>
+                    <DataTable.Cell>{item.name}</DataTable.Cell>
+                    <DataTable.Cell numeric>
+                      {item.totalQuantity}
+                    </DataTable.Cell>
+                    <DataTable.Cell numeric>
+                      {convertToRupiah(item.price)}
+                    </DataTable.Cell>
+                    <DataTable.Cell numeric>
+                      {convertToRupiah(item.totalPrice)}
+                    </DataTable.Cell>
+                  </DataTable.Row>
+                )}
+              />
             </DataTable>
             <DataTable style={styles.bayar}>
               <DataTable.Header>
@@ -81,7 +72,9 @@ export default function modal({visibleDua, hideModalDua}) {
                   <Text style={styles.text}>Total</Text>
                 </DataTable.Title>
                 <DataTable.Title numeric>
-                  <Text style={{fontWeight: 'bold', fontSize: 15}}>40 K</Text>
+                  <Text style={{fontWeight: 'bold', fontSize: 15}}>
+                    {convertToRupiah(totalHarga)}
+                  </Text>
                 </DataTable.Title>
               </DataTable.Header>
               <DataTable.Header>
@@ -89,7 +82,9 @@ export default function modal({visibleDua, hideModalDua}) {
                   <Text style={styles.text}>Uang Bayar</Text>
                 </DataTable.Title>
                 <DataTable.Title numeric>
-                  <Text style={{fontWeight: 'bold', fontSize: 15}}>40 K</Text>
+                  <Text style={{fontWeight: 'bold', fontSize: 15}}>
+                    {convertToRupiah(uangBayar)}
+                  </Text>
                 </DataTable.Title>
               </DataTable.Header>
               <DataTable.Header>
@@ -97,7 +92,9 @@ export default function modal({visibleDua, hideModalDua}) {
                   <Text style={styles.text}>Kembalian</Text>
                 </DataTable.Title>
                 <DataTable.Title numeric>
-                  <Text style={{fontWeight: 'bold', fontSize: 15}}>40 K</Text>
+                  <Text style={{fontWeight: 'bold', fontSize: 15}}>
+                    {convertToRupiah(kembalian)}
+                  </Text>
                 </DataTable.Title>
               </DataTable.Header>
             </DataTable>
@@ -107,6 +104,7 @@ export default function modal({visibleDua, hideModalDua}) {
             style={styles.conPrint}
             onPress={() => {
               hideModalDua();
+              reset();
             }}>
             <Text style={styles.print}>PRINT</Text>
           </TouchableOpacity>

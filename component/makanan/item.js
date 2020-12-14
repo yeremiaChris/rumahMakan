@@ -63,6 +63,7 @@ function item({
                         ? orderColor(
                             item.key,
                             item.quantity,
+                            item.price,
                             item.quantity * item.price,
                             item.name,
                           )

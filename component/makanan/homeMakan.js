@@ -131,7 +131,7 @@ export default function homeMakan({navigation}) {
   const total = () => {};
 
   // change color order and order Text
-  const orderColor = (key, totalQuantity, totalPrice, name) => {
+  const orderColor = (key, totalQuantity, price, totalPrice, name) => {
     // setItem(
     //   item.map((item) =>
     //     item.key === key && item.quantity > 0
@@ -146,6 +146,7 @@ export default function homeMakan({navigation}) {
         {
           key,
           totalQuantity,
+          price,
           totalPrice,
           name,
         },
@@ -204,6 +205,12 @@ export default function homeMakan({navigation}) {
   const showModalDua = () => setVisibleDua(true);
   const hideModalDua = () => setVisibleDua(false);
 
+  // mengelola kembalian uang
+  const [kembalian, setKembalian] = useState(0);
+
+  // mengelola uang bayar
+  const [uangBayar, setUangBayar] = useState(0);
+
   return (
     <>
       <View style={styles.container}>
@@ -230,8 +237,19 @@ export default function homeMakan({navigation}) {
           hideModal={hideModal}
           showModalDua={showModalDua}
           totalHarga={totalHarga}
+          kembalian={kembalian}
+          setKembalian={setKembalian}
+          setUangBayar={setUangBayar}
         />
-        <Modal visibleDua={visibleDua} hideModalDua={hideModalDua} />
+        <Modal
+          reset={reset}
+          orderan={orderan}
+          visibleDua={visibleDua}
+          hideModalDua={hideModalDua}
+          kembalian={kembalian}
+          totalHarga={totalHarga}
+          uangBayar={uangBayar}
+        />
       </View>
     </>
   );

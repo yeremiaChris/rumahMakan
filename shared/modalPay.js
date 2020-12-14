@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {TextInput, StyleSheet, View, Form} from 'react-native';
 import {
   Button,
@@ -9,62 +9,92 @@ import {
   IconButton,
 } from 'react-native-paper';
 import {convertToRupiah} from './rupiah';
-import {useForm, Controller} from 'react-hook-form';
+import {Formik} from 'formik';
+import {onChange} from 'react-native-reanimated';
 
 export default function modalPay({
   visible,
   hideModal,
   showModalDua,
   totalHarga,
+  kembalian,
+  setKembalian,
+  setUangBayar,
 }) {
   const containerStyle = {backgroundColor: 'white', padding: 20};
 
-  // pembayaran react-hook-form
-  const methods = useForm();
-  const {handleSubmit, control, reset} = methods;
-  const onSubmit = (data) => console.log(data);
+  // membuat button disable ketika belum memenuhi syaratnya
+  const [button, setButton] = useState(false);
+
+  // mengelola kembalian uang bayar
+  const uangKembalian = (text) => {
+    console.log(text);
+    setKembalian(text - totalHarga);
+  };
+
+  // onSubmit
+  const submit = (data) => {
+    hideModal();
+    showModalDua();
+    setUangBayar(data.uangBayar);
+  };
   return (
     <Provider>
       <Portal>
         <Modal visible={visible} contentContainerStyle={containerStyle}>
-          <View>
-            <Controller
-              name="bayar"
-              control={control}
-              defaultValue={false}
-              rules={{required: true}}
-              render={({onChange, value}) => (
+          <Formik
+            initialValues={{uangBayar: ''}}
+            onSubmit={(data) => submit(data)}>
+            {({handleChange, handleSubmit, values}) => (
+              <>
                 <TextInput
                   keyboardType="numeric"
+                  name="uangBayar"
+                  value={values.uangBayar}
                   style={styles.input}
                   placeholder="Uang Bayar"
-                />
-              )}
-            />
-          </View>
-          <View style={styles.buttonCon}>
-            <View style={styles.kembalian}>
-              <Text style={styles.text}>Kembalian</Text>
-              <Text style={styles.text}>Rp. 0</Text>
-            </View>
-            <View style={styles.pay}>
-              <View>
-                <Text style={styles.text}>Total </Text>
-                <Text style={styles.text}>{convertToRupiah(totalHarga)}</Text>
-              </View>
+                  onChangeText={handleChange('uangBayar')}
+                  onChange={(e) => {
+                    e.nativeEvent.text >= totalHarga
+                      ? setButton(false) ||
+                        uangKembalian(parseInt(e.nativeEvent.text))
+                      : setButton(true) || setKembalian(0);
+                  }}
+                  // onChangeText={(text) => {
+                  //   handleChange('uangBayar');
 
-              <Button
-                style={styles.button}
-                color="white"
-                onPress={() => {
-                  //   hideModal();
-                  //   showModalDua();
-                  onSubmit();
-                }}>
-                Pay
-              </Button>
-            </View>
-          </View>
+                  // text >= totalHarga
+                  //   ? setButton(false) && uangKembalian(parseInt(text))
+                  //   : setButton(true) || setKembalian(0);
+                  // }}
+                />
+                <View style={styles.buttonCon}>
+                  <View style={styles.kembalian}>
+                    <Text style={styles.text}>Kembalian</Text>
+                    <Text style={styles.text}>
+                      {convertToRupiah(kembalian)}
+                    </Text>
+                  </View>
+                  <View style={styles.pay}>
+                    <View>
+                      <Text style={styles.text}>Total </Text>
+                      <Text style={styles.text}>
+                        {convertToRupiah(totalHarga)}
+                      </Text>
+                    </View>
+
+                    <Button
+                      disabled={button}
+                      style={styles.button}
+                      color="white"
+                      onPress={handleSubmit}>
+                      Pay
+                    </Button>
+                  </View>
+                </View>
+              </>
+            )}
+          </Formik>
         </Modal>
       </Portal>
     </Provider>
