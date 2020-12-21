@@ -29,9 +29,7 @@ import {Provider as PaperProvider} from 'react-native-paper';
 
 // react navigation
 import {NavigationContainer} from '@react-navigation/native';
-
 import DrawerNav from './navigation/drawerNav';
-
 const App: () => React$Node = () => {
   return (
     <>

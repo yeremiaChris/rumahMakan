@@ -3,7 +3,6 @@ import {StyleSheet, View, Text} from 'react-native';
 import Header from '../../shared/header';
 import BottomBar from '../../shared/bottomBar';
 import Chip from '../../shared/chip';
-// import TabNavigation from '../../navigation/tabNavigation';
 import Items from './item';
 import Modal from '../../shared/modal';
 import {reducer} from '../../reducer/orderReducer';
@@ -211,6 +210,8 @@ export default function homeMakan({navigation}) {
   // mengelola uang bayar
   const [uangBayar, setUangBayar] = useState(0);
 
+  // membuat button disable ketika belum memenuhi syaratnya
+  const [button, setButton] = useState(true);
   return (
     <>
       <View style={styles.container}>
@@ -230,8 +231,6 @@ export default function homeMakan({navigation}) {
           totalUang={totalUang}
           orderan={orderan}
         />
-        {/* <TabNavigation data={item} /> */}
-        {/* <ItemMakan data={item} /> */}
         <ModalPay
           visible={visible}
           hideModal={hideModal}
@@ -240,6 +239,8 @@ export default function homeMakan({navigation}) {
           kembalian={kembalian}
           setKembalian={setKembalian}
           setUangBayar={setUangBayar}
+          button={button}
+          setButton={setButton}
         />
         <Modal
           reset={reset}

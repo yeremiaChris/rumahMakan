@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 
 import {convertToRupiah} from '../../shared/rupiah';
-
 function item({
   item,
   increment,
@@ -100,12 +99,12 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   card: {
-    borderRadius: 10,
+    borderRadius: 0,
     elevation: 0,
     flexDirection: 'row',
     marginBottom: 10,
-    borderColor: 'grey',
-    borderWidth: 0.3,
+    borderColor: '#e5e8e9',
+    borderWidth: 1,
   },
   contentCard: {
     flexDirection: 'row',
@@ -127,6 +126,6 @@ const styles = StyleSheet.create({
     width: 150,
   },
   container: {
-    height: 330,
+    height: 340,
   },
 });

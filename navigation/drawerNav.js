@@ -5,7 +5,7 @@ const Drawer = createDrawerNavigator();
 export default function drawerNav() {
   return (
     <Drawer.Navigator>
-      <Drawer.Screen name="Feed" component={stackNav} />
+      <Drawer.Screen name="Home" component={stackNav} />
     </Drawer.Navigator>
   );
 }

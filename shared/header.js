@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {IconButton, Colors, Searchbar, Badge} from 'react-native-paper';
 import Modal from '../shared/modal';
-function header({navigation, showModal}) {
+function header({navigation}) {
   const [searchQuery, setSearchQuery] = React.useState('');
 
   const onChangeSearch = (query) => setSearchQuery(query);
@@ -20,7 +20,7 @@ function header({navigation, showModal}) {
             icon="basket"
             color="white"
             size={25}
-            onPress={() => showModal()}
+            onPress={() => navigation.navigate('Laporan')}
           />
           {/* <Text>2</Text> */}
           <Badge style={styles.badgeContent} size={10} icon="basket">

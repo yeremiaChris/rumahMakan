@@ -20,11 +20,10 @@ export default function modalPay({
   kembalian,
   setKembalian,
   setUangBayar,
+  button,
+  setButton,
 }) {
   const containerStyle = {backgroundColor: 'white', padding: 20};
-
-  // membuat button disable ketika belum memenuhi syaratnya
-  const [button, setButton] = useState(false);
 
   // mengelola kembalian uang bayar
   const uangKembalian = (text) => {

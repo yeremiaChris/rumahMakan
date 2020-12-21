@@ -62,13 +62,14 @@ export default React.memo(chip);
 
 const styles = StyleSheet.create({
   chipChild: {
-    marginRight: 20,
+    marginRight: 3,
     alignItems: 'center',
+    borderRadius: 0,
   },
   containerChip: {
-    paddingLeft: 30,
-    paddingRight: 30,
     marginTop: -20,
+    paddingLeft: 10,
+    paddingRight: 10,
   },
   text: {
     color: 'grey',
