@@ -1312,6 +1312,11 @@
     color "^3.1.3"
     react-native-iphone-x-helper "^1.3.0"
 
+"@react-navigation/material-bottom-tabs@^5.3.10":
+  version "5.3.10"
+  resolved "https://registry.yarnpkg.com/@react-navigation/material-bottom-tabs/-/material-bottom-tabs-5.3.10.tgz#046b6aecd18c4b71114148afbfc9a5a9ac264275"
+  integrity sha512-XngPas8XAjR2QuFzzED1qoaxAM69gLPqC69xTkqSWeUYbsorX+kgl7z3AZocDglp4bLylYIVOa+fBHhfhUjqqQ==
+
 "@react-navigation/material-top-tabs@^5.3.10":
   version "5.3.10"
   resolved "https://registry.yarnpkg.com/@react-navigation/material-top-tabs/-/material-top-tabs-5.3.10.tgz#158b694e87bff2eb9577e8142415de8ac3547412"
@@ -5136,11 +5141,6 @@ hoist-non-react-statics@^1.0.5:
   resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-1.2.0.tgz#aa448cf0986d55cc40773b17174b7dd066cb7cfb"
   integrity sha1-qkSM8JhtVcxAdzsXF0t90GbLfPs=
 
-hoist-non-react-statics@^2.3.1:
-  version "2.5.5"
-  resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-2.5.5.tgz#c5903cf409c0dfd908f388e619d86b9c1174cb47"
-  integrity sha512-rqcy4pJo55FTTLWt+bU8ukscqHeE/e9KWvsOW2b/a3afxQZhwkQdT1rPPCJ0rYXdj4vNcasY8zHTH+jF/qStxw==
-
 hoist-non-react-statics@^3.3.0, hoist-non-react-statics@^3.3.2:
   version "3.3.2"
   resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-3.3.2.tgz#ece0acaf71d62c2969c2ec59feff42a4b1a85b45"
@@ -8153,6 +8153,11 @@ react-calendar@^3.0.0:
     merge-class-names "^1.1.1"
     prop-types "^15.6.0"
 
+react-currency-input-field@^2.7.1:
+  version "2.7.1"
+  resolved "https://registry.yarnpkg.com/react-currency-input-field/-/react-currency-input-field-2.7.1.tgz#79a9e45ac40a8890824500d07c4d70715158c353"
+  integrity sha512-0E7/4KGeMD6h/ebDRnPvfGMLSW/JH+0/LUtWcFv9xOAEurcbNk0Igr6G4TUxctLP/m96sxWuHbGqGJgpDgoYfA==
+
 react-currency-input@^1.3.6:
   version "1.3.6"
   resolved "https://registry.yarnpkg.com/react-currency-input/-/react-currency-input-1.3.6.tgz#a25188302f823d10ad16979d755ccc50dc955892"
@@ -8249,6 +8254,11 @@ react-native-appearance@^0.3.4:
     invariant "^2.2.4"
     use-subscription "^1.0.0"
 
+react-native-currency-input@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/react-native-currency-input/-/react-native-currency-input-0.1.2.tgz#e619b6252d74b81f9351a16f1a2dd90e5d2de97f"
+  integrity sha512-v/io3g4HMmabuRXpsuwDhtSnwyN2wdZItNC8C1k6XLlDR1ZG97pAFpNPvoLzpq+LOaFhllfOkCG0zAKYpLSJ0w==
+
 react-native-date-input@^1.0.11:
   version "1.0.11"
   resolved "https://registry.yarnpkg.com/react-native-date-input/-/react-native-date-input-1.0.11.tgz#fec3f6fa8598b3202750dafcadbd5a0d25e15dc0"
@@ -8328,14 +8338,14 @@ react-native-paper-dates@^0.2.7:
   dependencies:
     react-native-web-hover "^0.2.7"
 
-react-native-paper@^4.4.1:
-  version "4.4.1"
-  resolved "https://registry.yarnpkg.com/react-native-paper/-/react-native-paper-4.4.1.tgz#b2fb7c0889fd15d52d6fd5c27df13075104ef911"
-  integrity sha512-c2+0XsTg6aAwyJNwumtZLPuFw72/kYyFS2vXDzWZddx5OYF052DbPPUhX4SVom2jxVaI1y9izx88RO5c4hGJEA==
+react-native-paper@^4.5.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/react-native-paper/-/react-native-paper-4.5.0.tgz#5f1f1e658dbd7a322a299e08ce76e22be44c01d5"
+  integrity sha512-mQtOL9yAs5B5b+HPWVMMbFFuKVpTDn1YuR0h5SCtDkR+3deZjJNRLtrNgPnsrwRfBhA/F8j/p2yps4DY8AiyMg==
   dependencies:
     "@callstack/react-theme-provider" "^3.0.5"
     color "^3.1.2"
-    react-native-safe-area-view "^0.14.9"
+    react-native-iphone-x-helper "^1.3.1"
 
 react-native-picker-select@^8.0.4:
   version "8.0.4"
@@ -8373,13 +8383,6 @@ react-native-safe-area-context@^3.1.9:
   version "3.1.9"
   resolved "https://registry.yarnpkg.com/react-native-safe-area-context/-/react-native-safe-area-context-3.1.9.tgz#48864ea976b0fa57142a2cc523e1fd3314e7247e"
   integrity sha512-wmcGbdyE/vBSL5IjDPReoJUEqxkZsywZw5gPwsVUV1NBpw5eTIdnL6Y0uNKHE25Z661moxPHQz6kwAkYQyorxA==
-
-react-native-safe-area-view@^0.14.9:
-  version "0.14.9"
-  resolved "https://registry.yarnpkg.com/react-native-safe-area-view/-/react-native-safe-area-view-0.14.9.tgz#90ee8383037010d9a5055a97cf97e4c1da1f0c3d"
-  integrity sha512-WII/ulhpVyL/qbYb7vydq7dJAfZRBcEhg4/UWt6F6nAKpLa3gAceMOxBxI914ppwSP/TdUsandFy6lkJQE0z4A==
-  dependencies:
-    hoist-non-react-statics "^2.3.1"
 
 react-native-screens@^2.15.0:
   version "2.15.0"

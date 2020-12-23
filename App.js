@@ -30,11 +30,13 @@ import {Provider as PaperProvider} from 'react-native-paper';
 // react navigation
 import {NavigationContainer} from '@react-navigation/native';
 import DrawerNav from './navigation/drawerNav';
+import BottomNav from './navigation/bottomNav';
 const App: () => React$Node = () => {
   return (
     <>
       <PaperProvider>
         <NavigationContainer>
+          <StatusBar backgroundColor="#114444" />
           <DrawerNav />
         </NavigationContainer>
       </PaperProvider>

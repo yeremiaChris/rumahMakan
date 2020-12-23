@@ -10,15 +10,7 @@ import {
 } from 'react-native';
 
 import {convertToRupiah} from '../../shared/rupiah';
-function item({
-  item,
-  increment,
-  decrement,
-  orderColor,
-  cancelOrder,
-  totalUang,
-  orderan,
-}) {
+function item({item, increment, decrement, orderColor, cancelOrder, orderan}) {
   return (
     <View style={styles.container}>
       <FlatList
@@ -30,7 +22,7 @@ function item({
             <Card style={styles.card}>
               <Card.Content style={styles.contentCard}>
                 <View>
-                  <Title>{item.name}</Title>
+                  <Title style={{fontSize: 18}}>{item.name}</Title>
                   <Paragraph>{convertToRupiah(item.price)} </Paragraph>
                 </View>
                 <View>
@@ -111,7 +103,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   addCard: {
-    borderRadius: 10,
+    borderRadius: 5,
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 5,

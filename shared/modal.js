@@ -18,7 +18,18 @@ export default function modal({
   totalHarga,
   uangBayar,
   reset,
+  setKembalian,
+  setTotalHarga,
+  setTotalYangDiBeli,
 }) {
+  // print
+  const print = () => {
+    hideModalDua();
+    reset();
+    setKembalian(0);
+    setTotalYangDiBeli(0);
+    setTotalHarga(0);
+  };
   return (
     <View>
       <Modal visible={visibleDua} animationType="slide">
@@ -103,8 +114,7 @@ export default function modal({
             activeOpacity={0.7}
             style={styles.conPrint}
             onPress={() => {
-              hideModalDua();
-              reset();
+              print();
             }}>
             <Text style={styles.print}>PRINT</Text>
           </TouchableOpacity>

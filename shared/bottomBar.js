@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 import {convertToRupiah} from './rupiah';
-function bottomBar({totalHarga, reset, showModal}) {
+function bottomBar({totalHarga, reset, showModal, totalBarang}) {
   return (
     <View style={styles.containerDuaBottom}>
       <View style={styles.wrapTotal}>
@@ -13,7 +13,7 @@ function bottomBar({totalHarga, reset, showModal}) {
           <TouchableOpacity
             activeOpacity={0.5}
             onPress={() => {
-              totalHarga > 0 ? showModal() : null;
+              totalHarga > 0 ? showModal() && totalBarang() : null;
             }}>
             <View style={[styles.addCardDua, {marginBottom: 2}]}>
               <Text style={styles.textAddCard}>Bayar</Text>
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
   },
   addCardDua: {
     backgroundColor: '#114444',
-    borderRadius: 10,
+    borderRadius: 5,
     alignItems: 'center',
     padding: 5,
     width: 100,

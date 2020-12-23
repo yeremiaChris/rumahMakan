@@ -27,55 +27,19 @@ import ModalLaporan from '../../shared/modalLaporan';
 import RNPickerSelect from 'react-native-picker-select';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import Moment from 'moment';
-export default function Laporan({visible, hideModal, showModal, navigation}) {
+import {convertToRupiah} from '../../shared/rupiah';
+export default function Laporan({
+  visible,
+  hideModal,
+  showModal,
+  navigation,
+  laporan,
+}) {
+  // pelanggan
   const data = [
     {
       data: 'Pelanggan',
       key: '1',
-    },
-    {
-      data: 'Pelanggan',
-      key: '2',
-    },
-    {
-      data: 'Pelanggan',
-      key: '3',
-    },
-    {
-      data: 'Pelanggan',
-      key: '4',
-    },
-    {
-      data: 'Pelanggan',
-      key: '5',
-    },
-    {
-      data: 'Pelanggan',
-      key: '6',
-    },
-    {
-      data: 'Pelanggan',
-      key: '7',
-    },
-    {
-      data: 'Pelanggan',
-      key: '8',
-    },
-    {
-      data: 'Pelanggan',
-      key: '9',
-    },
-    {
-      data: 'Pelanggan',
-      key: '10',
-    },
-    {
-      data: 'Pelanggan',
-      key: '11',
-    },
-    {
-      data: 'Pelanggan',
-      key: '12',
     },
   ];
 
@@ -92,9 +56,9 @@ export default function Laporan({visible, hideModal, showModal, navigation}) {
   ];
 
   // date
-  Moment.locale('en');
+  Moment.locale('id');
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(Moment(new Date()));
   const showDatePicker = () => {
     setDatePickerVisibility(true);
   };
@@ -107,7 +71,6 @@ export default function Laporan({visible, hideModal, showModal, navigation}) {
     setDate(date);
     hideDatePicker();
   };
-
   return (
     <>
       <View
@@ -163,13 +126,10 @@ export default function Laporan({visible, hideModal, showModal, navigation}) {
             <DataTable>
               <DataTable.Header>
                 <DataTable.Title>
-                  <Text style={styles.text}>Nama Item</Text>
+                  <Text style={styles.text}>Pelanggan</Text>
                 </DataTable.Title>
                 <DataTable.Title numeric>
                   <Text style={styles.text}>Jumlah Beli</Text>
-                </DataTable.Title>
-                <DataTable.Title numeric>
-                  <Text style={styles.text}>Harga</Text>
                 </DataTable.Title>
                 <DataTable.Title numeric>
                   <Text style={styles.text}>Total Harga</Text>
@@ -177,19 +137,14 @@ export default function Laporan({visible, hideModal, showModal, navigation}) {
               </DataTable.Header>
               <View style={styles.scroll}>
                 <FlatList
-                  data={data}
+                  data={laporan}
                   keyExtractor={(item) => item.key}
                   renderItem={({item}) => (
                     <DataTable.Row>
-                      <DataTable.Cell>{item.data}</DataTable.Cell>
+                      <DataTable.Cell>{item.pelanggan}</DataTable.Cell>
+                      <DataTable.Cell numeric>{item.jumlahBeli}</DataTable.Cell>
                       <DataTable.Cell numeric>
-                        {item.totalQuantity}
-                      </DataTable.Cell>
-                      <DataTable.Cell numeric>
-                        {/* {convertToRupiah(item.price)} */}
-                      </DataTable.Cell>
-                      <DataTable.Cell numeric>
-                        {/* {convertToRupiah(item.totalPrice)} */}
+                        {convertToRupiah(item.totalHarga)}
                       </DataTable.Cell>
                     </DataTable.Row>
                   )}

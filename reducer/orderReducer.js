@@ -3,6 +3,7 @@ export const reducer = (state, action) => {
   switch (action.type) {
     case 'incrementOrder':
       return {
+        ...state,
         makan: [
           ...state.makan.map((data) =>
             data.key === action.id && data.quantity >= 0
@@ -14,6 +15,7 @@ export const reducer = (state, action) => {
       break;
     case 'decrementOrder':
       return {
+        ...state,
         makan: [
           ...state.makan.map((data) =>
             data.key === action.id && data.quantity > 0
@@ -25,6 +27,7 @@ export const reducer = (state, action) => {
       break;
     case 'orderItem':
       return {
+        ...state,
         makan: [
           ...state.makan.map((data) =>
             data.key === action.id && data.quantity > 0
@@ -41,6 +44,7 @@ export const reducer = (state, action) => {
       break;
     case 'cancelOrderItem':
       return {
+        ...state,
         makan: [
           ...state.makan.map((data) =>
             data.key === action.id && data.quantity > 0
@@ -57,10 +61,12 @@ export const reducer = (state, action) => {
       break;
     case 'urutMakan':
       return {
+        ...state,
         makan: [...state.makan.sort((data) => data.jenis !== action.test)],
       };
     case 'reset':
       return {
+        ...state,
         makan: [
           ...state.makan.map((data) => {
             return {

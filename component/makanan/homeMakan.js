@@ -1,105 +1,19 @@
-import React, {useState, useEffect, useReducer} from 'react';
+import React, {useState, useEffect} from 'react';
 import {StyleSheet, View, Text} from 'react-native';
 import Header from '../../shared/header';
 import BottomBar from '../../shared/bottomBar';
 import Chip from '../../shared/chip';
 import Items from './item';
 import Modal from '../../shared/modal';
-import {reducer} from '../../reducer/orderReducer';
 import ModalPay from '../../shared/modalPay';
 
-// dummy data
-const makan = [
-  {
-    name: 'Nasi Goreng',
-    price: 10000,
-    key: '1',
-    quantity: 0,
-    jenis: 'Makanan',
-    orderColor: 'orange',
-    orderText: 'Order',
-    order: false,
-  },
-  {
-    name: 'Mie Goreng',
-    price: 5000,
-    key: '2',
-    quantity: 0,
-    jenis: 'Makanan',
-    orderColor: 'orange',
-    orderText: 'Order',
-    order: false,
-  },
-  {
-    name: 'Geprek',
-    price: 8000,
-    key: '3',
-    quantity: 0,
-    jenis: 'Makanan',
-    orderColor: 'orange',
-    orderText: 'Order',
-    order: false,
-  },
-  {
-    name: 'Ayam Penyet',
-    price: 12000,
-    key: '4',
-    quantity: 0,
-    jenis: 'Makanan',
-    orderColor: 'orange',
-    orderText: 'Order',
-    order: false,
-  },
-  {
-    name: 'Kopi Panas',
-    price: 4000,
-    key: '5',
-    quantity: 0,
-    jenis: 'Minuman',
-    orderColor: 'orange',
-    orderText: 'Order',
-    order: false,
-  },
-  {
-    name: 'Teh Panas',
-    price: 3000,
-    key: '6',
-    quantity: 0,
-    jenis: 'Minuman',
-    orderColor: 'orange',
-    orderText: 'Order',
-    order: false,
-  },
-  {
-    name: 'Americano',
-    price: 15000,
-    key: '7',
-    quantity: 0,
-    jenis: 'Minuman',
-    orderColor: 'orange',
-    orderText: 'Order',
-    order: false,
-  },
-  {
-    name: 'Es Jeruk',
-    price: 5000,
-    key: '8',
-    quantity: 0,
-    jenis: 'Minuman',
-    orderColor: 'orange',
-    orderText: 'Order',
-    order: false,
-  },
-];
-const minum = [];
-
-export default function homeMakan({navigation}) {
-  const [item, setItem] = useState(makan);
-  const items = {
-    makan: item,
-  };
-  const [state, dispatch] = useReducer(reducer, items);
-
+export default function homeMakan({
+  navigation,
+  setLaporan,
+  laporan,
+  dispatch,
+  state,
+}) {
   // increment
   const increment = (index) => {
     // setItem(
@@ -168,10 +82,11 @@ export default function homeMakan({navigation}) {
     setTotalHarga((prev) => prev - totalPrice);
   };
 
-  //  total uang
-  const totalUang = () =>
+  // const total jumlah yang di order
+  const [totalYangDiBeli, setTotalYangDiBeli] = useState(0);
+  const totalBarang = () =>
     orderan.reduce((acc, curr) => {
-      setTotalHarga(acc.totalPrice + curr.totalPrice);
+      console.log(acc);
     });
 
   // reset semua
@@ -193,7 +108,6 @@ export default function homeMakan({navigation}) {
     //   }),
     // ]);
   };
-
   // modal pay
   const [visible, setVisible] = useState(false);
   const showModal = () => setVisible(true);
@@ -212,11 +126,13 @@ export default function homeMakan({navigation}) {
 
   // membuat button disable ketika belum memenuhi syaratnya
   const [button, setButton] = useState(true);
+
   return (
     <>
       <View style={styles.container}>
         <Header navigation={navigation} showModal={showModal} />
         <BottomBar
+          totalBarang={totalBarang}
           totalHarga={totalHarga}
           reset={reset}
           showModal={showModal}
@@ -228,10 +144,14 @@ export default function homeMakan({navigation}) {
           decrement={decrement}
           orderColor={orderColor}
           cancelOrder={cancelOrder}
-          totalUang={totalUang}
           orderan={orderan}
         />
         <ModalPay
+          totalBarang={totalBarang}
+          totalYangDiBeli={totalYangDiBeli}
+          laporan={laporan}
+          setLaporan={setLaporan}
+          orderan={orderan}
           visible={visible}
           hideModal={hideModal}
           showModalDua={showModalDua}
@@ -243,6 +163,9 @@ export default function homeMakan({navigation}) {
           setButton={setButton}
         />
         <Modal
+          setTotalYangDiBeli={setTotalYangDiBeli}
+          setTotalHarga={setTotalHarga}
+          setKembalian={setKembalian}
           reset={reset}
           orderan={orderan}
           visibleDua={visibleDua}
@@ -250,6 +173,7 @@ export default function homeMakan({navigation}) {
           kembalian={kembalian}
           totalHarga={totalHarga}
           uangBayar={uangBayar}
+          setTotalYangDiBeli={setTotalYangDiBeli}
         />
       </View>
     </>

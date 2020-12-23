@@ -22,21 +22,41 @@ export default function modalPay({
   setUangBayar,
   button,
   setButton,
+  orderan,
+  setLaporan,
+  laporan,
+  totalYangDiBeli,
 }) {
   const containerStyle = {backgroundColor: 'white', padding: 20};
-
   // mengelola kembalian uang bayar
   const uangKembalian = (text) => {
-    console.log(text);
     setKembalian(text - totalHarga);
   };
-
   // onSubmit
   const submit = (data) => {
+    const totalBarang = orderan.reduce(
+      (acc, curr) => acc + curr.totalQuantity,
+      0,
+    );
+
+    setLaporan([
+      ...laporan,
+      {
+        key: Math.random().toString(),
+        pelanggan: 'Pelanggan' + Math.random(),
+        jumlahBeli: totalBarang,
+        totalHarga: totalHarga,
+        item: orderan,
+        uangBayar: data.uangBayar,
+        kembalian: kembalian,
+      },
+    ]);
     hideModal();
     showModalDua();
     setUangBayar(data.uangBayar);
+    setButton(true);
   };
+
   return (
     <Provider>
       <Portal>
