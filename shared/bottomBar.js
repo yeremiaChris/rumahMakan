@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   price: {
-    fontSize: 15,
+    fontSize: 18,
     fontWeight: 'bold',
   },
 

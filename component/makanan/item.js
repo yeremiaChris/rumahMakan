@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Card, Title, Paragraph, IconButton} from 'react-native-paper';
 import {
   StyleSheet,
@@ -8,14 +8,17 @@ import {
   FlatList,
   TouchableOpacity,
 } from 'react-native';
-
 import {convertToRupiah} from '../../shared/rupiah';
+// accesing global state redux
+import {useSelector} from 'react-redux';
 function item({item, increment, decrement, orderColor, cancelOrder, orderan}) {
+  // accessing global state from redux
+  const data = useSelector((state) => state);
   return (
     <View style={styles.container}>
       <FlatList
         contentContainerStyle={styles.cardWrap}
-        data={item}
+        data={data.item}
         keyExtractor={(item) => item.key}
         renderItem={({item}) => {
           return (
@@ -79,6 +82,11 @@ function item({item, increment, decrement, orderColor, cancelOrder, orderan}) {
 }
 
 export default React.memo(item);
+
+// mapstate redux
+const mapStateToProps = (state) => {
+  return state;
+};
 
 const styles = StyleSheet.create({
   cardWrap: {

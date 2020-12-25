@@ -2,8 +2,14 @@ import React, {useState} from 'react';
 import {StyleSheet, View, Text, TextInput, ScrollView} from 'react-native';
 import {IconButton, Button, Avatar} from 'react-native-paper';
 import RNPickerSelect from 'react-native-picker-select';
-import CurrencyInput from 'react-native-currency-input';
+import {Formik} from 'formik';
+import * as yup from 'yup';
+// dispatch
+import {useDispatch} from 'react-redux';
 export default function addItem({navigation}) {
+  // dispatch
+  const dispatch = useDispatch();
+
   const [value, setValue] = useState(null); // can also be null
   // back
   const kembali = () => {
@@ -16,16 +22,51 @@ export default function addItem({navigation}) {
 
   // focus input
   const [focus, setFocus] = useState(false);
+  const [focusDua, setFocusDua] = useState(false);
 
   // select
   const select = [
-    {label: 'Makanan', value: 'hariIni', key: '1'},
-    {label: 'Minuman', value: '7Minggu', key: '2'},
-    {label: 'Cemilan', value: 'sebulan', key: '3'},
-    {label: 'Buah', value: 'setahun', key: '4'},
-    {label: 'Kerupuk', value: 'setahun', key: '4'},
-    {label: 'Kopi', value: 'setahun', key: '4'},
+    {label: 'Makanan', value: 'Makanan', key: '1'},
+    {label: 'Minuman', value: 'Minuman', key: '2'},
+    {label: 'Cemilan', value: 'Cemilan', key: '3'},
+    {label: 'Buah', value: 'Buah', key: '4'},
+    {label: 'Kerupuk', value: 'Kerupuk', key: '4'},
+    {label: 'Kopi', value: 'Kopi', key: '4'},
   ];
+
+  // onsubmit
+  const simpan = (data) => {
+    console.log(data);
+    dispatch({
+      type: 'tambahItem',
+      newItem: {
+        name: data.namaMenu,
+        price: data.hargaMenu,
+        jenis: data.jenisMenu,
+        key: Math.random().toString(),
+        orderColor: 'orange',
+        orderText: 'Order',
+        order: false,
+        quantity: 0,
+      },
+    });
+    navigation.navigate('Home');
+  };
+
+  // schema
+  const menuSchema = yup.object().shape({
+    namaMenu: yup
+      .string()
+      .min(4, 'Terlalu Pendek !')
+      .max(15, 'Terlalu Panjang !')
+      .required('Required !'),
+    jenisMenu: yup.string().required('Required !'),
+    hargaMenu: yup
+      .number()
+      .integer('Invalid Decimal !')
+      .required('Required !')
+      .typeError('Harus Angka Decimal !'),
+  });
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -35,81 +76,135 @@ export default function addItem({navigation}) {
           color="white"
           size={20}
         />
-        <Text style={styles.text}>Tambah Menu </Text>
+        <Text style={styles.text}>Tambah Menu Makanan</Text>
       </View>
       <View style={styles.wrapcon}>
         <View style={styles.containerInput}>
-          <ScrollView
-            contentContainerStyle={{
+          <View
+            style={{
               flex: 1,
-              justifyContent: 'space-between',
             }}>
-            <View>
-              <View style={styles.logo}>
-                <Avatar.Text label="Y" />
-                <Text style={{textAlign: 'center'}}>Your Cafe</Text>
-              </View>
-              <Text style={styles.textLabel}>Nama Menu </Text>
-              <TextInput
-                placeholderTextColor="#cccfd1"
-                style={
-                  focus
-                    ? [styles.input, {borderColor: 'gray', elevation: 1}]
-                    : styles.input
-                }
-                placeholder="Menu....."
-                onFocus={() => setFocus(true)}
-                onBlur={() => setFocus(false)}
-              />
-              <Text style={styles.textLabel}>Jenis Menu </Text>
+            <ScrollView
+              contentContainerStyle={{
+                justifyContent: 'space-between',
+                flexGrow: 1,
+              }}>
+              <Formik
+                validationSchema={menuSchema}
+                initialValues={{namaMenu: '', jenisMenu: '', hargaMenu: ''}}
+                onSubmit={(data) => simpan(data)}>
+                {({
+                  values,
+                  handleChange,
+                  handleSubmit,
+                  errors,
+                  handleBlur,
+                  touched,
+                  resetForm,
+                }) => (
+                  <>
+                    <View>
+                      <View style={styles.logo}>
+                        <Avatar.Text label="Y" />
+                        <Text style={{textAlign: 'center'}}>Your Cafe</Text>
+                      </View>
+                      <Text style={styles.textLabel}>Nama Menu </Text>
+                      <TextInput
+                        placeholderTextColor="#cccfd1"
+                        value={values.namaMenu}
+                        style={
+                          focusDua
+                            ? [
+                                styles.input,
+                                {borderColor: 'black', elevation: 1},
+                              ]
+                            : styles.input
+                        }
+                        placeholder="Menu....."
+                        onFocus={() => setFocusDua(true)}
+                        onEndEditing={() => {
+                          setFocusDua(false);
+                        }}
+                        onBlur={handleBlur('namaMenu')}
+                        onChangeText={handleChange('namaMenu')}
+                      />
+                      {errors.namaMenu && touched.namaMenu && (
+                        <Text style={styles.error}>{errors.namaMenu} </Text>
+                      )}
+                      <Text style={styles.textLabel}>Jenis Menu </Text>
+                      <RNPickerSelect
+                        value={values.jenisMenu.toString()}
+                        onFocus={() => setFocus(true)}
+                        onEndEditing={() => {
+                          setFocus(false);
+                        }}
+                        onBlur={handleBlur('jenisMenu')}
+                        placeholder={{
+                          label: 'Jenis Menu...',
+                          value: 'null',
+                        }}
+                        style={{
+                          ...pickerSelectStyles,
+                          iconContainer: {
+                            alignItems: 'center',
+                            borderRadius: 20,
+                            position: 'absolute',
+                            top: 10,
+                          },
+                        }}
+                        useNativeAndroidPickerStyle={false}
+                        fixAndroidTouchableBug
+                        onValueChange={handleChange('jenisMenu')}
+                        items={select}
+                      />
+                      {errors.jenisMenu && touched.jenisMenu && (
+                        <Text style={styles.error}>{errors.jenisMenu} </Text>
+                      )}
+                      <Text style={styles.textLabel}>Harga Menu</Text>
 
-              <RNPickerSelect
-                onFocus={() => setFocus(true)}
-                onBlur={() => setFocus(false)}
-                placeholder={{
-                  label: 'Jenis Menu...',
-                  value: null,
-                }}
-                style={{
-                  ...pickerSelectStyles,
-                  iconContainer: {
-                    alignItems: 'center',
-                    borderRadius: 20,
-                    position: 'absolute',
-                    top: 10,
-                  },
-                }}
-                useNativeAndroidPickerStyle={false}
-                fixAndroidTouchableBug
-                onValueChange={(value) => console.log(value)}
-                items={select}
-              />
-              <Text style={styles.textLabel}>Harga Menu</Text>
-
-              <CurrencyInput
-                placeholderTextColor="#cccfd1"
-                style={styles.input}
-                placeholder="Harga Jual..."
-                value={value}
-                onChangeValue={setValue}
-                unit="Rp. "
-                delimiter=","
-                separator="."
-                precision={3}
-                onChangeText={(formattedValue) => {
-                  console.log(formattedValue); // $2,310.46
-                }}
-              />
-            </View>
-            <View>
-              <Button
-                color="white"
-                onPress={() => console.log('Pressed')}
-                style={styles.button}>
-                Simpan
-              </Button>
-            </View>
-          </ScrollView>
+                      <TextInput
+                        placeholderTextColor="#cccfd1"
+                        keyboardType="numeric"
+                        value={values.hargaMenu}
+                        style={
+                          focus
+                            ? [
+                                styles.input,
+                                {borderColor: 'black', elevation: 1},
+                              ]
+                            : styles.input
+                        }
+                        placeholder="Harga Menu....."
+                        onFocus={() => {
+                          setFocus(true);
+                        }}
+                        onBlur={handleBlur('hargaMenu')}
+                        onEndEditing={() => setFocus(false)}
+                        onChangeText={handleChange('hargaMenu')}
+                      />
+                      {errors.hargaMenu && touched.hargaMenu && (
+                        <Text style={styles.error}>{errors.hargaMenu} </Text>
+                      )}
+                    </View>
+                    <View>
+                      <Button
+                        color="white"
+                        onPress={resetForm}
+                        style={[styles.button, {backgroundColor: 'red'}]}>
+                        Reset
+                      </Button>
+                      <Button
+                        color="white"
+                        onPress={handleSubmit}
+                        style={styles.button}>
+                        Simpan
+                      </Button>
+                    </View>
+                  </>
+                )}
+              </Formik>
+            </ScrollView>
+          </View>
         </View>
       </View>
     </View>
@@ -129,6 +224,7 @@ const styles = StyleSheet.create({
   text: {
     color: 'white',
     fontSize: 18,
+    fontWeight: 'bold',
   },
   containerInput: {
     flex: 1,
@@ -144,7 +240,10 @@ const styles = StyleSheet.create({
     borderColor: '#c1c1c1',
     paddingLeft: 15,
     padding: 10,
-    marginBottom: 10,
+  },
+  error: {
+    color: 'red',
+    fontWeight: 'bold',
   },
   wrapcon: {
     flex: 1,
@@ -153,6 +252,7 @@ const styles = StyleSheet.create({
   textLabel: {
     marginBottom: 10,
     fontWeight: 'bold',
+    marginTop: 10,
   },
   tambah: {
     position: 'relative',
@@ -160,6 +260,7 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: 'orange',
+    marginTop: 5,
   },
   logo: {
     alignItems: 'center',
@@ -175,7 +276,6 @@ const pickerSelectStyles = StyleSheet.create({
     borderColor: '#c1c1c1',
     paddingLeft: 15,
     padding: 10,
-    marginBottom: 10,
     color: 'black',
     fontSize: 17,
   },

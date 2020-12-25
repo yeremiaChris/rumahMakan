@@ -1,19 +1,12 @@
 import React, {useState, useReducer} from 'react';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import drawer from './drawerNav';
-import tambah from '../component/makanan/addItem';
+import Tambah from '../component/makanan/addItem';
 import Home from '../component/makanan/homeMakan';
 import {reducer} from '../reducer/orderReducer';
 import {IconButton} from 'react-native-paper';
 import {StyleSheet} from 'react-native';
-export default function bottomNav({
-  name,
-  navigation,
-  setLaporan,
-  laporan,
-  dispatch,
-  state,
-}) {
+export default function bottomNav({name, navigation, setLaporan, laporan}) {
   const Tab = createMaterialBottomTabNavigator();
   return (
     <Tab.Navigator
@@ -35,15 +28,7 @@ export default function bottomNav({
           },
         }}>
         {(props) => {
-          return (
-            <Home
-              setLaporan={setLaporan}
-              laporan={laporan}
-              dispatch={dispatch}
-              state={state}
-              {...props}
-            />
-          );
+          return <Home setLaporan={setLaporan} laporan={laporan} {...props} />;
         }}
       </Tab.Screen>
       <Tab.Screen
@@ -59,9 +44,9 @@ export default function bottomNav({
             return <IconButton icon="plus" color={color} style={styles.icon} />;
           },
         }}
-        name="Tambah"
-        component={tambah}
-      />
+        name="Tambah">
+        {(props) => <Tambah {...props} />}
+      </Tab.Screen>
     </Tab.Navigator>
   );
 }

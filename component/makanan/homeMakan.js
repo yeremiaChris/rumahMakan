@@ -6,14 +6,10 @@ import Chip from '../../shared/chip';
 import Items from './item';
 import Modal from '../../shared/modal';
 import ModalPay from '../../shared/modalPay';
-
-export default function homeMakan({
-  navigation,
-  setLaporan,
-  laporan,
-  dispatch,
-  state,
-}) {
+import {useDispatch} from 'react-redux';
+export default function homeMakan({navigation, setLaporan, laporan, state}) {
+  // dispatch
+  const dispatch = useDispatch();
   // increment
   const increment = (index) => {
     // setItem(
@@ -139,7 +135,7 @@ export default function homeMakan({
         />
         <Chip dispatch={dispatch} />
         <Items
-          item={state.makan}
+          item={state}
           increment={increment}
           decrement={decrement}
           orderColor={orderColor}
@@ -182,7 +178,6 @@ export default function homeMakan({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: 'white',
   },
 });

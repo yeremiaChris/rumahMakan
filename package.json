@@ -19,6 +19,7 @@
     "@react-navigation/native": "^5.8.10",
     "@react-navigation/stack": "^5.12.8",
     "@rebass/preset": "^4.0.5",
+    "@reduxjs/toolkit": "^1.5.0",
     "bootstrap": "^4.5.3",
     "dayjs": "^1.9.7",
     "emotion-theming": "^11.0.0",
@@ -34,6 +35,7 @@
     "react-dom": "^17.0.1",
     "react-hook-form": "^6.13.0",
     "react-native": "0.63.4",
+    "react-native-amount-input": "^1.0.0",
     "react-native-appearance": "^0.3.4",
     "react-native-currency-input": "^0.1.2",
     "react-native-date-input": "^1.0.11",
@@ -54,9 +56,11 @@
     "react-native-vector-icons": "^7.1.0",
     "react-native-web": "^0.14.10",
     "react-number-format": "^4.4.1",
+    "react-redux": "^7.2.2",
     "reactstrap": "^8.7.1",
     "rebass": "^4.0.7",
-    "redux": "^4.0.5"
+    "redux": "^4.0.5",
+    "yup": "^0.32.8"
   },
   "devDependencies": {
     "@babel/core": "^7.8.4",

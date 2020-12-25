@@ -31,15 +31,19 @@ import {Provider as PaperProvider} from 'react-native-paper';
 import {NavigationContainer} from '@react-navigation/native';
 import DrawerNav from './navigation/drawerNav';
 import BottomNav from './navigation/bottomNav';
+import {Provider as StoreProvider} from 'react-redux';
+import {store} from './reducer/orderReducer';
 const App: () => React$Node = () => {
   return (
     <>
-      <PaperProvider>
-        <NavigationContainer>
-          <StatusBar backgroundColor="#114444" />
-          <DrawerNav />
-        </NavigationContainer>
-      </PaperProvider>
+      <StoreProvider store={store}>
+        <PaperProvider>
+          <NavigationContainer>
+            <StatusBar backgroundColor="#114444" />
+            <DrawerNav />
+          </NavigationContainer>
+        </PaperProvider>
+      </StoreProvider>
     </>
   );
 };

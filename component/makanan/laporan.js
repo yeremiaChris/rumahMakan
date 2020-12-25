@@ -28,6 +28,7 @@ import RNPickerSelect from 'react-native-picker-select';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import Moment from 'moment';
 import {convertToRupiah} from '../../shared/rupiah';
+import ModalDetail from '../../shared/modalDetail';
 export default function Laporan({
   visible,
   hideModal,
@@ -71,6 +72,12 @@ export default function Laporan({
     setDate(date);
     hideDatePicker();
   };
+
+  // modal
+  const [visibleDua, setVisibleDua] = React.useState(false);
+
+  const showModalDua = () => setVisibleDua(true);
+  const hideModalDua = () => setVisibleDua(false);
   return (
     <>
       <View
@@ -140,46 +147,53 @@ export default function Laporan({
                   data={laporan}
                   keyExtractor={(item) => item.key}
                   renderItem={({item}) => (
-                    <DataTable.Row>
-                      <DataTable.Cell>{item.pelanggan}</DataTable.Cell>
-                      <DataTable.Cell numeric>{item.jumlahBeli}</DataTable.Cell>
-                      <DataTable.Cell numeric>
-                        {convertToRupiah(item.totalHarga)}
-                      </DataTable.Cell>
-                    </DataTable.Row>
+                    <TouchableOpacity
+                      activeOpacity={0.4}
+                      onPress={() => showModalDua()}>
+                      <DataTable.Row>
+                        <DataTable.Cell>{item.pelanggan}</DataTable.Cell>
+                        <DataTable.Cell numeric>
+                          {item.jumlahBeli}
+                        </DataTable.Cell>
+                        <DataTable.Cell numeric>
+                          {convertToRupiah(item.totalHarga)}
+                        </DataTable.Cell>
+                      </DataTable.Row>
+                    </TouchableOpacity>
                   )}
                 />
               </View>
             </DataTable>
           </View>
         </View>
-        <View>
-          <DataTable style={styles.bayar}>
-            <DataTable.Header>
-              <DataTable.Title>
-                <Text style={styles.text}>Jumlah Kuantitas</Text>
-              </DataTable.Title>
-              <DataTable.Title numeric>
-                <Text style={{fontWeight: 'bold', fontSize: 15}}>
-                  {/* {convertToRupiah(totalHarga)} */}
-                </Text>
-              </DataTable.Title>
-            </DataTable.Header>
-            <DataTable.Header>
-              <DataTable.Title>
-                <Text style={styles.text}>Pendapatan</Text>
-              </DataTable.Title>
-              <DataTable.Title numeric>
-                <Text style={{fontWeight: 'bold', fontSize: 15}}>
-                  {/* {convertToRupiah(uangBayar)} */}
-                </Text>
-              </DataTable.Title>
-            </DataTable.Header>
-          </DataTable>
-          <TouchableOpacity activeOpacity={0.7} style={styles.conPrint}>
-            <Text style={styles.print}>CETAK</Text>
-          </TouchableOpacity>
-        </View>
+        <ModalDetail visible={visibleDua} hideModal={hideModalDua} />
+
+        <DataTable style={styles.bayar}>
+          <DataTable.Header>
+            <DataTable.Title>
+              <Text style={styles.text}>Jumlah Kuantitas</Text>
+            </DataTable.Title>
+            <DataTable.Title numeric>
+              <Text style={{fontWeight: 'bold', fontSize: 15}}>
+                {/* {convertToRupiah(totalHarga)} */}
+              </Text>
+            </DataTable.Title>
+          </DataTable.Header>
+          <DataTable.Header>
+            <DataTable.Title>
+              <Text style={styles.text}>Pendapatan</Text>
+            </DataTable.Title>
+            <DataTable.Title numeric>
+              <Text style={{fontWeight: 'bold', fontSize: 15}}>
+                {/* {convertToRupiah(uangBayar)} */}
+              </Text>
+            </DataTable.Title>
+          </DataTable.Header>
+        </DataTable>
+
+        <TouchableOpacity activeOpacity={0.7} style={styles.conPrint}>
+          <Text style={styles.print}>CETAK</Text>
+        </TouchableOpacity>
       </View>
     </>
   );
@@ -189,6 +203,7 @@ const styles = StyleSheet.create({
   textDua: {
     color: 'white',
     fontSize: 20,
+    fontWeight: 'bold',
   },
   header: {
     backgroundColor: '#114444',
@@ -250,237 +265,3 @@ const pickerSelectStyles = StyleSheet.create({
     width: 180,
   },
 });
-
-// import React, {useState} from 'react';
-// import {
-//   StyleSheet,
-//   View,
-//   Text,
-//   Modal,
-//   ScrollView,
-//   TouchableOpacity,
-//   FlatList,
-// } from 'react-native';
-// import RNPickerSelect from 'react-native-picker-select';
-// import {DataTable, IconButton} from 'react-native-paper';
-// // import Picker from '@react-native-picker/picker';
-// // import {convertToRupiah} from './rupiah';
-
-// //import DatePicker from the package we installed
-// import DatePicker from 'react-native-datepicker';
-// export default function modal({
-//   visibleDua,
-//   hideModalDua,
-//   orderan,
-//   kembalian,
-//   totalHarga,
-//   uangBayar,
-//   reset,
-//   navigation,
-// }) {
-//   // select
-//   const [selectedValue, setSelectedValue] = useState('java');
-//   const select = [
-//     {label: 'Hari ini', value: 'hariIni', key: '1'},
-//     {label: '7 Minggu Terakhir', value: '7Minggu', key: '2'},
-//     {label: 'Sebulan Terakhir', value: 'sebulan', key: '3'},
-//     {label: 'Setahun ini', value: 'setahun', key: '4'},
-//   ];
-
-//   // date
-//   const [date, setDate] = useState('09-10-2020');
-//   return (
-//     <View>
-//       <Modal animationType="slide">
-//         <View style={styles.container}>
-//           <View style={styles.header}>
-//             <View style={styles.searchHead}>
-//               <IconButton
-//                 icon="arrow-left"
-//                 color="white"
-//                 size={25}
-//                 onPress={() => navigation.goBack()}
-//               />
-//             </View>
-//             <View>
-//               <Text style={styles.textDua}>Laporan Penjualan</Text>
-//             </View>
-//           </View>
-//           <View style={styles.select}>
-//             <RNPickerSelect
-//               placeholder={{
-//                 label: 'Pilih Laporan...',
-//                 value: null,
-//               }}
-//               style={pickerSelectStyles}
-//               useNativeAndroidPickerStyle={true}
-//               fixAndroidTouchableBug
-//               onValueChange={(value) => console.log(value)}
-//               items={select}
-//             />
-//             <DatePicker
-//               style={styles.datePickerStyle}
-//               date={date} // Initial date from state
-//               mode="date" // The enum of date, datetime and time
-//               placeholder="select date"
-//               format="DD-MM-YYYY"
-//               minDate="01-01-2016"
-//               maxDate="01-01-2019"
-//               confirmBtnText="Confirm"
-//               cancelBtnText="Cancel"
-//               customStyles={{
-//                 dateIcon: {
-//                   //display: 'none',
-//                   position: 'absolute',
-//                   left: 0,
-//                   top: 4,
-//                   marginLeft: 0,
-//                 },
-//                 dateInput: {
-//                   marginLeft: 36,
-//                 },
-//               }}
-//               onDateChange={(date) => {
-//                 setDate(date);
-//               }}
-//             />
-//           </View>
-//           <View style={styles.tanggal}>
-//             <Text>Selasa, 20 Des 2020</Text>
-//             <Text>Pukul: 08:20</Text>
-//           </View>
-//           <View style={styles.content}>
-//             <DataTable>
-//               <DataTable.Header>
-//                 <DataTable.Title>
-//                   <Text style={styles.text}>Nama Item</Text>
-//                 </DataTable.Title>
-//                 <DataTable.Title numeric>
-//                   <Text style={styles.text}>Jumlah Beli</Text>
-//                 </DataTable.Title>
-//                 <DataTable.Title numeric>
-//                   <Text style={styles.text}>Harga</Text>
-//                 </DataTable.Title>
-//                 <DataTable.Title numeric>
-//                   <Text style={styles.text}>Total Harga</Text>
-//                 </DataTable.Title>
-//               </DataTable.Header>
-//               <FlatList
-//                 contentContainerStyle={styles.scroll}
-//                 data={orderan}
-//                 keyExtractor={(item) => item.key}
-//                 renderItem={({item}) => (
-//                   <DataTable.Row>
-//                     {/* <DataTable.Cell>{item.name}</DataTable.Cell> */}
-//                     <DataTable.Cell numeric>
-//                       {item.totalQuantity}
-//                     </DataTable.Cell>
-//                     <DataTable.Cell numeric>
-//                       {/* {convertToRupiah(item.price)} */}
-//                     </DataTable.Cell>
-//                     <DataTable.Cell numeric>
-//                       {/* {convertToRupiah(item.totalPrice)} */}
-//                     </DataTable.Cell>
-//                   </DataTable.Row>
-//                 )}
-//               />
-//             </DataTable>
-//             <DataTable style={styles.bayar}>
-//               <DataTable.Header>
-//                 <DataTable.Title>
-//                   <Text style={styles.text}>Jumlah Kuantitas</Text>
-//                 </DataTable.Title>
-//                 <DataTable.Title numeric>
-//                   <Text style={{fontWeight: 'bold', fontSize: 15}}>
-//                     {/* {convertToRupiah(totalHarga)} */}
-//                   </Text>
-//                 </DataTable.Title>
-//               </DataTable.Header>
-//               <DataTable.Header>
-//                 <DataTable.Title>
-//                   <Text style={styles.text}>Pendapatan</Text>
-//                 </DataTable.Title>
-//                 <DataTable.Title numeric>
-//                   <Text style={{fontWeight: 'bold', fontSize: 15}}>
-//                     {/* {convertToRupiah(uangBayar)} */}
-//                   </Text>
-//                 </DataTable.Title>
-//               </DataTable.Header>
-//             </DataTable>
-//           </View>
-
-//           <TouchableOpacity activeOpacity={0.7} style={styles.conPrint}>
-//             <Text style={styles.print}>PRINT</Text>
-//           </TouchableOpacity>
-//         </View>
-//       </Modal>
-//     </View>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   text: {
-//     fontWeight: 'bold',
-//   },
-//   textDua: {
-//     color: 'white',
-//     fontSize: 20,
-//   },
-//   print: {
-//     color: 'white',
-//     marginBottom: 10,
-//   },
-//   bayar: {
-//     flex: 1,
-//     borderBottomLeftRadius: 20,
-//     borderBottomRightRadius: 20,
-//     position: 'relative',
-//     bottom: -20,
-//     backgroundColor: 'white',
-//   },
-//   header: {
-//     backgroundColor: '#114444',
-//     flexDirection: 'row',
-//     alignItems: 'center',
-//   },
-//   container: {
-//     flex: 1,
-//     justifyContent: 'space-between',
-//   },
-//   button: {
-//     backgroundColor: '#114444',
-//     borderRadius: 0,
-//     paddingTop: 25,
-//   },
-//   conPrint: {
-//     justifyContent: 'flex-end',
-//     zIndex: -1,
-//     backgroundColor: '#114444',
-//     alignItems: 'center',
-//     height: 60,
-//   },
-//   content: {
-//     flex: 1,
-//     backgroundColor: 'white',
-//   },
-//   tanggal: {
-//     paddingLeft: 15,
-//     paddingTop: 10,
-//     paddingRight: 15,
-//     paddingBottom: 15,
-//     flexDirection: 'row',
-//     justifyContent: 'space-between',
-//   },
-//   scroll: {
-//     height: 200,
-//     marginTop: 20,
-//   },
-// });
-
-// const pickerSelectStyles = StyleSheet.create({
-//   inputAndroid: {
-//     fontSize: 16,
-//     color: 'black',
-//     paddingRight: 30, // to ensure the text is never behind the icon
-//   },
-// });
