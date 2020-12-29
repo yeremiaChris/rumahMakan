@@ -23,17 +23,10 @@ function drawerNav(props) {
         )}
       </Drawer.Screen>
       <Drawer.Screen name="Laporan">
-        {(props) => <Laporan {...props} laporan={laporan} name="Laporan" />}
+        {(props) => <Bottom {...props} laporan={laporan} name="Laporan" />}
       </Drawer.Screen>
       <Drawer.Screen name="Tambah">
-        {(props) => (
-          <Bottom
-            {...props}
-            name="Tambah"
-            setLaporan={setLaporan}
-            laporan={laporan}
-          />
-        )}
+        {(props) => <Bottom {...props} name="Tambah" />}
       </Drawer.Screen>
     </Drawer.Navigator>
   );

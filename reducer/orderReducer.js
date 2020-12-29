@@ -11,6 +11,7 @@ const makan = [
     orderColor: 'orange',
     orderText: 'Order',
     order: false,
+    edit: false,
   },
   {
     name: 'Mie Goreng',
@@ -21,6 +22,7 @@ const makan = [
     orderColor: 'orange',
     orderText: 'Order',
     order: false,
+    edit: false,
   },
   {
     name: 'Geprek',
@@ -31,6 +33,7 @@ const makan = [
     orderColor: 'orange',
     orderText: 'Order',
     order: false,
+    edit: false,
   },
   {
     name: 'Ayam Penyet Bakar',
@@ -41,6 +44,7 @@ const makan = [
     orderColor: 'orange',
     orderText: 'Order',
     order: false,
+    edit: false,
   },
   {
     name: 'Kopi Panas',
@@ -51,6 +55,7 @@ const makan = [
     orderColor: 'orange',
     orderText: 'Order',
     order: false,
+    edit: false,
   },
   {
     name: 'Teh Panas',
@@ -61,6 +66,7 @@ const makan = [
     orderColor: 'orange',
     orderText: 'Order',
     order: false,
+    edit: false,
   },
   {
     name: 'Americano',
@@ -71,6 +77,7 @@ const makan = [
     orderColor: 'orange',
     orderText: 'Order',
     order: false,
+    edit: false,
   },
   {
     name: 'Es Jeruk',
@@ -81,10 +88,24 @@ const makan = [
     orderColor: 'orange',
     orderText: 'Order',
     order: false,
+    edit: false,
   },
 ];
 const initialValue = {
   item: makan,
+};
+
+// nama dan action untuk update
+// kalo nggak di buat ada error di async function
+const UPDATE = 'update';
+export const update = (key, name, price, jenis) => {
+  return {
+    type: UPDATE,
+    key: key,
+    name: name,
+    price: price,
+    jenis: jenis,
+  };
 };
 export const reducer = (state = initialValue, action) => {
   switch (action.type) {
@@ -143,7 +164,10 @@ export const reducer = (state = initialValue, action) => {
       };
       break;
     case 'urutMakan':
-      return [...state.item.sort((data) => data.jenis !== action.test)];
+      return {
+        item: [...state.item.sort((data) => data.jenis !== action.test)],
+      };
+      break;
     case 'reset':
       return {
         item: [
@@ -158,9 +182,48 @@ export const reducer = (state = initialValue, action) => {
           }),
         ],
       };
+      break;
     case 'tambahItem':
       return {
         item: [action.newItem, ...state.item],
+      };
+      break;
+    case 'hapusItem':
+      return {
+        item: [...state.item.filter((item) => item.key != action.key)],
+      };
+      break;
+    case 'hapusSemua':
+      return {
+        item: [],
+      };
+      break;
+    case 'edit': {
+      return {
+        item: [
+          ...state.item.map((data) => {
+            return {
+              ...data,
+              edit: true,
+            };
+          }),
+        ],
+      };
+    }
+    case UPDATE:
+      return {
+        item: [
+          ...state.item.map((data) =>
+            data.key === action.key
+              ? {
+                  ...data,
+                  name: action.name,
+                  price: action.price,
+                  jenis: action.jenis,
+                }
+              : data,
+          ),
+        ],
       };
     default:
       return state;

@@ -7,7 +7,16 @@ import Items from './item';
 import Modal from '../../shared/modal';
 import ModalPay from '../../shared/modalPay';
 import {useDispatch} from 'react-redux';
-export default function homeMakan({navigation, setLaporan, laporan, state}) {
+
+import StackNav from '../../navigation/stackNav';
+export default function homeMakan({
+  pilihPage,
+  setLaporan,
+  laporan,
+  state,
+  navigation,
+  route,
+}) {
   // dispatch
   const dispatch = useDispatch();
   // increment
@@ -77,14 +86,12 @@ export default function homeMakan({navigation, setLaporan, laporan, state}) {
     dispatch({type: 'cancelOrderItem', id: key});
     setTotalHarga((prev) => prev - totalPrice);
   };
-
   // const total jumlah yang di order
   const [totalYangDiBeli, setTotalYangDiBeli] = useState(0);
   const totalBarang = () =>
     orderan.reduce((acc, curr) => {
       console.log(acc);
     });
-
   // reset semua
   const reset = () => {
     setOrderan([]);
@@ -126,21 +133,21 @@ export default function homeMakan({navigation, setLaporan, laporan, state}) {
   return (
     <>
       <View style={styles.container}>
-        <Header navigation={navigation} showModal={showModal} />
+        <Header navigation={pilihPage} showModal={showModal} />
         <BottomBar
           totalBarang={totalBarang}
           totalHarga={totalHarga}
           reset={reset}
           showModal={showModal}
         />
-        <Chip dispatch={dispatch} />
+        <Chip />
         <Items
-          item={state}
+          pilihPage={pilihPage}
           increment={increment}
           decrement={decrement}
           orderColor={orderColor}
           cancelOrder={cancelOrder}
-          orderan={orderan}
+          kunci={navigation}
         />
         <ModalPay
           totalBarang={totalBarang}

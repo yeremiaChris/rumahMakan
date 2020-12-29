@@ -4,9 +4,10 @@ import {IconButton, Button, Avatar} from 'react-native-paper';
 import RNPickerSelect from 'react-native-picker-select';
 import {Formik} from 'formik';
 import * as yup from 'yup';
+import {update} from '../../reducer/orderReducer';
 // dispatch
 import {useDispatch} from 'react-redux';
-export default function addItem({navigation}) {
+export default function addItem({pindahPage, params, route, navigation}) {
   // dispatch
   const dispatch = useDispatch();
 
@@ -35,22 +36,30 @@ export default function addItem({navigation}) {
   ];
 
   // onsubmit
-  const simpan = (data) => {
-    console.log(data);
-    dispatch({
-      type: 'tambahItem',
-      newItem: {
-        name: data.namaMenu,
-        price: data.hargaMenu,
-        jenis: data.jenisMenu,
-        key: Math.random().toString(),
-        orderColor: 'orange',
-        orderText: 'Order',
-        order: false,
-        quantity: 0,
-      },
-    });
-    navigation.navigate('Home');
+  const simpan = (data, {resetForm}) => {
+    if (route.name == 'Tambah') {
+      dispatch({
+        type: 'tambahItem',
+        newItem: {
+          name: data.namaMenu,
+          price: data.hargaMenu,
+          jenis: data.jenisMenu,
+          key: Math.random().toString(),
+          orderColor: 'orange',
+          orderText: 'Order',
+          order: false,
+          quantity: 0,
+          edit: false,
+        },
+      });
+      pindahPage.navigate('Home');
+    } else {
+      dispatch(
+        update(route.params.key, data.namaMenu, data.hargaMenu, data.jenisMenu),
+      );
+      navigation.navigate('Home');
+    }
+    resetForm();
   };
 
   // schema
@@ -67,16 +76,19 @@ export default function addItem({navigation}) {
       .required('Required !')
       .typeError('Harus Angka Decimal !'),
   });
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <IconButton
-          onPress={() => kembali()}
+          onPress={kembali}
           icon="arrow-left"
           color="white"
           size={20}
         />
-        <Text style={styles.text}>Tambah Menu Makanan</Text>
+        <Text style={styles.text}>
+          {route.name === 'Update' ? 'Update' : 'Tambah Item'}
+        </Text>
       </View>
       <View style={styles.wrapcon}>
         <View style={styles.containerInput}>
@@ -91,8 +103,20 @@ export default function addItem({navigation}) {
               }}>
               <Formik
                 validationSchema={menuSchema}
-                initialValues={{namaMenu: '', jenisMenu: '', hargaMenu: ''}}
-                onSubmit={(data) => simpan(data)}>
+                initialValues={
+                  route.name === 'Update'
+                    ? {
+                        namaMenu: route.params.name,
+                        jenisMenu: route.params.jenis,
+                        hargaMenu: route.params.price.toString(),
+                      }
+                    : {
+                        namaMenu: '',
+                        jenisMenu: '',
+                        hargaMenu: '',
+                      }
+                }
+                onSubmit={simpan}>
                 {({
                   values,
                   handleChange,
@@ -141,7 +165,7 @@ export default function addItem({navigation}) {
                         onBlur={handleBlur('jenisMenu')}
                         placeholder={{
                           label: 'Jenis Menu...',
-                          value: 'null',
+                          value: '',
                         }}
                         style={{
                           ...pickerSelectStyles,

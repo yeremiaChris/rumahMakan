@@ -6,7 +6,16 @@ import Home from '../component/makanan/homeMakan';
 import {reducer} from '../reducer/orderReducer';
 import {IconButton} from 'react-native-paper';
 import {StyleSheet} from 'react-native';
-export default function bottomNav({name, navigation, setLaporan, laporan}) {
+import Stack from './stackNav';
+import Laporan from '../component/makanan/laporan';
+import Add from '../component/makanan/addItem';
+export default function bottomNav({
+  name,
+  navigation,
+  setLaporan,
+  laporan,
+  route,
+}) {
   const Tab = createMaterialBottomTabNavigator();
   return (
     <Tab.Navigator
@@ -28,8 +37,34 @@ export default function bottomNav({name, navigation, setLaporan, laporan}) {
           },
         }}>
         {(props) => {
-          return <Home setLaporan={setLaporan} laporan={laporan} {...props} />;
+          return (
+            <Stack
+              {...props}
+              setLaporan={setLaporan}
+              laporan={laporan}
+              pindahPage={navigation}
+              params={route.params}
+            />
+          );
         }}
+      </Tab.Screen>
+      <Tab.Screen
+        listeners={{
+          tabPress: (e) => {
+            e.preventDefault();
+            navigation.navigate('Laporan');
+          },
+        }}
+        options={{
+          tabBarLabel: false,
+          tabBarIcon: ({color}) => {
+            return (
+              <IconButton icon="store" color={color} style={styles.icon} />
+            );
+          },
+        }}
+        name="Laporan">
+        {(props) => <Laporan {...props} laporan={laporan} name="Laporan" />}
       </Tab.Screen>
       <Tab.Screen
         listeners={{
@@ -45,7 +80,15 @@ export default function bottomNav({name, navigation, setLaporan, laporan}) {
           },
         }}
         name="Tambah">
-        {(props) => <Tambah {...props} />}
+        {(props) => (
+          <Add
+            {...props}
+            name="Tambah"
+            setLaporan={setLaporan}
+            laporan={laporan}
+            pindahPage={navigation}
+          />
+        )}
       </Tab.Screen>
     </Tab.Navigator>
   );
@@ -60,8 +103,7 @@ const styles = StyleSheet.create({
     elevation: 0,
     padding: 0,
     zIndex: -1,
-    alignItems: 'center',
     justifyContent: 'center',
-    height: 40,
+    height: 35,
   },
 });

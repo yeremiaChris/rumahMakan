@@ -1,8 +1,10 @@
 import React, {useState} from 'react';
 import {Chip} from 'react-native-paper';
 import {StyleSheet, View, FlatList, Text} from 'react-native';
-
-function chip({dispatch}) {
+import {useDispatch} from 'react-redux';
+function chip() {
+  // dispatch
+  const dispatch = useDispatch();
   const data = [
     {
       chip: 'Makanan',
@@ -15,18 +17,23 @@ function chip({dispatch}) {
       select: false,
     },
     {
-      chip: 'Minuman',
+      chip: 'Cemilan',
       id: '3',
       select: false,
     },
     {
-      chip: 'Minuman',
+      chip: 'Buah',
       id: '4',
       select: false,
     },
     {
-      chip: 'Minuman',
+      chip: 'Kerupuk',
       id: '5',
+      select: false,
+    },
+    {
+      chip: 'Kopi',
+      id: '6',
       select: false,
     },
   ];
