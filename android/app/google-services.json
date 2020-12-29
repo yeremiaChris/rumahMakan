@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "233908126443",
+    "project_id": "salessystem-8c100",
+    "storage_bucket": "salessystem-8c100.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:233908126443:android:d560804c263f49598934ae",
+        "android_client_info": {
+          "package_name": "com.rumahmakan"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "233908126443-72p0pibl3qsgf1koiolvrchg3udajk2b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJQMbCHaxKw1boHSjh1UM5LF3jhRVHAQs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "233908126443-72p0pibl3qsgf1koiolvrchg3udajk2b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -246,15 +246,23 @@ function item({
 
       <View>
         <Portal>
-          <Dialog visible={visible} onDismiss={hideDialog}>
+          <Dialog visible={visible} style={{backgroundColor: '#114444'}}>
             {semua ? (
-              <Dialog.Title>Hapus semuanya ?</Dialog.Title>
+              <Dialog.Title style={{color: 'white'}}>
+                Hapus semuanya ?
+              </Dialog.Title>
             ) : (
-              <Dialog.Title>Hapus menu {itemHapus.item} ?</Dialog.Title>
+              <Dialog.Title style={{color: 'white'}}>
+                Hapus menu {itemHapus.item} ?
+              </Dialog.Title>
             )}
             <Dialog.Actions>
-              <Button onPress={ya}>Ya</Button>
-              <Button onPress={tidak}>Tidak</Button>
+              <Button color="white" onPress={ya}>
+                Ya
+              </Button>
+              <Button color="white" onPress={tidak}>
+                Tidak
+              </Button>
             </Dialog.Actions>
           </Dialog>
         </Portal>
