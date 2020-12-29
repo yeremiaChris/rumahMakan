@@ -10,6 +10,8 @@ export default function stackNav({
   pindahPage,
   params,
   route,
+  setInfoLaporan,
+  infoLaporan,
 }) {
   return (
     <Stack.Navigator
@@ -23,6 +25,8 @@ export default function stackNav({
             setLaporan={setLaporan}
             laporan={laporan}
             pilihPage={pindahPage}
+            setInfoLaporan={setInfoLaporan}
+            infoLaporan={infoLaporan}
           />
         )}
       </Stack.Screen>

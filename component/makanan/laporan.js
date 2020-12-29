@@ -35,6 +35,7 @@ export default function Laporan({
   showModal,
   navigation,
   laporan,
+  infoLaporan,
 }) {
   // pelanggan
   const data = [
@@ -73,10 +74,15 @@ export default function Laporan({
     hideDatePicker();
   };
 
-  // modal
+  // modal detail laporan
   const [visibleDua, setVisibleDua] = React.useState(false);
 
-  const showModalDua = () => setVisibleDua(true);
+  // state detail
+  const [detailItems, setDetailItems] = useState({});
+  const showModalDua = (detailItem, pelanggan) => {
+    setVisibleDua(true);
+    setDetailItems({detail: detailItem, pelanggan});
+  };
   const hideModalDua = () => setVisibleDua(false);
   return (
     <>
@@ -149,7 +155,7 @@ export default function Laporan({
                   renderItem={({item}) => (
                     <TouchableOpacity
                       activeOpacity={0.4}
-                      onPress={() => showModalDua()}>
+                      onPress={() => showModalDua(item.item, item.pelanggan)}>
                       <DataTable.Row>
                         <DataTable.Cell>{item.pelanggan}</DataTable.Cell>
                         <DataTable.Cell numeric>
@@ -166,16 +172,20 @@ export default function Laporan({
             </DataTable>
           </View>
         </View>
-        <ModalDetail visible={visibleDua} hideModal={hideModalDua} />
+        <ModalDetail
+          visible={visibleDua}
+          hideModal={hideModalDua}
+          detailItems={detailItems}
+        />
 
         <DataTable style={styles.bayar}>
           <DataTable.Header>
             <DataTable.Title>
-              <Text style={styles.text}>Jumlah Kuantitas</Text>
+              <Text style={styles.text}>Jumlah Kuantitas Beli</Text>
             </DataTable.Title>
             <DataTable.Title numeric>
               <Text style={{fontWeight: 'bold', fontSize: 15}}>
-                {/* {convertToRupiah(totalHarga)} */}
+                {infoLaporan.total}
               </Text>
             </DataTable.Title>
           </DataTable.Header>
@@ -185,7 +195,7 @@ export default function Laporan({
             </DataTable.Title>
             <DataTable.Title numeric>
               <Text style={{fontWeight: 'bold', fontSize: 15}}>
-                {/* {convertToRupiah(uangBayar)} */}
+                {convertToRupiah(infoLaporan.pendapatan)}
               </Text>
             </DataTable.Title>
           </DataTable.Header>

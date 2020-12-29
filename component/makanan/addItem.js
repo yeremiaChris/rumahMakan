@@ -87,7 +87,7 @@ export default function addItem({pindahPage, params, route, navigation}) {
           size={20}
         />
         <Text style={styles.text}>
-          {route.name === 'Update' ? 'Update' : 'Tambah Item'}
+          {route.name === 'Update' ? 'UPDATE MENU' : 'TAMBAH MENU'}
         </Text>
       </View>
       <View style={styles.wrapcon}>
@@ -211,17 +211,20 @@ export default function addItem({pindahPage, params, route, navigation}) {
                       )}
                     </View>
                     <View>
-                      <Button
-                        color="white"
-                        onPress={resetForm}
-                        style={[styles.button, {backgroundColor: 'red'}]}>
-                        Reset
-                      </Button>
+                      {route.name === 'Update' ? null : (
+                        <Button
+                          color="white"
+                          onPress={resetForm}
+                          style={[styles.button, {backgroundColor: 'red'}]}>
+                          Reset
+                        </Button>
+                      )}
+
                       <Button
                         color="white"
                         onPress={handleSubmit}
                         style={styles.button}>
-                        Simpan
+                        {route.name === 'Update' ? 'Update' : 'Simpan'}
                       </Button>
                     </View>
                   </>

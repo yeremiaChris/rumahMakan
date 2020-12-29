@@ -15,6 +15,8 @@ export default function bottomNav({
   setLaporan,
   laporan,
   route,
+  infoLaporan,
+  setInfoLaporan,
 }) {
   const Tab = createMaterialBottomTabNavigator();
   return (
@@ -44,6 +46,8 @@ export default function bottomNav({
               laporan={laporan}
               pindahPage={navigation}
               params={route.params}
+              setInfoLaporan={setInfoLaporan}
+              infoLaporan={infoLaporan}
             />
           );
         }}
@@ -64,7 +68,14 @@ export default function bottomNav({
           },
         }}
         name="Laporan">
-        {(props) => <Laporan {...props} laporan={laporan} name="Laporan" />}
+        {(props) => (
+          <Laporan
+            {...props}
+            laporan={laporan}
+            name="Laporan"
+            infoLaporan={infoLaporan}
+          />
+        )}
       </Tab.Screen>
       <Tab.Screen
         listeners={{

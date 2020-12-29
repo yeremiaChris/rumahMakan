@@ -16,6 +16,8 @@ export default function homeMakan({
   state,
   navigation,
   route,
+  setInfoLaporan,
+  infoLaporan,
 }) {
   // dispatch
   const dispatch = useDispatch();
@@ -164,6 +166,8 @@ export default function homeMakan({
           setUangBayar={setUangBayar}
           button={button}
           setButton={setButton}
+          setInfoLaporan={setInfoLaporan}
+          infoLaporan={infoLaporan}
         />
         <Modal
           setTotalYangDiBeli={setTotalYangDiBeli}

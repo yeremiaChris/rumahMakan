@@ -26,12 +26,18 @@ export default function modalPay({
   setLaporan,
   laporan,
   totalYangDiBeli,
+  setInfoLaporan,
+  infoLaporan,
 }) {
   const containerStyle = {backgroundColor: 'white', padding: 20};
   // mengelola kembalian uang bayar
   const uangKembalian = (text) => {
     setKembalian(text - totalHarga);
   };
+
+  // state untuk jumlah pelanggan
+  const [pelangganNo, setPelangganNo] = useState(1);
+
   // onSubmit
   const submit = (data) => {
     const totalBarang = orderan.reduce(
@@ -43,7 +49,7 @@ export default function modalPay({
       ...laporan,
       {
         key: Math.random().toString(),
-        pelanggan: 'Pelanggan' + Math.random(),
+        pelanggan: 'Pelanggan ' + pelangganNo,
         jumlahBeli: totalBarang,
         totalHarga: totalHarga,
         item: orderan,
@@ -51,6 +57,13 @@ export default function modalPay({
         kembalian: kembalian,
       },
     ]);
+
+    // info laporan mendapatkan pendapatan dan jumlah belinya
+    setInfoLaporan({
+      pendapatan: infoLaporan.pendapatan + totalHarga,
+      total: infoLaporan.total + totalBarang,
+    });
+    setPelangganNo((prevState) => prevState + 1);
     hideModal();
     showModalDua();
     setUangBayar(data.uangBayar);
