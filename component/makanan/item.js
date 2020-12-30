@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Card,
   Title,
@@ -30,6 +30,11 @@ function item({
   params,
   nav,
 }) {
+  // dispatch hapus item
+  const dispatch = useDispatch();
+  // useEffect(() => {
+  //   const data = firestore().collection('menu');
+  // }, []);
   // accessing global state from redux
   const data = useSelector((state) => state);
   // delete button to display
@@ -54,8 +59,6 @@ function item({
   // hide for udpate
   const hideDialogDua = () => setVisibleDua(false);
 
-  // dispatch hapus item
-  const dispatch = useDispatch();
   const hapusItem = (key) => {
     dispatch({type: 'hapusItem', key});
     hideDialog();
@@ -321,6 +324,6 @@ const styles = StyleSheet.create({
     width: 150,
   },
   container: {
-    height: 335,
+    height: 340,
   },
 });

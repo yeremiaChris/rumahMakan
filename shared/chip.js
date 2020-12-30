@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     borderRadius: 0,
   },
   containerChip: {
-    marginTop: -20,
+    marginTop: -25,
     paddingLeft: 10,
     paddingRight: 10,
   },

@@ -33,6 +33,8 @@ import DrawerNav from './navigation/drawerNav';
 import BottomNav from './navigation/bottomNav';
 import {Provider as StoreProvider} from 'react-redux';
 import {store} from './reducer/orderReducer';
+
+// firebase
 const App: () => React$Node = () => {
   return (
     <>
