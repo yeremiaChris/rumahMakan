@@ -33,6 +33,7 @@ import DrawerNav from './navigation/drawerNav';
 import BottomNav from './navigation/bottomNav';
 import {Provider as StoreProvider} from 'react-redux';
 import {store} from './reducer/orderReducer';
+
 const App: () => React$Node = () => {
   return (
     <>

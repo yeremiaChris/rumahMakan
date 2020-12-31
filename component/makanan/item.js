@@ -17,7 +17,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {convertToRupiah} from '../../shared/rupiah';
-
+import {hapusItem, hapusSemua} from '../../reducer/actionRedux';
 // accesing global state redux
 import {useSelector, useDispatch} from 'react-redux';
 
@@ -57,13 +57,13 @@ function item({
   // dispatch hapus item
   const dispatch = useDispatch();
   const hapusItem = (key) => {
-    dispatch({type: 'hapusItem', key});
+    dispatch(hapusItem(key));
     hideDialog();
   };
 
   // dispatch hapus semua
   const hapusSemua = () => {
-    dispatch({type: 'hapusSemua'});
+    dispatch(hapusSemua());
     hideDialog();
   };
   // state untuk delete
@@ -94,10 +94,6 @@ function item({
   // edit
   const [editMode, setEditMode] = useState(false);
   const edit = (key, name, jenis, price) => {
-    dispatch({
-      type: 'edit',
-      key: item.key,
-    });
     pilihPage.navigate('Update', {key, name, jenis, price});
   };
 
@@ -246,15 +242,26 @@ function item({
 
       <View>
         <Portal>
-          <Dialog visible={visible} onDismiss={hideDialog}>
+          <Dialog
+            style={{backgroundColor: '#114444'}}
+            visible={visible}
+            onDismiss={hideDialog}>
             {semua ? (
-              <Dialog.Title>Hapus semuanya ?</Dialog.Title>
+              <Dialog.Title style={{color: 'white'}}>
+                Hapus semuanya ?
+              </Dialog.Title>
             ) : (
-              <Dialog.Title>Hapus menu {itemHapus.item} ?</Dialog.Title>
+              <Dialog.Title style={{color: 'white'}}>
+                Hapus menu {itemHapus.item} ?
+              </Dialog.Title>
             )}
             <Dialog.Actions>
-              <Button onPress={ya}>Ya</Button>
-              <Button onPress={tidak}>Tidak</Button>
+              <Button color="white" onPress={ya}>
+                Ya
+              </Button>
+              <Button color="white" onPress={tidak}>
+                Tidak
+              </Button>
             </Dialog.Actions>
           </Dialog>
         </Portal>

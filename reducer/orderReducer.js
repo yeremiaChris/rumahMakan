@@ -1,3 +1,15 @@
+import {
+  UPDATE,
+  INCREMENT_ORDER,
+  DECREMENT_ORDER,
+  ORDER_ITEM,
+  CANCEL_ORDER_ITEM,
+  URUT_MAKAN,
+  RESET,
+  TAMBAH_ITEM,
+  HAPUS_ITEM,
+  HAPUS_SEMUA,
+} from './actionType';
 // reducer
 import {createStore} from 'redux';
 // dummy data
@@ -97,19 +109,9 @@ const initialValue = {
 
 // nama dan action untuk update
 // kalo nggak di buat ada error di async function
-const UPDATE = 'update';
-export const update = (key, name, price, jenis) => {
-  return {
-    type: UPDATE,
-    key: key,
-    name: name,
-    price: price,
-    jenis: jenis,
-  };
-};
 export const reducer = (state = initialValue, action) => {
   switch (action.type) {
-    case 'incrementOrder':
+    case INCREMENT_ORDER:
       return {
         item: [
           ...state.item.map((data) =>
@@ -120,7 +122,7 @@ export const reducer = (state = initialValue, action) => {
         ],
       };
       break;
-    case 'decrementOrder':
+    case DECREMENT_ORDER:
       return {
         item: [
           ...state.item.map((data) =>
@@ -131,7 +133,7 @@ export const reducer = (state = initialValue, action) => {
         ],
       };
       break;
-    case 'orderItem':
+    case ORDER_ITEM:
       return {
         item: [
           ...state.item.map((data) =>
@@ -147,7 +149,7 @@ export const reducer = (state = initialValue, action) => {
         ],
       };
       break;
-    case 'cancelOrderItem':
+    case CANCEL_ORDER_ITEM:
       return {
         item: [
           ...state.item.map((data) =>
@@ -163,12 +165,12 @@ export const reducer = (state = initialValue, action) => {
         ],
       };
       break;
-    case 'urutMakan':
+    case URUT_MAKAN:
       return {
         item: [...state.item.sort((data) => data.jenis !== action.test)],
       };
       break;
-    case 'reset':
+    case RESET:
       return {
         item: [
           ...state.item.map((data) => {
@@ -183,33 +185,21 @@ export const reducer = (state = initialValue, action) => {
         ],
       };
       break;
-    case 'tambahItem':
+    case TAMBAH_ITEM:
       return {
         item: [action.newItem, ...state.item],
       };
       break;
-    case 'hapusItem':
+    case HAPUS_ITEM:
       return {
         item: [...state.item.filter((item) => item.key != action.key)],
       };
       break;
-    case 'hapusSemua':
+    case HAPUS_SEMUA:
       return {
         item: [],
       };
       break;
-    case 'edit': {
-      return {
-        item: [
-          ...state.item.map((data) => {
-            return {
-              ...data,
-              edit: true,
-            };
-          }),
-        ],
-      };
-    }
     case UPDATE:
       return {
         item: [

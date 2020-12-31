@@ -4,7 +4,7 @@ import {IconButton, Button, Avatar} from 'react-native-paper';
 import RNPickerSelect from 'react-native-picker-select';
 import {Formik} from 'formik';
 import * as yup from 'yup';
-import {update} from '../../reducer/orderReducer';
+import {update, tambahItem} from '../../reducer/actionRedux';
 // dispatch
 import {useDispatch} from 'react-redux';
 export default function addItem({pindahPage, params, route, navigation}) {
@@ -38,20 +38,18 @@ export default function addItem({pindahPage, params, route, navigation}) {
   // onsubmit
   const simpan = (data, {resetForm}) => {
     if (route.name == 'Tambah') {
-      dispatch({
-        type: 'tambahItem',
-        newItem: {
-          name: data.namaMenu,
-          price: data.hargaMenu,
-          jenis: data.jenisMenu,
-          key: Math.random().toString(),
-          orderColor: 'orange',
-          orderText: 'Order',
-          order: false,
-          quantity: 0,
-          edit: false,
-        },
-      });
+      const newItem = {
+        name: data.namaMenu,
+        price: data.hargaMenu,
+        jenis: data.jenisMenu,
+        key: Math.random().toString(),
+        orderColor: 'orange',
+        orderText: 'Order',
+        order: false,
+        quantity: 0,
+        edit: false,
+      };
+      dispatch(tambahItem(newItem));
       pindahPage.navigate('Home');
     } else {
       dispatch(
