@@ -7,7 +7,13 @@ import Items from './item';
 import Modal from '../../shared/modal';
 import ModalPay from '../../shared/modalPay';
 import {useDispatch} from 'react-redux';
-
+import {
+  incrementOrder,
+  decrementOrder,
+  orderItem,
+  cancelOrderItem,
+  resetAction,
+} from '../../reducer/actionRedux';
 import StackNav from '../../navigation/stackNav';
 export default function homeMakan({
   pilihPage,
@@ -30,7 +36,7 @@ export default function homeMakan({
     //       : item,
     //   ),
     // );
-    dispatch({type: 'incrementOrder', id: index});
+    dispatch(incrementOrder(index));
   };
 
   // decrement
@@ -42,7 +48,7 @@ export default function homeMakan({
     //       : item,
     //   ),
     // );
-    dispatch({type: 'decrementOrder', id: index});
+    dispatch(decrementOrder(index));
   };
 
   // total harga
@@ -59,7 +65,7 @@ export default function homeMakan({
     //       : item,
     //   ),
     // );
-    dispatch({type: 'orderItem', id: key});
+    dispatch(orderItem(key));
     if (totalQuantity > 0) {
       setOrderan([
         ...orderan,
@@ -85,7 +91,7 @@ export default function homeMakan({
     //       : item,
     //   ),
     // );
-    dispatch({type: 'cancelOrderItem', id: key});
+    dispatch(cancelOrderItem(key));
     setTotalHarga((prev) => prev - totalPrice);
   };
   // const total jumlah yang di order
@@ -98,7 +104,7 @@ export default function homeMakan({
   const reset = () => {
     setOrderan([]);
     setTotalHarga(0);
-    dispatch({type: 'reset'});
+    dispatch(resetAction());
     // setItem([
     //   ...item.map((data) => {
     //     setOrderan([]);

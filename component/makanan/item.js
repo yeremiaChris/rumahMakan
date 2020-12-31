@@ -17,7 +17,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {convertToRupiah} from '../../shared/rupiah';
-
+import {hapusItem, hapusSemua} from '../../reducer/actionRedux';
 // accesing global state redux
 import {useSelector, useDispatch} from 'react-redux';
 
@@ -60,13 +60,13 @@ function item({
   const hideDialogDua = () => setVisibleDua(false);
 
   const hapusItem = (key) => {
-    dispatch({type: 'hapusItem', key});
+    dispatch(hapusItem(key));
     hideDialog();
   };
 
   // dispatch hapus semua
   const hapusSemua = () => {
-    dispatch({type: 'hapusSemua'});
+    dispatch(hapusSemua());
     hideDialog();
   };
   // state untuk delete
@@ -97,10 +97,6 @@ function item({
   // edit
   const [editMode, setEditMode] = useState(false);
   const edit = (key, name, jenis, price) => {
-    dispatch({
-      type: 'edit',
-      key: item.key,
-    });
     pilihPage.navigate('Update', {key, name, jenis, price});
   };
 
@@ -249,7 +245,10 @@ function item({
 
       <View>
         <Portal>
-          <Dialog visible={visible} style={{backgroundColor: '#114444'}}>
+          <Dialog
+            style={{backgroundColor: '#114444'}}
+            visible={visible}
+            onDismiss={hideDialog}>
             {semua ? (
               <Dialog.Title style={{color: 'white'}}>
                 Hapus semuanya ?

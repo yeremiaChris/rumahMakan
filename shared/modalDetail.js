@@ -70,7 +70,7 @@ export default function modalDetail({visible, hideModal, detailItems}) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#114444',
-    padding: 10,
+    padding: 20,
   },
   header: {
     fontSize: 20,
