@@ -11,6 +11,7 @@ import {
   HAPUS_SEMUA,
   FETCH_MENU,
   ERROR,
+  DISMISS,
 } from './actionType';
 import firestore from '@react-native-firebase/firestore';
 // action function
@@ -103,24 +104,11 @@ export const tambahItem = (newItem) => {
         price: newItem.price,
       })
       .then(() => {
-        dispatch({type: TAMBAH_ITEM});
+        dispatch({type: TAMBAH_ITEM, success: true});
       })
       .catch((err) => {
-        dispatch({type: ERROR});
+        dispatch({type: ERROR, success: false});
       });
-    // asyn call to database
-    // firestore
-    //   .collection('menu')
-    //   .add({
-    //     ...newItem,
-    //     test: 'test',
-    //   })
-    //   .then(() => {
-    //     dispatch({type: TAMBAH_ITEM, newItem});
-    //   })
-    //   .catch((err) => {
-    //     dispatch({type: ERROR, err});
-    //   });
   };
 };
 // export const tambahItem = (newItem) => {
@@ -140,5 +128,11 @@ export const hapusItem = (key) => {
 export const hapusSemua = () => {
   return {
     type: HAPUS_SEMUA,
+  };
+};
+
+export const dismiss = () => {
+  return {
+    type: DISMISS,
   };
 };

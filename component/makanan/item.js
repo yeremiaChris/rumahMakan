@@ -8,6 +8,7 @@ import {
   Dialog,
   Portal,
   ActivityIndicator,
+  Snackbar,
 } from 'react-native-paper';
 import {
   StyleSheet,
@@ -18,10 +19,16 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {convertToRupiah} from '../../shared/rupiah';
-import {hapusItem, hapusSemua, fetchMenu} from '../../reducer/actionRedux';
+import {
+  hapusItem,
+  hapusSemua,
+  fetchMenu,
+  dismiss,
+} from '../../reducer/actionRedux';
 // accesing global state redux
 import {useSelector, useDispatch} from 'react-redux';
 import {useFirestoreConnect} from 'react-redux-firebase';
+
 function item({
   pilihPage,
   increment,
@@ -33,15 +40,20 @@ function item({
 }) {
   // dispatch hapus item
   const dispatch = useDispatch();
+
+  // useEffect untuk fetch data dari firebase redux
   useEffect(() => {
     dispatch(fetchMenu());
   }, []);
 
-  useFirestoreConnect(['menu']);
+  // accessing global state from redux
   const data = useSelector((state) => state.project);
 
-  // accessing global state from redux
+  // state dari redux untuk loading
   const loading = useSelector((state) => state.project.loading);
+
+  // state dari redux untuk success tambah menu
+  const success = useSelector((state) => state.project.success);
   const [hapus, setHapus] = useState(false);
 
   // disable
@@ -110,101 +122,134 @@ function item({
     setDisable(false);
   };
 
+  // loading footer function
+  const onEndReached = (e) => {
+    if (e.distanceFromEnd > 0) {
+      setloadingFlatlist(false);
+    } else {
+      setloadingFlatlist(true);
+    }
+    console.log('loading');
+  };
+
+  // state loading boottom flatlist
+  const [loadingFlatlist, setloadingFlatlist] = useState(true);
+
+  // renderFooter
+  const renderFooter = () => {
+    return (
+      <>
+        {loadingFlatlist ? (
+          <ActivityIndicator
+            animating={loadingFlatlist}
+            color="#114444"
+            style={{marginTop: 10}}
+          />
+        ) : null}
+      </>
+    );
+  };
+
   // render the item
   const renderItem = ({item}) => {
     return (
-      <TouchableOpacity
-        activeOpacity={0.5}
-        disabled={disable}
-        onLongPress={() => {
-          setHapus(true);
-          setDisable(true);
-        }}>
-        <Card style={styles.card}>
-          {hapus ? (
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-              }}>
-              <IconButton
-                icon="delete"
-                size={20}
-                color="grey"
-                onPress={() => {
-                  setItemHapus({
-                    item: item.name,
-                    key: item.key,
-                  });
-                  showDialog();
-                }}
-              />
-              <IconButton
-                icon="pencil"
-                size={20}
-                color="grey"
-                onPress={() => {
-                  edit(item.key, item.name, item.jenis, item.price);
-                }}
-              />
-            </View>
-          ) : (
-            <Text></Text>
-          )}
-          <Card.Content style={styles.contentCard}>
-            <View>
-              <View>
-                <Title style={{fontSize: 18}}>{item.name}</Title>
-                <Paragraph>{convertToRupiah(item.price)} </Paragraph>
-              </View>
-            </View>
-            <View>
-              <View style={styles.jumlah}>
-                <IconButton
-                  disabled={disable}
-                  style={styles.iconButton}
-                  icon="plus"
-                  color="white"
-                  size={15}
-                  onPress={() => {
-                    item.order === false ? increment(item.key) : null;
-                  }}
-                />
-                <Text>{item.quantity}</Text>
-                <IconButton
-                  disabled={disable}
-                  style={styles.iconButton}
-                  icon="minus"
-                  color="white"
-                  size={15}
-                  onPress={() => {
-                    item.order === false ? decrement(item.key) : null;
-                  }}
-                />
-              </View>
-              <TouchableOpacity
-                disabled={disable}
-                activeOpacity={0.9}
-                onPress={() => {
-                  item.order === false
-                    ? orderColor(
-                        item.key,
-                        item.quantity,
-                        item.price,
-                        item.quantity * item.price,
-                        item.name,
-                      )
-                    : cancelOrder(item.key, item.quantity * item.price);
+      <>
+        <TouchableOpacity
+          activeOpacity={0.5}
+          disabled={disable}
+          onLongPress={() => {
+            setHapus(true);
+            setDisable(true);
+          }}>
+          <Card style={styles.card}>
+            {hapus ? (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
                 }}>
-                <View
-                  style={[styles.addCard, {backgroundColor: item.orderColor}]}>
-                  <Text style={styles.textAddCard}>{item.orderText}</Text>
+                <IconButton
+                  icon="delete"
+                  size={20}
+                  color="grey"
+                  onPress={() => {
+                    setItemHapus({
+                      item: item.name,
+                      key: item.key,
+                    });
+                    showDialog();
+                  }}
+                />
+                <IconButton
+                  icon="pencil"
+                  size={20}
+                  color="grey"
+                  onPress={() => {
+                    edit(item.key, item.name, item.jenis, item.price);
+                  }}
+                />
+              </View>
+            ) : (
+              <Text></Text>
+            )}
+            <Card.Content style={styles.contentCard}>
+              <View>
+                <View>
+                  <Title style={{fontSize: 18}}>{item.name}</Title>
+                  <Paragraph>{convertToRupiah(item.price)} </Paragraph>
                 </View>
-              </TouchableOpacity>
-            </View>
-          </Card.Content>
-        </Card>
-      </TouchableOpacity>
+              </View>
+              <View>
+                <View style={styles.jumlah}>
+                  <IconButton
+                    disabled={disable}
+                    style={styles.iconButton}
+                    icon="plus"
+                    color="white"
+                    size={15}
+                    onPress={() => {
+                      item.order === false ? increment(item.key) : null;
+                    }}
+                  />
+                  <Text>{item.quantity}</Text>
+                  <IconButton
+                    disabled={disable}
+                    style={styles.iconButton}
+                    icon="minus"
+                    color="white"
+                    size={15}
+                    onPress={() => {
+                      item.order === false ? decrement(item.key) : null;
+                    }}
+                  />
+                </View>
+                <TouchableOpacity
+                  disabled={disable}
+                  activeOpacity={0.9}
+                  onPress={() => {
+                    item.order === false
+                      ? orderColor(
+                          item.key,
+                          item.quantity,
+                          item.price,
+                          item.quantity * item.price,
+                          item.name,
+                        )
+                      : cancelOrder(item.key, item.quantity * item.price);
+                  }}>
+                  <View
+                    style={[
+                      styles.addCard,
+                      {backgroundColor: item.orderColor},
+                    ]}>
+                    <Text style={styles.textAddCard}>{item.orderText}</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            </Card.Content>
+          </Card>
+        </TouchableOpacity>
+      </>
     );
   };
   return (
@@ -245,17 +290,32 @@ function item({
         </View>
       ) : (
         <FlatList
-          showsVerticalScrollIndicator={false}
+          showsVerticalScrollIndicator={true}
           removeClippedSubviews={true}
           contentContainerStyle={styles.cardWrap}
           data={data.item}
           keyExtractor={keyExtractor}
           renderItem={renderItem}
-          maxToRenderPerBatch={3}
           windowSize={2}
+          initialNumToRender={5}
+          maxToRenderPerBatch={2}
+          onEndReached={onEndReached}
+          onEndReachedThreshold={0.5}
+          ListFooterComponent={renderFooter}
         />
       )}
-
+      <Snackbar
+        visible={success}
+        duration={2000}
+        onDismiss={() => dispatch(dismiss())}
+        action={{
+          label: 'close',
+          onPress: () => {
+            dispatch(dismiss());
+          },
+        }}>
+        Menu berhasil di tambah
+      </Snackbar>
       <View>
         <Portal>
           <Dialog
@@ -321,14 +381,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   addCard: {
-    borderRadius: 10,
+    borderRadius: 5,
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 5,
   },
   jumlah: {
     backgroundColor: '#f2f5f5',
-    borderRadius: 10,
+    borderRadius: 5,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',

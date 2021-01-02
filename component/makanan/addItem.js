@@ -44,7 +44,7 @@ export default function addItem({pindahPage, params, route, navigation}) {
         jenis: data.jenisMenu,
       };
       dispatch(tambahItem(newItem));
-      // pindahPage.navigate('Home');
+      pindahPage.navigate('Home');
     } else {
       dispatch(
         update(route.params.key, data.namaMenu, data.hargaMenu, data.jenisMenu),
@@ -270,8 +270,8 @@ const styles = StyleSheet.create({
   },
   textLabel: {
     marginBottom: 10,
-    fontWeight: 'bold',
     marginTop: 10,
+    color: 'black',
   },
   tambah: {
     position: 'relative',

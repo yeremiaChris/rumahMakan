@@ -11,6 +11,7 @@ import {
   HAPUS_SEMUA,
   ERROR,
   FETCH_MENU,
+  DISMISS,
 } from './actionType';
 
 import RNFirebase from '@react-native-firebase/firestore';
@@ -125,6 +126,7 @@ const makan = [
 const initialValue = {
   item: [],
   loading: true,
+  success: false,
 };
 
 // nama dan action untuk update
@@ -211,7 +213,10 @@ export const reducer = (state = initialValue, action) => {
       };
       break;
     case TAMBAH_ITEM:
-      return state;
+      return {
+        ...state,
+        success: action.success,
+      };
       // return {
       //   item: [action.newItem, ...state.item],
       // };
@@ -243,6 +248,11 @@ export const reducer = (state = initialValue, action) => {
               : data,
           ),
         ],
+      };
+    case DISMISS:
+      return {
+        success: false,
+        ...state,
       };
 
     default:
