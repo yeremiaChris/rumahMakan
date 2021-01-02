@@ -7,6 +7,7 @@ import {
   Button,
   Dialog,
   Portal,
+  ActivityIndicator,
 } from 'react-native-paper';
 import {
   StyleSheet,
@@ -17,10 +18,10 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {convertToRupiah} from '../../shared/rupiah';
-import {hapusItem, hapusSemua} from '../../reducer/actionRedux';
+import {hapusItem, hapusSemua, fetchMenu} from '../../reducer/actionRedux';
 // accesing global state redux
 import {useSelector, useDispatch} from 'react-redux';
-
+import {useFirestoreConnect} from 'react-redux-firebase';
 function item({
   pilihPage,
   increment,
@@ -32,12 +33,15 @@ function item({
 }) {
   // dispatch hapus item
   const dispatch = useDispatch();
-  // useEffect(() => {
-  //   const data = firestore().collection('menu');
-  // }, []);
+  useEffect(() => {
+    dispatch(fetchMenu());
+  }, []);
+
+  useFirestoreConnect(['menu']);
+  const data = useSelector((state) => state.project);
+
   // accessing global state from redux
-  const data = useSelector((state) => state);
-  // delete button to display
+  const loading = useSelector((state) => state.project.loading);
   const [hapus, setHapus] = useState(false);
 
   // disable
@@ -225,7 +229,15 @@ function item({
           </Button>
         </View>
       ) : null}
-      {data.item.length == 0 ? (
+      {loading ? (
+        <ActivityIndicator
+          animating={loading}
+          color="#114444"
+          style={{marginTop: 10}}
+        />
+      ) : null}
+
+      {data.item.length == 0 && loading == false ? (
         <View style={{paddingLeft: 10, marginTop: 10}}>
           <Text style={{color: 'red'}}>
             Menu kosong. Silahkan tambahkan menu.
@@ -233,6 +245,7 @@ function item({
         </View>
       ) : (
         <FlatList
+          showsVerticalScrollIndicator={false}
           removeClippedSubviews={true}
           contentContainerStyle={styles.cardWrap}
           data={data.item}
@@ -308,7 +321,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   addCard: {
-    borderRadius: 5,
+    borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 5,
@@ -323,6 +336,6 @@ const styles = StyleSheet.create({
     width: 150,
   },
   container: {
-    height: 340,
+    height: 350,
   },
 });

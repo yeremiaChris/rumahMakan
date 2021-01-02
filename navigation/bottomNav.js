@@ -115,6 +115,6 @@ const styles = StyleSheet.create({
     padding: 0,
     zIndex: -1,
     justifyContent: 'center',
-    height: 35,
+    height: 30,
   },
 });

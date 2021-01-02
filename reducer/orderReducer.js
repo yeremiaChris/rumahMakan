@@ -9,9 +9,28 @@ import {
   TAMBAH_ITEM,
   HAPUS_ITEM,
   HAPUS_SEMUA,
+  ERROR,
+  FETCH_MENU,
 } from './actionType';
+
+import RNFirebase from '@react-native-firebase/firestore';
+import {firebase, firestore} from '@react-native-firebase/firestore';
 // reducer
-import {createStore} from 'redux';
+import {createStore, applyMiddleware, combineReducers, compose} from 'redux';
+import thunk from 'redux-thunk';
+
+import {
+  firestoreReducer,
+  createFirestoreInstance,
+  getFirestore,
+  reduxFirestore,
+} from 'redux-firestore';
+import {
+  reactReduxFirebase,
+  getFirebase,
+  firebaseReducer,
+} from 'react-redux-firebase';
+
 // dummy data
 const makan = [
   {
@@ -104,13 +123,19 @@ const makan = [
   },
 ];
 const initialValue = {
-  item: makan,
+  item: [],
+  loading: true,
 };
 
 // nama dan action untuk update
 // kalo nggak di buat ada error di async function
 export const reducer = (state = initialValue, action) => {
   switch (action.type) {
+    case FETCH_MENU:
+      return {
+        item: action.item,
+        loading: action.loading,
+      };
     case INCREMENT_ORDER:
       return {
         item: [
@@ -186,10 +211,14 @@ export const reducer = (state = initialValue, action) => {
       };
       break;
     case TAMBAH_ITEM:
-      return {
-        item: [action.newItem, ...state.item],
-      };
+      return state;
+      // return {
+      //   item: [action.newItem, ...state.item],
+      // };
       break;
+    case ERROR:
+      console.log('error', action.err);
+      return state;
     case HAPUS_ITEM:
       return {
         item: [...state.item.filter((item) => item.key != action.key)],
@@ -215,10 +244,34 @@ export const reducer = (state = initialValue, action) => {
           ),
         ],
       };
+
     default:
       return state;
       break;
   }
 };
 
-export const store = createStore(reducer);
+const reactNativeFirebaseConfig = {
+  debug: true,
+};
+
+// apply middleware berguna untuk kita bisa berinteraksi dengan database atau asyn func di actionya kita return function yang biasanya adalah object
+const rootReducer = combineReducers({
+  project: reducer,
+});
+
+// export const store = createStore(
+//   rootReducer,
+//   compose(
+//     applyMiddleware(thunk.withExtraArgument({getFirebase, getFirestore})),
+//     reduxFirestore(reactNativeFirebaseConfig),
+//   ),
+// );
+export const store = createStore(
+  rootReducer,
+  applyMiddleware(thunk.withExtraArgument({getFirebase, getFirestore})),
+);
+// export const rrfProps = {
+//   firebase: RNFirebase,
+//   dispatch: store.dispatch,
+// };

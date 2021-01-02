@@ -42,15 +42,9 @@ export default function addItem({pindahPage, params, route, navigation}) {
         name: data.namaMenu,
         price: data.hargaMenu,
         jenis: data.jenisMenu,
-        key: Math.random().toString(),
-        orderColor: 'orange',
-        orderText: 'Order',
-        order: false,
-        quantity: 0,
-        edit: false,
       };
       dispatch(tambahItem(newItem));
-      pindahPage.navigate('Home');
+      // pindahPage.navigate('Home');
     } else {
       dispatch(
         update(route.params.key, data.namaMenu, data.hargaMenu, data.jenisMenu),

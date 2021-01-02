@@ -8,3 +8,5 @@ export const RESET = 'reset';
 export const TAMBAH_ITEM = 'tambahItem';
 export const HAPUS_ITEM = 'hapusItem';
 export const HAPUS_SEMUA = 'hapusSemua';
+export const FETCH_MENU = 'fetchMenu';
+export const ERROR = 'error';

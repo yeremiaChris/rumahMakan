@@ -33,6 +33,9 @@ import DrawerNav from './navigation/drawerNav';
 import BottomNav from './navigation/bottomNav';
 import {Provider as StoreProvider} from 'react-redux';
 import {store} from './reducer/orderReducer';
+import {rrfProps} from './reducer/orderReducer';
+import firestore from '@react-native-firebase/firestore';
+
 const App: () => React$Node = () => {
   return (
     <>
