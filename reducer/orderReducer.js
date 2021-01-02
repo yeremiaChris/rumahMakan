@@ -225,14 +225,12 @@ export const reducer = (state = initialValue, action) => {
       console.log('error', action.err);
       return state;
     case HAPUS_ITEM:
-      return {
-        item: [...state.item.filter((item) => item.key != action.key)],
-      };
+      console.log('hapus', action.key);
+      return state;
       break;
     case HAPUS_SEMUA:
-      return {
-        item: [],
-      };
+      console.log('hapus semua');
+      return state;
       break;
     case UPDATE:
       return {
@@ -251,7 +249,7 @@ export const reducer = (state = initialValue, action) => {
       };
     case DISMISS:
       return {
-        success: false,
+        success: action.success,
         ...state,
       };
 

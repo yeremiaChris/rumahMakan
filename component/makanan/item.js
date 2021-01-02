@@ -54,6 +54,7 @@ function item({
 
   // state dari redux untuk success tambah menu
   const success = useSelector((state) => state.project.success);
+
   const [hapus, setHapus] = useState(false);
 
   // disable
@@ -75,16 +76,6 @@ function item({
   // hide for udpate
   const hideDialogDua = () => setVisibleDua(false);
 
-  const hapusItem = (key) => {
-    dispatch(hapusItem(key));
-    hideDialog();
-  };
-
-  // dispatch hapus semua
-  const hapusSemua = () => {
-    dispatch(hapusSemua());
-    hideDialog();
-  };
   // state untuk delete
   const [itemHapus, setItemHapus] = useState({});
 
@@ -93,10 +84,15 @@ function item({
 
   // key extractor
   const keyExtractor = (item) => item.key;
-
   // button di modal
   const ya = () => {
-    semua ? hapusSemua() : hapusItem(itemHapus.key);
+    if (semua) {
+      dispatch(hapusSemua());
+      hideDialog();
+    } else {
+      dispatch(hapusItem(itemHapus.key));
+      hideDialog();
+    }
     setSemua(false);
   };
   const tidak = () => {
@@ -139,7 +135,7 @@ function item({
   const renderFooter = () => {
     return (
       <>
-        {loadingFlatlist ? (
+        {loadingFlatlist && data.item.length >= 3 ? (
           <ActivityIndicator
             animating={loadingFlatlist}
             color="#114444"
@@ -296,22 +292,23 @@ function item({
           data={data.item}
           keyExtractor={keyExtractor}
           renderItem={renderItem}
-          windowSize={2}
+          windowSize={1}
           initialNumToRender={5}
-          maxToRenderPerBatch={2}
+          maxToRenderPerBatch={1}
           onEndReached={onEndReached}
           onEndReachedThreshold={0.5}
           ListFooterComponent={renderFooter}
         />
       )}
       <Snackbar
-        visible={success}
+        visible={false}
         duration={2000}
         onDismiss={() => dispatch(dismiss())}
         action={{
           label: 'close',
           onPress: () => {
             dispatch(dismiss());
+            console.log('test');
           },
         }}>
         Menu berhasil di tambah

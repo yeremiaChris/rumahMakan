@@ -119,20 +119,35 @@ export const tambahItem = (newItem) => {
 // };
 
 export const hapusItem = (key) => {
-  return {
-    type: HAPUS_ITEM,
-    key,
+  return (dispatch) => {
+    firestore()
+      .collection('menu')
+      .doc(key)
+      .delete()
+      .then(() => dispatch({type: HAPUS_ITEM, key: key}))
+      .catch((err) => dispatch({type: ERROR, err: err}));
   };
 };
 
 export const hapusSemua = () => {
-  return {
-    type: HAPUS_SEMUA,
+  return (dispatch) => {
+    firestore()
+      .collection('menu')
+      .get()
+      .then((res) => {
+        res._docs.forEach((element) => {
+          element.ref.delete();
+          dispatch({type: HAPUS_SEMUA});
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 };
 
 export const dismiss = () => {
-  return {
-    type: DISMISS,
+  return (dispatch) => {
+    dispatch({type: DISMISS, success: false});
   };
 };
