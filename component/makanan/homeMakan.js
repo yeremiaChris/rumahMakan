@@ -24,6 +24,9 @@ export default function homeMakan({
   route,
   setInfoLaporan,
   infoLaporan,
+  kalimat,
+  routeName,
+  params,
 }) {
   // dispatch
   const dispatch = useDispatch();
@@ -150,12 +153,15 @@ export default function homeMakan({
         />
         <Chip />
         <Items
+          paramsKalimat={params}
+          kalimat={kalimat}
           pilihPage={pilihPage}
           increment={increment}
           decrement={decrement}
           orderColor={orderColor}
           cancelOrder={cancelOrder}
           kunci={navigation}
+          routeName={routeName}
         />
         <ModalPay
           totalBarang={totalBarang}

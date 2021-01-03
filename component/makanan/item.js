@@ -53,8 +53,7 @@ function item({
   const loading = useSelector((state) => state.project.loading);
 
   // state dari redux untuk success tambah menu
-  const success = useSelector((state) => state.project.success);
-
+  const success = useSelector((state) => state.projectDua);
   const [hapus, setHapus] = useState(false);
 
   // disable
@@ -84,14 +83,17 @@ function item({
 
   // key extractor
   const keyExtractor = (item) => item.key;
+
   // button di modal
   const ya = () => {
     if (semua) {
       dispatch(hapusSemua());
       hideDialog();
+      close(false);
     } else {
       dispatch(hapusItem(itemHapus.key));
       hideDialog();
+      close(false);
     }
     setSemua(false);
   };
@@ -100,7 +102,7 @@ function item({
     setSemua(false);
   };
 
-  // func delete semua
+  // func menampilkan modal delete semua
   const deleteSemua = () => {
     setSemua(true);
     showDialog();
@@ -110,6 +112,7 @@ function item({
   const [editMode, setEditMode] = useState(false);
   const edit = (key, name, jenis, price) => {
     pilihPage.navigate('Update', {key, name, jenis, price});
+    close();
   };
 
   // close dispaly button hapus dan edit
@@ -175,6 +178,7 @@ function item({
                     });
                     showDialog();
                   }}
+                  b
                 />
                 <IconButton
                   icon="pencil"
@@ -301,17 +305,16 @@ function item({
         />
       )}
       <Snackbar
-        visible={false}
-        duration={2000}
+        visible={success.success}
+        duration={3000}
         onDismiss={() => dispatch(dismiss())}
         action={{
           label: 'close',
           onPress: () => {
             dispatch(dismiss());
-            console.log('test');
           },
         }}>
-        Menu berhasil di tambah
+        Menu berhasil di {success.kalimat}
       </Snackbar>
       <View>
         <Portal>

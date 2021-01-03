@@ -32,9 +32,14 @@ import {NavigationContainer} from '@react-navigation/native';
 import DrawerNav from './navigation/drawerNav';
 import BottomNav from './navigation/bottomNav';
 import {Provider as StoreProvider} from 'react-redux';
-import {store} from './reducer/orderReducer';
 import {rrfProps} from './reducer/orderReducer';
 import firestore from '@react-native-firebase/firestore';
+import {rootReducer} from './reducer/orderReducer';
+import {createStore, applyMiddleware, compose} from 'redux';
+import thunk from 'redux-thunk';
+
+// store from reducer
+const store = createStore(rootReducer, applyMiddleware(thunk));
 
 const App: () => React$Node = () => {
   return (

@@ -12,9 +12,11 @@ import {
   FETCH_MENU,
   ERROR,
   DISMISS,
+  SUCCESS,
 } from './actionType';
 import firestore from '@react-native-firebase/firestore';
-// action function
+
+// action function fetch data
 export const fetchMenu = () => {
   return (dispatch, getState) => {
     try {
@@ -43,16 +45,35 @@ export const fetchMenu = () => {
   };
 };
 
-export const update = (key, name, price, jenis) => {
-  return {
-    type: UPDATE,
-    key,
-    name,
-    price,
-    jenis,
+// update data
+export const update = (key, name, price, jenis, update) => {
+  return (dispatch) => {
+    firestore()
+      .collection('menu')
+      .doc(key)
+      .update({
+        name,
+        price,
+        jenis,
+      })
+      .then(() => {
+        dispatch({type: UPDATE});
+        dispatch({type: SUCCESS, kalimat: 'Update'});
+      })
+      .catch(() => {
+        dispatch({type: ERROR});
+      });
   };
+  // return {
+  //   type: UPDATE,
+  //   key,
+  //   name,
+  //   price,
+  //   jenis,
+  // };
 };
 
+// tambah jumlah atau quantity orderan
 export const incrementOrder = (id) => {
   return {
     type: INCREMENT_ORDER,
@@ -60,6 +81,7 @@ export const incrementOrder = (id) => {
   };
 };
 
+// mengurangi jumlah atau quantity orderan
 export const decrementOrder = (id) => {
   return {
     type: DECREMENT_ORDER,
@@ -67,6 +89,7 @@ export const decrementOrder = (id) => {
   };
 };
 
+// order menu
 export const orderItem = (id) => {
   return {
     type: ORDER_ITEM,
@@ -74,6 +97,7 @@ export const orderItem = (id) => {
   };
 };
 
+// cancel orderan menu
 export const cancelOrderItem = (id) => {
   return {
     type: CANCEL_ORDER_ITEM,
@@ -81,6 +105,7 @@ export const cancelOrderItem = (id) => {
   };
 };
 
+// mengurutkan berdasarkan jenis
 export const urutMakan = (test) => {
   return {
     type: URUT_MAKAN,
@@ -88,14 +113,16 @@ export const urutMakan = (test) => {
   };
 };
 
+// mereset orderan
 export const resetAction = () => {
   return {
     type: RESET,
   };
 };
 
-export const tambahItem = (newItem) => {
-  return (dispatch, getState, {getFirebase, getFirestore}) => {
+// tambah menu
+export const tambahItem = (newItem, tambah) => {
+  return (dispatch, getState) => {
     firestore()
       .collection('menu')
       .add({
@@ -104,20 +131,16 @@ export const tambahItem = (newItem) => {
         price: newItem.price,
       })
       .then(() => {
-        dispatch({type: TAMBAH_ITEM, success: true});
+        dispatch({type: TAMBAH_ITEM});
+        dispatch({type: SUCCESS, kalimat: 'Tambah'});
       })
       .catch((err) => {
-        dispatch({type: ERROR, success: false});
+        dispatch({type: ERROR});
       });
   };
 };
-// export const tambahItem = (newItem) => {
-//   return {
-//     type: TAMBAH_ITEM,
-//     newItem,
-//   };
-// };
 
+// hapus item firestore
 export const hapusItem = (key) => {
   return (dispatch) => {
     firestore()
@@ -129,6 +152,7 @@ export const hapusItem = (key) => {
   };
 };
 
+// mengapus seluruh item
 export const hapusSemua = () => {
   return (dispatch) => {
     firestore()
@@ -146,8 +170,9 @@ export const hapusSemua = () => {
   };
 };
 
+// dismiss snackbar
 export const dismiss = () => {
   return (dispatch) => {
-    dispatch({type: DISMISS, success: false});
+    dispatch({type: DISMISS});
   };
 };

@@ -11,3 +11,4 @@ export const HAPUS_SEMUA = 'hapusSemua';
 export const FETCH_MENU = 'fetchMenu';
 export const ERROR = 'error';
 export const DISMISS = 'dismiss';
+export const SUCCESS = 'success';

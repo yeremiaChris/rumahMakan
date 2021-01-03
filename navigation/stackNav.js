@@ -2,13 +2,11 @@ import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import AddItem from '../component/makanan/addItem';
 import Home from '../component/makanan/homeMakan';
-
 const Stack = createStackNavigator();
 export default function stackNav({
   setLaporan,
   laporan,
   pindahPage,
-  params,
   route,
   setInfoLaporan,
   infoLaporan,

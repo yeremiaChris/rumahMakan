@@ -12,13 +12,14 @@ import {
   ERROR,
   FETCH_MENU,
   DISMISS,
+  SUCCESS,
 } from './actionType';
 
 import RNFirebase from '@react-native-firebase/firestore';
 import {firebase, firestore} from '@react-native-firebase/firestore';
 // reducer
-import {createStore, applyMiddleware, combineReducers, compose} from 'redux';
-import thunk from 'redux-thunk';
+
+import {combineReducers} from 'redux';
 
 import {
   firestoreReducer,
@@ -126,20 +127,21 @@ const makan = [
 const initialValue = {
   item: [],
   loading: true,
-  success: false,
 };
 
 // nama dan action untuk update
 // kalo nggak di buat ada error di async function
-export const reducer = (state = initialValue, action) => {
+const reducer = (state = initialValue, action) => {
   switch (action.type) {
     case FETCH_MENU:
       return {
+        ...state,
         item: action.item,
         loading: action.loading,
       };
     case INCREMENT_ORDER:
       return {
+        ...state,
         item: [
           ...state.item.map((data) =>
             data.key === action.id && data.quantity >= 0
@@ -151,6 +153,7 @@ export const reducer = (state = initialValue, action) => {
       break;
     case DECREMENT_ORDER:
       return {
+        ...state,
         item: [
           ...state.item.map((data) =>
             data.key === action.id && data.quantity > 0
@@ -162,6 +165,7 @@ export const reducer = (state = initialValue, action) => {
       break;
     case ORDER_ITEM:
       return {
+        ...state,
         item: [
           ...state.item.map((data) =>
             data.key === action.id && data.quantity > 0
@@ -178,6 +182,7 @@ export const reducer = (state = initialValue, action) => {
       break;
     case CANCEL_ORDER_ITEM:
       return {
+        ...state,
         item: [
           ...state.item.map((data) =>
             data.key === action.id && data.quantity > 0
@@ -194,11 +199,13 @@ export const reducer = (state = initialValue, action) => {
       break;
     case URUT_MAKAN:
       return {
+        ...state,
         item: [...state.item.sort((data) => data.jenis !== action.test)],
       };
       break;
     case RESET:
       return {
+        ...state,
         item: [
           ...state.item.map((data) => {
             return {
@@ -213,13 +220,8 @@ export const reducer = (state = initialValue, action) => {
       };
       break;
     case TAMBAH_ITEM:
-      return {
-        ...state,
-        success: action.success,
-      };
-      // return {
-      //   item: [action.newItem, ...state.item],
-      // };
+      console.log('tambah', action.tambah);
+      return state;
       break;
     case ERROR:
       console.log('error', action.err);
@@ -233,25 +235,23 @@ export const reducer = (state = initialValue, action) => {
       return state;
       break;
     case UPDATE:
-      return {
-        item: [
-          ...state.item.map((data) =>
-            data.key === action.key
-              ? {
-                  ...data,
-                  name: action.name,
-                  price: action.price,
-                  jenis: action.jenis,
-                }
-              : data,
-          ),
-        ],
-      };
-    case DISMISS:
-      return {
-        success: action.success,
-        ...state,
-      };
+      console.log('update');
+      return state;
+    // return {
+    //   ...state,
+    //   item: [
+    //     ...state.item.map((data) =>
+    //       data.key === action.key
+    //         ? {
+    //             ...data,
+    //             name: action.name,
+    //             price: action.price,
+    //             jenis: action.jenis,
+    //           }
+    //         : data,
+    //     ),
+    //   ],
+    // };
 
     default:
       return state;
@@ -259,27 +259,31 @@ export const reducer = (state = initialValue, action) => {
   }
 };
 
-const reactNativeFirebaseConfig = {
-  debug: true,
+const initialValueDua = {
+  success: false,
+  kalimat: '',
 };
 
-// apply middleware berguna untuk kita bisa berinteraksi dengan database atau asyn func di actionya kita return function yang biasanya adalah object
-const rootReducer = combineReducers({
+const reducerDua = (state = initialValueDua, action) => {
+  switch (action.type) {
+    case SUCCESS:
+      console.log('succcess');
+      return {
+        success: !state.success,
+        kalimat: action.kalimat,
+      };
+    case DISMISS:
+      console.log('dismis');
+      return {
+        ...state,
+        success: false,
+      };
+    default:
+      return state;
+  }
+};
+//
+export const rootReducer = combineReducers({
   project: reducer,
+  projectDua: reducerDua,
 });
-
-// export const store = createStore(
-//   rootReducer,
-//   compose(
-//     applyMiddleware(thunk.withExtraArgument({getFirebase, getFirestore})),
-//     reduxFirestore(reactNativeFirebaseConfig),
-//   ),
-// );
-export const store = createStore(
-  rootReducer,
-  applyMiddleware(thunk.withExtraArgument({getFirebase, getFirestore})),
-);
-// export const rrfProps = {
-//   firebase: RNFirebase,
-//   dispatch: store.dispatch,
-// };

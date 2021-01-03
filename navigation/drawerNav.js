@@ -14,7 +14,6 @@ function drawerNav(props) {
     total: 0,
     pendapatan: 0,
   });
-
   return (
     <Drawer.Navigator>
       <Drawer.Screen name="Home">

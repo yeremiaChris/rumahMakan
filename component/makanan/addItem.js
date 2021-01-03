@@ -7,6 +7,9 @@ import * as yup from 'yup';
 import {update, tambahItem} from '../../reducer/actionRedux';
 // dispatch
 import {useDispatch} from 'react-redux';
+
+import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
+
 export default function addItem({pindahPage, params, route, navigation}) {
   // dispatch
   const dispatch = useDispatch();
@@ -35,7 +38,9 @@ export default function addItem({pindahPage, params, route, navigation}) {
     {label: 'Kopi', value: 'Kopi', key: '4'},
   ];
 
+  const routeName = getFocusedRouteNameFromRoute(route);
   // onsubmit
+  const [kalimat, setKalimat] = useState('');
   const simpan = (data, {resetForm}) => {
     if (route.name == 'Tambah') {
       const newItem = {
@@ -43,13 +48,15 @@ export default function addItem({pindahPage, params, route, navigation}) {
         price: data.hargaMenu,
         jenis: data.jenisMenu,
       };
+      setKalimat('Tambah');
       dispatch(tambahItem(newItem));
-      pindahPage.navigate('Home');
+      navigation.navigate('Home', {tambah: kalimat});
     } else {
       dispatch(
         update(route.params.key, data.namaMenu, data.hargaMenu, data.jenisMenu),
       );
-      navigation.navigate('Home');
+      setKalimat('Update');
+      navigation.navigate('Home', {tambah: kalimat});
     }
     resetForm();
   };
