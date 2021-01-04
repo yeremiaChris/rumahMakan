@@ -280,7 +280,6 @@ const initialValueTiga = {
 const reducerTiga = (state = initialValueTiga, action) => {
   switch (action.type) {
     case FETCH_LAPORAN:
-      console.log('laporan');
       return {
         laporan: action.laporan,
       };

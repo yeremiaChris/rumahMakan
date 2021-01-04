@@ -105,6 +105,34 @@ export default function Laporan({visible, hideModal, showModal, navigation}) {
     setDetailItems({detail: detailItem, pelanggan});
   };
   const hideModalDua = () => setVisibleDua(false);
+
+  // renderitem
+  const renderItem = ({item}) => {
+    console.log(item);
+    return (
+      <>
+        {laporans.laporan.length !== 0 ? (
+          <TouchableOpacity
+            disabled={button}
+            activeOpacity={0.4}
+            onPress={() => {
+              showModalDua(item.item, item.nama);
+            }}>
+            <DataTable.Row>
+              <DataTable.Cell>{item.nama}</DataTable.Cell>
+              <DataTable.Cell numeric>{item.jumlahBeli}</DataTable.Cell>
+              <DataTable.Cell numeric>
+                {convertToRupiah(item.totalHarga)}
+              </DataTable.Cell>
+            </DataTable.Row>
+          </TouchableOpacity>
+        ) : (
+          <Text>Laporan tidak ada</Text>
+        )}
+      </>
+    );
+  };
+
   return (
     <>
       <View
@@ -180,24 +208,7 @@ export default function Laporan({visible, hideModal, showModal, navigation}) {
                 <FlatList
                   data={laporans.laporan}
                   keyExtractor={(item) => item.key}
-                  renderItem={({item}) => (
-                    <TouchableOpacity
-                      disabled={button}
-                      activeOpacity={0.4}
-                      onPress={() => {
-                        showModalDua(item.item, item.nama);
-                      }}>
-                      <DataTable.Row>
-                        <DataTable.Cell>{item.nama}</DataTable.Cell>
-                        <DataTable.Cell numeric>
-                          {item.jumlahBeli}
-                        </DataTable.Cell>
-                        <DataTable.Cell numeric>
-                          {convertToRupiah(item.totalHarga)}
-                        </DataTable.Cell>
-                      </DataTable.Row>
-                    </TouchableOpacity>
-                  )}
+                  renderItem={renderItem}
                 />
               </View>
             </DataTable>
