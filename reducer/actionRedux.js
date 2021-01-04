@@ -184,7 +184,8 @@ export const dismiss = () => {
   };
 };
 
-// laporan
+// fetch data untuk di tampilkan di laporan component
+
 export const fetchLaporan = () => {
   return (dispatch) => {
     firestore()
@@ -210,6 +211,7 @@ export const fetchLaporan = () => {
   };
 };
 
+// membuat laporan
 export const addLaporan = (
   nama,
   jumlahBeli,
@@ -219,6 +221,7 @@ export const addLaporan = (
   kembalian,
 ) => {
   return (dispatch, getState) => {
+    const date = new Date();
     try {
       firestore()
         .collection('laporan')
@@ -229,6 +232,7 @@ export const addLaporan = (
           item,
           uangBayar,
           kembalian,
+          createAt: date.toDateString(),
         })
         .then(() => {
           dispatch({type: TAMBAH_LAPORAN});
@@ -239,5 +243,32 @@ export const addLaporan = (
     } catch (error) {
       dispatch({type: ERROR});
     }
+  };
+};
+
+// urutkan hari ini
+export const laporanUrut = (kode) => {
+  return (dispatch) => {
+    firestore()
+      .collection('laporan')
+      .where('createAt', '==', kode)
+      .onSnapshot((doc) => {
+        let list = [];
+        doc._docs.forEach((element) => {
+          if (element._exists) {
+            const data = {
+              nama: element.data().nama,
+              jumlahBeli: element.data().jumlahBeli,
+              totalHarga: element.data().totalHarga,
+              item: element.data().item,
+              key: element.id,
+            };
+            list.push(data);
+          } else {
+            null;
+          }
+        });
+        dispatch({type: FETCH_LAPORAN, laporan: list});
+      });
   };
 };

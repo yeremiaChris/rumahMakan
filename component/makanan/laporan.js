@@ -31,7 +31,7 @@ import {convertToRupiah} from '../../shared/rupiah';
 import ModalDetail from '../../shared/modalDetail';
 import {useSelector, useDispatch} from 'react-redux';
 
-import {fetchLaporan} from '../../reducer/actionRedux';
+import {fetchLaporan, laporanUrut} from '../../reducer/actionRedux';
 
 export default function Laporan({visible, hideModal, showModal, navigation}) {
   // laporan dari redux
@@ -59,12 +59,21 @@ export default function Laporan({visible, hideModal, showModal, navigation}) {
   const onChangeSearch = (query) => setSearchQuery(query);
 
   // select
+  const urut = new Date();
+  const seminggu = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+  const sebulan = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+  const setahun = new Date(Date.now() - 365 * 24 * 60 * 60 * 1000);
   const select = [
-    {label: 'Hari ini', value: 'hariIni', key: '1'},
-    {label: '7 Minggu Terakhir', value: '7Minggu', key: '2'},
-    {label: 'Sebulan Terakhir', value: 'sebulan', key: '3'},
-    {label: 'Setahun ini', value: 'setahun', key: '4'},
+    {label: 'Hari ini', value: urut.toDateString(), key: '1'},
+    {label: '7 Minggu Terakhir', value: seminggu.toDateString(), key: '2'},
+    {label: 'Sebulan Terakhir', value: sebulan.toDateString(), key: '3'},
+    {label: 'Setahun ini', value: setahun.toDateString(), key: '4'},
   ];
+
+  // onchange picker
+  const changePicker = (kode) => {
+    dispatch(laporanUrut(kode));
+  };
 
   // date
   Moment.locale('id');
@@ -79,6 +88,8 @@ export default function Laporan({visible, hideModal, showModal, navigation}) {
   };
 
   const handleConfirm = (date) => {
+    const kode = date.toDateString();
+    changePicker(kode);
     setDate(date);
     hideDatePicker();
   };
@@ -120,13 +131,17 @@ export default function Laporan({visible, hideModal, showModal, navigation}) {
           <View style={styles.date}>
             <RNPickerSelect
               placeholder={{
-                label: 'Pilih Laporan...',
-                value: null,
+                label: 'Semua',
+                value: 'semua',
               }}
               style={pickerSelectStyles}
               useNativeAndroidPickerStyle={true}
               fixAndroidTouchableBug
-              onValueChange={(value) => console.log(value)}
+              onValueChange={(value) => {
+                value == 'semua'
+                  ? dispatch(fetchLaporan())
+                  : changePicker(value);
+              }}
               items={select}
             />
             <TouchableOpacity
@@ -222,9 +237,11 @@ export default function Laporan({visible, hideModal, showModal, navigation}) {
                   ? laporans.laporan.map((item) => {
                       return convertToRupiah(item.totalHarga);
                     })
-                  : laporans.laporan.reduce(
-                      (curr, prev) => convertToRupiah(curr + prev.totalHarga),
-                      0,
+                  : convertToRupiah(
+                      laporans.laporan.reduce(
+                        (curr, prev) => curr + prev.totalHarga,
+                        0,
+                      ),
                     )}
               </Text>
             </DataTable.Title>

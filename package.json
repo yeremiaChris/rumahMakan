@@ -37,6 +37,7 @@
     "react-datepicker": "^3.3.0",
     "react-dom": "^17.0.1",
     "react-hook-form": "^6.13.0",
+    "react-moment": "^1.1.1",
     "react-native": "0.63.4",
     "react-native-amount-input": "^1.0.0",
     "react-native-appearance": "^0.3.4",

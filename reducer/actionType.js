@@ -16,3 +16,4 @@ export const SUCCESS = 'success';
 // laporan
 export const FETCH_LAPORAN = 'fetchLaporan';
 export const TAMBAH_LAPORAN = 'tambahLaporan';
+export const LAPORAN_URUT = 'laporanUrut';

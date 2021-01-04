@@ -15,6 +15,7 @@ import {
   SUCCESS,
   FETCH_LAPORAN,
   TAMBAH_LAPORAN,
+  LAPORAN_URUT,
 } from './actionType';
 
 import RNFirebase from '@react-native-firebase/firestore';
@@ -34,6 +35,7 @@ import {
   getFirebase,
   firebaseReducer,
 } from 'react-redux-firebase';
+import {State} from 'react-native-gesture-handler';
 
 // dummy data
 const makan = [
@@ -280,12 +282,13 @@ const reducerTiga = (state = initialValueTiga, action) => {
     case FETCH_LAPORAN:
       console.log('laporan');
       return {
-        ...state,
         laporan: action.laporan,
       };
       break;
     case TAMBAH_LAPORAN:
       console.log('tambahLaporan');
+      return state;
+    case LAPORAN_URUT:
       return state;
     default:
       return state;
