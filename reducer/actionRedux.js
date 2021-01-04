@@ -15,11 +15,9 @@ import {
   SUCCESS,
   FETCH_LAPORAN,
   TAMBAH_LAPORAN,
-  INFO_LAPORAN,
-  FETCH_INFO_LAPORAN,
 } from './actionType';
 import firestore from '@react-native-firebase/firestore';
-
+import {useSelector} from 'react-redux';
 // action function fetch data
 export const fetchMenu = () => {
   return (dispatch, getState) => {
@@ -212,32 +210,6 @@ export const fetchLaporan = () => {
   };
 };
 
-export const fetchInfoLaporan = () => {
-  return (dispatch) => {
-    firestore()
-      .collection('infoLaporan')
-      .onSnapshot((doc) => {
-        doc._docs.forEach((element) => {
-          if (element._exists) {
-            const data = {
-              jumlahKuantitasBeli: element.data().jumlahKuantitasBeli,
-              pendapatan: element.data().pendapatan,
-            };
-            dispatch({
-              type: FETCH_INFO_LAPORAN,
-              info: {
-                jumlahKuantitasBeli: data.jumlahKuantitasBeli,
-                pendapatan: data.pendapatan,
-              },
-            });
-          } else {
-            dispatch({type: ERROR});
-          }
-        });
-      });
-  };
-};
-
 export const addLaporan = (
   nama,
   jumlahBeli,
@@ -267,35 +239,5 @@ export const addLaporan = (
     } catch (error) {
       dispatch({type: ERROR});
     }
-  };
-};
-
-export const infoLaporans = (key, jumlahKuantitasBeli, pendapatan) => {
-  const docRef = firestore().collection('infoLaporan').doc(key);
-  return (dispatch, getState) => {
-    firestore()
-      .collection('infoLaporan')
-      .doc(key)
-      .get()
-      .then((snabshot) => {
-        firestore()
-          .collection('infoLaporan')
-          .doc(key)
-          .update({
-            jumlahKuantitasBeli:
-              snabshot._data.jumlahKuantitasBeli + jumlahKuantitasBeli,
-            pendapatan: snabshot._data.pendapatan + pendapatan,
-          })
-          .then(() => {
-            console.log('berhasil update');
-            dispatch({type: INFO_LAPORAN});
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   };
 };

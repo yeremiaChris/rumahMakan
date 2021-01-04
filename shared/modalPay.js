@@ -13,7 +13,7 @@ import {Formik} from 'formik';
 import {onChange} from 'react-native-reanimated';
 
 import {useDispatch} from 'react-redux';
-import {addLaporan, infoLaporans} from '../reducer/actionRedux';
+import {addLaporan} from '../reducer/actionRedux';
 export default function modalPay({
   visible,
   hideModal,
@@ -60,28 +60,6 @@ export default function modalPay({
         kembalian,
       ),
     );
-    // setLaporan([
-    //   ...laporan,
-    //   {
-    //     key: Math.random().toString(),
-    //     pelanggan: 'Pelanggan ' + pelangganNo,
-    //     jumlahBeli: totalBarang,
-    //     totalHarga: totalHarga,
-    //     item: orderan,
-    //     uangBayar: data.uangBayar,
-    //     kembalian: kembalian,
-    //   },
-    // ]);
-
-    // info laporan mendapatkan pendapatan dan jumlah belinya
-    // setInfoLaporan({
-    //   pendapatan: infoLaporan.pendapatan + totalHarga,
-    //   total: infoLaporan.total + totalBarang,
-    // });
-    const pendapatan = infoLaporan.pendapatan + totalHarga;
-    const total = infoLaporan.total + totalBarang;
-    dispatch(infoLaporans('9IAXPnr2VHyJ4lHtRi8e', total, pendapatan));
-
     setPelangganNo((prevState) => prevState + 1);
     hideModal();
     showModalDua();

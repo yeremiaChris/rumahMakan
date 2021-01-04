@@ -15,8 +15,6 @@ import {
   SUCCESS,
   FETCH_LAPORAN,
   TAMBAH_LAPORAN,
-  INFO_LAPORAN,
-  FETCH_INFO_LAPORAN,
 } from './actionType';
 
 import RNFirebase from '@react-native-firebase/firestore';
@@ -275,7 +273,6 @@ const reducerDua = (state = initialValueDua, action) => {
 
 const initialValueTiga = {
   laporan: [],
-  infoLaporan: {},
 };
 
 const reducerTiga = (state = initialValueTiga, action) => {
@@ -290,13 +287,6 @@ const reducerTiga = (state = initialValueTiga, action) => {
     case TAMBAH_LAPORAN:
       console.log('tambahLaporan');
       return state;
-    case INFO_LAPORAN:
-      return state;
-    case FETCH_INFO_LAPORAN:
-      return {
-        ...state,
-        infoLaporan: action.info,
-      };
     default:
       return state;
       break;

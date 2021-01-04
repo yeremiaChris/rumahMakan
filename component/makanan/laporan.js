@@ -31,27 +31,21 @@ import {convertToRupiah} from '../../shared/rupiah';
 import ModalDetail from '../../shared/modalDetail';
 import {useSelector, useDispatch} from 'react-redux';
 
-import {fetchLaporan, fetchInfoLaporan} from '../../reducer/actionRedux';
+import {fetchLaporan} from '../../reducer/actionRedux';
 
-export default function Laporan({
-  visible,
-  hideModal,
-  showModal,
-  navigation,
-  infoLaporan,
-}) {
+export default function Laporan({visible, hideModal, showModal, navigation}) {
+  // laporan dari redux
+  const laporans = useSelector((state) => state.projectTiga);
   // fetch data dari firestore melalui redux
+
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchLaporan());
-    dispatch(fetchInfoLaporan());
   }, []);
 
   // disable button sebelum fetch data
   const button = useSelector((state) => state.project.button);
 
-  // laporan dari redux
-  const laporans = useSelector((state) => state.projectTiga);
   // pelanggan
   const data = [
     {
@@ -207,7 +201,14 @@ export default function Laporan({
             </DataTable.Title>
             <DataTable.Title numeric>
               <Text style={{fontWeight: 'bold', fontSize: 15}}>
-                {laporans.infoLaporan.jumlahKuantitasBeli}
+                {laporans.laporan.length == 0 || laporans.laporan.length == 1
+                  ? laporans.laporan.map((item) => {
+                      return item.jumlahBeli;
+                    })
+                  : laporans.laporan.reduce(
+                      (curr, prev) => curr + prev.jumlahBeli,
+                      0,
+                    )}
               </Text>
             </DataTable.Title>
           </DataTable.Header>
@@ -217,7 +218,14 @@ export default function Laporan({
             </DataTable.Title>
             <DataTable.Title numeric>
               <Text style={{fontWeight: 'bold', fontSize: 15}}>
-                {convertToRupiah(laporans.infoLaporan.pendapatan)}
+                {laporans.laporan.length == 0 || laporans.laporan.length == 1
+                  ? laporans.laporan.map((item) => {
+                      return convertToRupiah(item.totalHarga);
+                    })
+                  : laporans.laporan.reduce(
+                      (curr, prev) => convertToRupiah(curr + prev.totalHarga),
+                      0,
+                    )}
               </Text>
             </DataTable.Title>
           </DataTable.Header>
