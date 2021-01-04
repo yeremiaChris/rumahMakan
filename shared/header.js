@@ -1,8 +1,10 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {IconButton, Colors, Searchbar, Badge} from 'react-native-paper';
+import {useSelector} from 'react-redux';
 import Modal from '../shared/modal';
 function header({navigation}) {
+  const button = useSelector((state) => state.project.button);
   const [searchQuery, setSearchQuery] = React.useState('');
 
   const onChangeSearch = (query) => setSearchQuery(query);
@@ -10,6 +12,7 @@ function header({navigation}) {
     <View style={styles.wrap}>
       <View style={styles.headerSatu}>
         <IconButton
+          disabled={button}
           icon="menu"
           color="white"
           size={25}
@@ -17,6 +20,7 @@ function header({navigation}) {
         />
         <View style={styles.badge}>
           <IconButton
+            disabled={button}
             icon="basket"
             color="white"
             size={25}

@@ -13,6 +13,10 @@ import {
   ERROR,
   DISMISS,
   SUCCESS,
+  FETCH_LAPORAN,
+  TAMBAH_LAPORAN,
+  INFO_LAPORAN,
+  FETCH_INFO_LAPORAN,
 } from './actionType';
 import firestore from '@react-native-firebase/firestore';
 
@@ -37,7 +41,12 @@ export const fetchMenu = () => {
             };
             data.push(item);
           });
-          dispatch({type: FETCH_MENU, item: data, loading: false});
+          dispatch({
+            type: FETCH_MENU,
+            item: data,
+            loading: false,
+            button: false,
+          });
         });
     } catch (error) {
       dispatch({type: ERROR, err: error});
@@ -174,5 +183,119 @@ export const hapusSemua = () => {
 export const dismiss = () => {
   return (dispatch) => {
     dispatch({type: DISMISS});
+  };
+};
+
+// laporan
+export const fetchLaporan = () => {
+  return (dispatch) => {
+    firestore()
+      .collection('laporan')
+      .onSnapshot((doc) => {
+        let list = [];
+        doc._docs.forEach((element) => {
+          if (element._exists) {
+            const data = {
+              nama: element.data().nama,
+              jumlahBeli: element.data().jumlahBeli,
+              totalHarga: element.data().totalHarga,
+              item: element.data().item,
+              key: element.id,
+            };
+            list.push(data);
+          } else {
+            null;
+          }
+        });
+        dispatch({type: FETCH_LAPORAN, laporan: list});
+      });
+  };
+};
+
+export const fetchInfoLaporan = () => {
+  return (dispatch) => {
+    firestore()
+      .collection('infoLaporan')
+      .onSnapshot((doc) => {
+        doc._docs.forEach((element) => {
+          if (element._exists) {
+            const data = {
+              jumlahKuantitasBeli: element.data().jumlahKuantitasBeli,
+              pendapatan: element.data().pendapatan,
+            };
+            dispatch({
+              type: FETCH_INFO_LAPORAN,
+              info: {
+                jumlahKuantitasBeli: data.jumlahKuantitasBeli,
+                pendapatan: data.pendapatan,
+              },
+            });
+          } else {
+            dispatch({type: ERROR});
+          }
+        });
+      });
+  };
+};
+
+export const addLaporan = (
+  nama,
+  jumlahBeli,
+  totalHarga,
+  item,
+  uangBayar,
+  kembalian,
+) => {
+  return (dispatch, getState) => {
+    try {
+      firestore()
+        .collection('laporan')
+        .add({
+          nama,
+          jumlahBeli,
+          totalHarga,
+          item,
+          uangBayar,
+          kembalian,
+        })
+        .then(() => {
+          dispatch({type: TAMBAH_LAPORAN});
+        })
+        .catch(() => {
+          dispatch({type: ERROR});
+        });
+    } catch (error) {
+      dispatch({type: ERROR});
+    }
+  };
+};
+
+export const infoLaporans = (key, jumlahKuantitasBeli, pendapatan) => {
+  const docRef = firestore().collection('infoLaporan').doc(key);
+  return (dispatch, getState) => {
+    firestore()
+      .collection('infoLaporan')
+      .doc(key)
+      .get()
+      .then((snabshot) => {
+        firestore()
+          .collection('infoLaporan')
+          .doc(key)
+          .update({
+            jumlahKuantitasBeli:
+              snabshot._data.jumlahKuantitasBeli + jumlahKuantitasBeli,
+            pendapatan: snabshot._data.pendapatan + pendapatan,
+          })
+          .then(() => {
+            console.log('berhasil update');
+            dispatch({type: INFO_LAPORAN});
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 };

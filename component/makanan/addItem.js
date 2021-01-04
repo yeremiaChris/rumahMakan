@@ -6,11 +6,13 @@ import {Formik} from 'formik';
 import * as yup from 'yup';
 import {update, tambahItem} from '../../reducer/actionRedux';
 // dispatch
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 
 export default function addItem({pindahPage, params, route, navigation}) {
+  // disable button sebelum fetch data
+  const button = useSelector((state) => state.project.button);
   // dispatch
   const dispatch = useDispatch();
 
@@ -50,13 +52,13 @@ export default function addItem({pindahPage, params, route, navigation}) {
       };
       setKalimat('Tambah');
       dispatch(tambahItem(newItem));
-      navigation.navigate('Home', {tambah: kalimat});
+      pindahPage.navigate('Home');
     } else {
       dispatch(
         update(route.params.key, data.namaMenu, data.hargaMenu, data.jenisMenu),
       );
       setKalimat('Update');
-      navigation.navigate('Home', {tambah: kalimat});
+      navigation.navigate('Home');
     }
     resetForm();
   };
@@ -80,6 +82,7 @@ export default function addItem({pindahPage, params, route, navigation}) {
     <View style={styles.container}>
       <View style={styles.header}>
         <IconButton
+          disabled={button}
           onPress={kembali}
           icon="arrow-left"
           color="white"
@@ -212,6 +215,7 @@ export default function addItem({pindahPage, params, route, navigation}) {
                     <View>
                       {route.name === 'Update' ? null : (
                         <Button
+                          disabled={button}
                           color="white"
                           onPress={resetForm}
                           style={[styles.button, {backgroundColor: 'red'}]}>
@@ -220,6 +224,7 @@ export default function addItem({pindahPage, params, route, navigation}) {
                       )}
 
                       <Button
+                        disabled={button}
                         color="white"
                         onPress={handleSubmit}
                         style={styles.button}>

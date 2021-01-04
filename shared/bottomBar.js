@@ -1,7 +1,9 @@
 import React from 'react';
 import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 import {convertToRupiah} from './rupiah';
+import {useSelector} from 'react-redux';
 function bottomBar({totalHarga, reset, showModal, totalBarang}) {
+  const button = useSelector((state) => state.project.button);
   return (
     <View style={styles.containerDuaBottom}>
       <View style={styles.wrapTotal}>
@@ -11,6 +13,7 @@ function bottomBar({totalHarga, reset, showModal, totalBarang}) {
         </View>
         <View style={styles.wrapButton}>
           <TouchableOpacity
+            disabled={button}
             activeOpacity={0.5}
             onPress={() => {
               totalHarga > 0 ? showModal() && totalBarang() : null;
@@ -19,7 +22,10 @@ function bottomBar({totalHarga, reset, showModal, totalBarang}) {
               <Text style={styles.textAddCard}>Bayar</Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity activeOpacity={0.5} onPress={() => reset()}>
+          <TouchableOpacity
+            disabled={button}
+            activeOpacity={0.5}
+            onPress={() => reset()}>
             <View style={[styles.addCardDua, {backgroundColor: 'tan'}]}>
               <Text style={styles.textAddCard}>Reset</Text>
             </View>

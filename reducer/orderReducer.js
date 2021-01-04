@@ -13,6 +13,10 @@ import {
   FETCH_MENU,
   DISMISS,
   SUCCESS,
+  FETCH_LAPORAN,
+  TAMBAH_LAPORAN,
+  INFO_LAPORAN,
+  FETCH_INFO_LAPORAN,
 } from './actionType';
 
 import RNFirebase from '@react-native-firebase/firestore';
@@ -127,6 +131,7 @@ const makan = [
 const initialValue = {
   item: [],
   loading: true,
+  button: true,
 };
 
 // nama dan action untuk update
@@ -138,6 +143,7 @@ const reducer = (state = initialValue, action) => {
         ...state,
         item: action.item,
         loading: action.loading,
+        button: action.button,
       };
     case INCREMENT_ORDER:
       return {
@@ -237,22 +243,6 @@ const reducer = (state = initialValue, action) => {
     case UPDATE:
       console.log('update');
       return state;
-    // return {
-    //   ...state,
-    //   item: [
-    //     ...state.item.map((data) =>
-    //       data.key === action.key
-    //         ? {
-    //             ...data,
-    //             name: action.name,
-    //             price: action.price,
-    //             jenis: action.jenis,
-    //           }
-    //         : data,
-    //     ),
-    //   ],
-    // };
-
     default:
       return state;
       break;
@@ -282,8 +272,39 @@ const reducerDua = (state = initialValueDua, action) => {
       return state;
   }
 };
-//
+
+const initialValueTiga = {
+  laporan: [],
+  infoLaporan: {},
+};
+
+const reducerTiga = (state = initialValueTiga, action) => {
+  switch (action.type) {
+    case FETCH_LAPORAN:
+      console.log('laporan');
+      return {
+        ...state,
+        laporan: action.laporan,
+      };
+      break;
+    case TAMBAH_LAPORAN:
+      console.log('tambahLaporan');
+      return state;
+    case INFO_LAPORAN:
+      return state;
+    case FETCH_INFO_LAPORAN:
+      return {
+        ...state,
+        infoLaporan: action.info,
+      };
+    default:
+      return state;
+      break;
+  }
+};
+
 export const rootReducer = combineReducers({
   project: reducer,
   projectDua: reducerDua,
+  projectTiga: reducerTiga,
 });

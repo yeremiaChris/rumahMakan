@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   View,
@@ -29,14 +29,29 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import Moment from 'moment';
 import {convertToRupiah} from '../../shared/rupiah';
 import ModalDetail from '../../shared/modalDetail';
+import {useSelector, useDispatch} from 'react-redux';
+
+import {fetchLaporan, fetchInfoLaporan} from '../../reducer/actionRedux';
+
 export default function Laporan({
   visible,
   hideModal,
   showModal,
   navigation,
-  laporan,
   infoLaporan,
 }) {
+  // fetch data dari firestore melalui redux
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchLaporan());
+    dispatch(fetchInfoLaporan());
+  }, []);
+
+  // disable button sebelum fetch data
+  const button = useSelector((state) => state.project.button);
+
+  // laporan dari redux
+  const laporans = useSelector((state) => state.projectTiga);
   // pelanggan
   const data = [
     {
@@ -80,6 +95,7 @@ export default function Laporan({
   // state detail
   const [detailItems, setDetailItems] = useState({});
   const showModalDua = (detailItem, pelanggan) => {
+    console.log(detailItem);
     setVisibleDua(true);
     setDetailItems({detail: detailItem, pelanggan});
   };
@@ -96,6 +112,7 @@ export default function Laporan({
           <View style={styles.header}>
             <View style={styles.searchHead}>
               <IconButton
+                disabled={button}
                 icon="arrow-left"
                 color="white"
                 size={25}
@@ -119,11 +136,13 @@ export default function Laporan({
               items={select}
             />
             <TouchableOpacity
+              disabled={button}
               onPress={() => showDatePicker()}
               style={styles.dateCon}>
               <Text>{Moment(date).format('dddd, DD MMM Y')}</Text>
             </TouchableOpacity>
             <DateTimePickerModal
+              disabled={button}
               isVisible={isDatePickerVisible}
               mode="date"
               onConfirm={handleConfirm}
@@ -150,14 +169,17 @@ export default function Laporan({
               </DataTable.Header>
               <View style={styles.scroll}>
                 <FlatList
-                  data={laporan}
+                  data={laporans.laporan}
                   keyExtractor={(item) => item.key}
                   renderItem={({item}) => (
                     <TouchableOpacity
+                      disabled={button}
                       activeOpacity={0.4}
-                      onPress={() => showModalDua(item.item, item.pelanggan)}>
+                      onPress={() => {
+                        showModalDua(item.item, item.nama);
+                      }}>
                       <DataTable.Row>
-                        <DataTable.Cell>{item.pelanggan}</DataTable.Cell>
+                        <DataTable.Cell>{item.nama}</DataTable.Cell>
                         <DataTable.Cell numeric>
                           {item.jumlahBeli}
                         </DataTable.Cell>
@@ -185,7 +207,7 @@ export default function Laporan({
             </DataTable.Title>
             <DataTable.Title numeric>
               <Text style={{fontWeight: 'bold', fontSize: 15}}>
-                {infoLaporan.total}
+                {laporans.infoLaporan.jumlahKuantitasBeli}
               </Text>
             </DataTable.Title>
           </DataTable.Header>
@@ -195,13 +217,16 @@ export default function Laporan({
             </DataTable.Title>
             <DataTable.Title numeric>
               <Text style={{fontWeight: 'bold', fontSize: 15}}>
-                {convertToRupiah(infoLaporan.pendapatan)}
+                {convertToRupiah(laporans.infoLaporan.pendapatan)}
               </Text>
             </DataTable.Title>
           </DataTable.Header>
         </DataTable>
 
-        <TouchableOpacity activeOpacity={0.7} style={styles.conPrint}>
+        <TouchableOpacity
+          disabled={button}
+          activeOpacity={0.7}
+          style={styles.conPrint}>
           <Text style={styles.print}>CETAK</Text>
         </TouchableOpacity>
       </View>

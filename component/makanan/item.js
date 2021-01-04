@@ -155,7 +155,7 @@ function item({
       <>
         <TouchableOpacity
           activeOpacity={0.5}
-          disabled={disable}
+          disabled={data.button ? true : disable}
           onLongPress={() => {
             setHapus(true);
             setDisable(true);
@@ -168,6 +168,7 @@ function item({
                   justifyContent: 'space-between',
                 }}>
                 <IconButton
+                  disabled={data.button}
                   icon="delete"
                   size={20}
                   color="grey"
@@ -178,9 +179,9 @@ function item({
                     });
                     showDialog();
                   }}
-                  b
                 />
                 <IconButton
+                  disabled={data.button}
                   icon="pencil"
                   size={20}
                   color="grey"
@@ -202,7 +203,7 @@ function item({
               <View>
                 <View style={styles.jumlah}>
                   <IconButton
-                    disabled={disable}
+                    disabled={data.button ? true : disable}
                     style={styles.iconButton}
                     icon="plus"
                     color="white"
@@ -213,7 +214,7 @@ function item({
                   />
                   <Text>{item.quantity}</Text>
                   <IconButton
-                    disabled={disable}
+                    disabled={data.button ? true : disable}
                     style={styles.iconButton}
                     icon="minus"
                     color="white"
@@ -224,7 +225,7 @@ function item({
                   />
                 </View>
                 <TouchableOpacity
-                  disabled={disable}
+                  disabled={data.button ? true : disable}
                   activeOpacity={0.9}
                   onPress={() => {
                     item.order === false
@@ -262,10 +263,14 @@ function item({
             padding: 10,
             paddingBottom: 0,
           }}>
-          <TouchableOpacity activeOpacity={0.5} onPress={close}>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={close}
+            disabled={data.button}>
             <Text style={{color: 'orange', fontWeight: 'bold'}}>CLOSE</Text>
           </TouchableOpacity>
           <Button
+            disabled={data.button}
             icon="delete"
             mode="contained"
             color="red"
@@ -332,10 +337,10 @@ function item({
               </Dialog.Title>
             )}
             <Dialog.Actions>
-              <Button color="white" onPress={ya}>
+              <Button color="white" onPress={ya} disabled={data.button}>
                 Ya
               </Button>
-              <Button color="white" onPress={tidak}>
+              <Button color="white" onPress={tidak} disabled={data.button}>
                 Tidak
               </Button>
             </Dialog.Actions>
@@ -347,8 +352,8 @@ function item({
           <Dialog visible={visibleDua} onDismiss={hideDialogDua}>
             <Dialog.Title>Update</Dialog.Title>
             <Dialog.Actions>
-              <Button>Update</Button>
-              <Button>Batal</Button>
+              <Button disabled={data.button}>Update</Button>
+              <Button disabled={data.button}>Batal</Button>
             </Dialog.Actions>
           </Dialog>
         </Portal>

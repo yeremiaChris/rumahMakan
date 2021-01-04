@@ -12,6 +12,8 @@ import {convertToRupiah} from './rupiah';
 import {Formik} from 'formik';
 import {onChange} from 'react-native-reanimated';
 
+import {useDispatch} from 'react-redux';
+import {addLaporan, infoLaporans} from '../reducer/actionRedux';
 export default function modalPay({
   visible,
   hideModal,
@@ -30,6 +32,7 @@ export default function modalPay({
   infoLaporan,
 }) {
   const containerStyle = {backgroundColor: 'white', padding: 20};
+
   // mengelola kembalian uang bayar
   const uangKembalian = (text) => {
     setKembalian(text - totalHarga);
@@ -38,31 +41,47 @@ export default function modalPay({
   // state untuk jumlah pelanggan
   const [pelangganNo, setPelangganNo] = useState(1);
 
+  // dispatch action untuk laporan
+  const dispatch = useDispatch();
+
   // onSubmit
   const submit = (data) => {
     const totalBarang = orderan.reduce(
       (acc, curr) => acc + curr.totalQuantity,
       0,
     );
-
-    setLaporan([
-      ...laporan,
-      {
-        key: Math.random().toString(),
-        pelanggan: 'Pelanggan ' + pelangganNo,
-        jumlahBeli: totalBarang,
-        totalHarga: totalHarga,
-        item: orderan,
-        uangBayar: data.uangBayar,
-        kembalian: kembalian,
-      },
-    ]);
+    dispatch(
+      addLaporan(
+        'Pelanggan ' + pelangganNo,
+        totalBarang,
+        totalHarga,
+        orderan,
+        data.uangBayar,
+        kembalian,
+      ),
+    );
+    // setLaporan([
+    //   ...laporan,
+    //   {
+    //     key: Math.random().toString(),
+    //     pelanggan: 'Pelanggan ' + pelangganNo,
+    //     jumlahBeli: totalBarang,
+    //     totalHarga: totalHarga,
+    //     item: orderan,
+    //     uangBayar: data.uangBayar,
+    //     kembalian: kembalian,
+    //   },
+    // ]);
 
     // info laporan mendapatkan pendapatan dan jumlah belinya
-    setInfoLaporan({
-      pendapatan: infoLaporan.pendapatan + totalHarga,
-      total: infoLaporan.total + totalBarang,
-    });
+    // setInfoLaporan({
+    //   pendapatan: infoLaporan.pendapatan + totalHarga,
+    //   total: infoLaporan.total + totalBarang,
+    // });
+    const pendapatan = infoLaporan.pendapatan + totalHarga;
+    const total = infoLaporan.total + totalBarang;
+    dispatch(infoLaporans('9IAXPnr2VHyJ4lHtRi8e', total, pendapatan));
+
     setPelangganNo((prevState) => prevState + 1);
     hideModal();
     showModalDua();

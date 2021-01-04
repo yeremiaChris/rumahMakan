@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
 import {Chip} from 'react-native-paper';
 import {StyleSheet, View, FlatList, Text} from 'react-native';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 function chip() {
+  const button = useSelector((state) => state.project.button);
   // dispatch
   const dispatch = useDispatch();
   const data = [
@@ -53,6 +54,7 @@ function chip() {
         keyExtractor={(item) => item.id}
         renderItem={({item}) => (
           <Chip
+            disabled={button}
             selected={item.select}
             style={styles.chipChild}
             onPress={() => {
