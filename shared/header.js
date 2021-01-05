@@ -1,13 +1,20 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {IconButton, Colors, Searchbar, Badge} from 'react-native-paper';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
+import {filter} from '../reducer/actionRedux';
 import Modal from '../shared/modal';
 function header({navigation}) {
   const button = useSelector((state) => state.project.button);
-  const [searchQuery, setSearchQuery] = React.useState('');
-
-  const onChangeSearch = (query) => setSearchQuery(query);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [state, setstate] = useState([]);
+  console.log(searchQuery);
+  // dispatch untuk search
+  const dispatch = useDispatch();
+  const onChangeSearch = (query) => {
+    dispatch(filter(query));
+    setSearchQuery(query);
+  };
   return (
     <View style={styles.wrap}>
       <View style={styles.headerSatu}>
@@ -36,8 +43,8 @@ function header({navigation}) {
         <Searchbar
           style={styles.search}
           placeholder="Cari..."
-          onChangeText={onChangeSearch}
           value={searchQuery}
+          onChangeText={onChangeSearch}
         />
       </View>
     </View>

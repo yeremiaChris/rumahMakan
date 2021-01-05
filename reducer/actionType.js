@@ -17,3 +17,4 @@ export const SUCCESS = 'success';
 export const FETCH_LAPORAN = 'fetchLaporan';
 export const TAMBAH_LAPORAN = 'tambahLaporan';
 export const LAPORAN_URUT = 'laporanUrut';
+export const FILTER = 'filter';

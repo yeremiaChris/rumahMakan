@@ -16,6 +16,7 @@ import {
   FETCH_LAPORAN,
   TAMBAH_LAPORAN,
   LAPORAN_URUT,
+  FILTER,
 } from './actionType';
 
 import RNFirebase from '@react-native-firebase/firestore';
@@ -138,6 +139,26 @@ const initialValue = {
 // kalo nggak di buat ada error di async function
 const reducer = (state = initialValue, action) => {
   switch (action.type) {
+    case FILTER:
+      if (action.text) {
+        return {
+          ...state,
+          item: [
+            ...state.item.filter((item) => {
+              const itemData = item.name
+                ? item.name.toUpperCase()
+                : ''.toUpperCase();
+              const textData = action.text.toUpperCase();
+              return itemData.indexOf(textData) > -1;
+            }),
+          ],
+        };
+      } else {
+        return {
+          ...state,
+          item: action.item,
+        };
+      }
     case FETCH_MENU:
       return {
         ...state,

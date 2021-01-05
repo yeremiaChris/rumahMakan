@@ -15,9 +15,11 @@ import {
   SUCCESS,
   FETCH_LAPORAN,
   TAMBAH_LAPORAN,
+  FILTER,
 } from './actionType';
 import firestore from '@react-native-firebase/firestore';
 import {useSelector} from 'react-redux';
+import {useState} from 'react';
 // action function fetch data
 export const fetchMenu = () => {
   return (dispatch, getState) => {
@@ -232,7 +234,8 @@ export const addLaporan = (
           item,
           uangBayar,
           kembalian,
-          createAt: date.toDateString(),
+          createAt: date,
+          tanggal: date.toDateString(),
         })
         .then(() => {
           dispatch({type: TAMBAH_LAPORAN});
@@ -247,11 +250,17 @@ export const addLaporan = (
 };
 
 // urutkan hari ini
-export const laporanUrut = (kode) => {
+
+export const laporanUrut = (start) => {
+  const end = new Date();
+  const seminggu = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+  const sebulan = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+  const setahun = new Date(Date.now() - 365 * 24 * 60 * 60 * 1000);
   return (dispatch) => {
     firestore()
       .collection('laporan')
-      .where('createAt', '==', kode)
+      .where('createAt', '>=', start)
+      .where('createAt', '<=', end)
       .onSnapshot((doc) => {
         let list = [];
         doc._docs.forEach((element) => {
@@ -269,6 +278,61 @@ export const laporanUrut = (kode) => {
           }
         });
         dispatch({type: FETCH_LAPORAN, laporan: list});
+      });
+  };
+};
+
+export const tanggal = (start) => {
+  return (dispatch) => {
+    firestore()
+      .collection('laporan')
+      .where('tanggal', '==', start)
+      .onSnapshot((doc) => {
+        let list = [];
+        doc._docs.forEach((element) => {
+          if (element._exists) {
+            const data = {
+              nama: element.data().nama,
+              jumlahBeli: element.data().jumlahBeli,
+              totalHarga: element.data().totalHarga,
+              item: element.data().item,
+              key: element.id,
+            };
+            list.push(data);
+          } else {
+            null;
+          }
+        });
+        dispatch({type: FETCH_LAPORAN, laporan: list});
+      });
+  };
+};
+
+// filter
+export const filter = (text) => {
+  return (dispatch) => {
+    firestore()
+      .collection('menu')
+      .onSnapshot((doc) => {
+        let data = [];
+        doc._docs.forEach((items) => {
+          const item = {
+            key: items.id,
+            name: items.data().name,
+            price: items.data().price,
+            quantity: 0,
+            jenis: items.data().jenis,
+            orderColor: 'orange',
+            orderText: 'order',
+            order: false,
+          };
+          data.push(item);
+        });
+        dispatch({
+          type: FILTER,
+          item: data,
+          text: text,
+        });
       });
   };
 };

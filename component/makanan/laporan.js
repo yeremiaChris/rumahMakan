@@ -31,7 +31,7 @@ import {convertToRupiah} from '../../shared/rupiah';
 import ModalDetail from '../../shared/modalDetail';
 import {useSelector, useDispatch} from 'react-redux';
 
-import {fetchLaporan, laporanUrut} from '../../reducer/actionRedux';
+import {fetchLaporan, laporanUrut, tanggal} from '../../reducer/actionRedux';
 
 export default function Laporan({visible, hideModal, showModal, navigation}) {
   // laporan dari redux
@@ -57,23 +57,17 @@ export default function Laporan({visible, hideModal, showModal, navigation}) {
   // search
   const [searchQuery, setSearchQuery] = React.useState('');
   const onChangeSearch = (query) => setSearchQuery(query);
-
   // select
-  const urut = new Date();
+  const sekarang = new Date(Date.now() - 1 * 24 * 60 * 60 * 1000);
   const seminggu = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
   const sebulan = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
   const setahun = new Date(Date.now() - 365 * 24 * 60 * 60 * 1000);
   const select = [
-    {label: 'Hari ini', value: urut.toDateString(), key: '1'},
-    {label: '7 Minggu Terakhir', value: seminggu.toDateString(), key: '2'},
-    {label: 'Sebulan Terakhir', value: sebulan.toDateString(), key: '3'},
-    {label: 'Setahun ini', value: setahun.toDateString(), key: '4'},
+    {label: 'Satu Hari Ini', value: 'hariIni', key: '1'},
+    {label: '7 Minggu Terakhir', value: 'seminggu', key: '2'},
+    {label: 'Sebulan Terakhir', value: 'sebualn', key: '3'},
+    {label: 'Setahun ini', value: 'setahun', key: '4'},
   ];
-
-  // onchange picker
-  const changePicker = (kode) => {
-    dispatch(laporanUrut(kode));
-  };
 
   // date
   Moment.locale('id');
@@ -83,13 +77,33 @@ export default function Laporan({visible, hideModal, showModal, navigation}) {
     setDatePickerVisibility(true);
   };
 
+  // menyembunyikan date picker
   const hideDatePicker = () => {
     setDatePickerVisibility(false);
   };
 
+  // state label waktu laporan
+  const [label, setLabel] = useState('Semua');
+  // onchange picker
+  const changePicker = (kode, value) => {
+    console.log(kode);
+    if (kode == 'hariIni') {
+      dispatch(laporanUrut(sekarang));
+    } else if (kode == 'seminggu') {
+      dispatch(laporanUrut(seminggu));
+    } else if (kode == 'sebulan') {
+      dispatch(laporanUrut(sebulan));
+    } else if (kode == 'setahun') {
+      dispatch(laporanUrut(setahun));
+    }
+    // setLabel(value);
+    // dispatch(laporanUrut(kode));
+  };
+
+  // handle change tanggal dari date picker
   const handleConfirm = (date) => {
-    const kode = date.toDateString();
-    changePicker(kode);
+    const tanggalBaru = date.toDateString();
+    tanggal(tanggalBaru);
     setDate(date);
     hideDatePicker();
   };
@@ -108,7 +122,6 @@ export default function Laporan({visible, hideModal, showModal, navigation}) {
 
   // renderitem
   const renderItem = ({item}) => {
-    console.log(item);
     return (
       <>
         {laporans.laporan.length !== 0 ? (
@@ -160,15 +173,15 @@ export default function Laporan({visible, hideModal, showModal, navigation}) {
             <RNPickerSelect
               placeholder={{
                 label: 'Semua',
-                value: 'semua',
+                value: 'Semua',
               }}
               style={pickerSelectStyles}
               useNativeAndroidPickerStyle={true}
               fixAndroidTouchableBug
               onValueChange={(value) => {
-                value == 'semua'
+                value == 'Semua'
                   ? dispatch(fetchLaporan())
-                  : changePicker(value);
+                  : changePicker(value, value);
               }}
               items={select}
             />
@@ -188,7 +201,7 @@ export default function Laporan({visible, hideModal, showModal, navigation}) {
             />
           </View>
           <View style={styles.tanggal}>
-            <Text>Selasa, 20 Des 2020</Text>
+            <Text>{label}</Text>
           </View>
 
           <View style={styles.content}>
