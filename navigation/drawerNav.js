@@ -1,5 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import {createDrawerNavigator} from '@react-navigation/drawer';
+import {
+  createDrawerNavigator,
+  DrawerContentScrollView,
+  DrawerItemList,
+  DrawerItem,
+} from '@react-navigation/drawer';
 import Laporan from '../component/makanan/laporan';
 import Home from '../component/makanan/homeMakan';
 import Add from '../component/makanan/addItem';
@@ -39,37 +44,20 @@ function drawerNav(props) {
 
   if (initializing) return null;
 
+  // logout
+  const logout = (props) => {
+    console.log(props);
+    auth()
+      .signOut()
+      .then(() => {
+        props.navigation.navigate('Login');
+      })
+      .catch(() => console.log('error logout'));
+  };
+
   return (
     <>
-      {user ? (
-        <Drawer.Navigator>
-          <Drawer.Screen name="Home">
-            {(props) => (
-              <Bottom
-                {...props}
-                name="Home"
-                setLaporan={setLaporan}
-                laporan={laporan}
-                setInfoLaporan={setInfoLaporan}
-                infoLaporan={infoLaporan}
-              />
-            )}
-          </Drawer.Screen>
-          <Drawer.Screen name="Laporan">
-            {(props) => (
-              <Bottom
-                {...props}
-                laporan={laporan}
-                name="Laporan"
-                infoLaporan={infoLaporan}
-              />
-            )}
-          </Drawer.Screen>
-          <Drawer.Screen name="Tambah">
-            {(props) => <Bottom {...props} name="Tambah" />}
-          </Drawer.Screen>
-        </Drawer.Navigator>
-      ) : (
+      {!user ? (
         <Drawer.Navigator>
           <Drawer.Screen name="Login">
             {(props) => <Login {...props} name="Login" />}
@@ -78,6 +66,44 @@ function drawerNav(props) {
             {(props) => <Register {...props} name="Register" />}
           </Drawer.Screen>
         </Drawer.Navigator>
+      ) : (
+        <>
+          <Drawer.Navigator
+            drawerContent={(props) => {
+              return (
+                <DrawerContentScrollView {...props}>
+                  <DrawerItemList {...props} />
+                  <DrawerItem label="Logout" onPress={logout} />
+                </DrawerContentScrollView>
+              );
+            }}>
+            <Drawer.Screen name="Home">
+              {(props) => (
+                <Bottom
+                  {...props}
+                  name="Home"
+                  setLaporan={setLaporan}
+                  laporan={laporan}
+                  setInfoLaporan={setInfoLaporan}
+                  infoLaporan={infoLaporan}
+                />
+              )}
+            </Drawer.Screen>
+            <Drawer.Screen name="Laporan">
+              {(props) => (
+                <Bottom
+                  {...props}
+                  laporan={laporan}
+                  name="Laporan"
+                  infoLaporan={infoLaporan}
+                />
+              )}
+            </Drawer.Screen>
+            <Drawer.Screen name="Tambah">
+              {(props) => <Bottom {...props} name="Tambah" />}
+            </Drawer.Screen>
+          </Drawer.Navigator>
+        </>
       )}
     </>
   );
