@@ -38,104 +38,11 @@ import {
 } from 'react-redux-firebase';
 import {State} from 'react-native-gesture-handler';
 
-// dummy data
-const makan = [
-  {
-    name: 'Nasi Goreng',
-    price: 10000,
-    key: '1',
-    quantity: 0,
-    jenis: 'Makanan',
-    orderColor: 'orange',
-    orderText: 'Order',
-    order: false,
-    edit: false,
-  },
-  {
-    name: 'Mie Goreng',
-    price: 5000,
-    key: '2',
-    quantity: 0,
-    jenis: 'Makanan',
-    orderColor: 'orange',
-    orderText: 'Order',
-    order: false,
-    edit: false,
-  },
-  {
-    name: 'Geprek',
-    price: 8000,
-    key: '3',
-    quantity: 0,
-    jenis: 'Makanan',
-    orderColor: 'orange',
-    orderText: 'Order',
-    order: false,
-    edit: false,
-  },
-  {
-    name: 'Ayam Penyet Bakar',
-    price: 12000,
-    key: '4',
-    quantity: 0,
-    jenis: 'Makanan',
-    orderColor: 'orange',
-    orderText: 'Order',
-    order: false,
-    edit: false,
-  },
-  {
-    name: 'Kopi Panas',
-    price: 4000,
-    key: '5',
-    quantity: 0,
-    jenis: 'Minuman',
-    orderColor: 'orange',
-    orderText: 'Order',
-    order: false,
-    edit: false,
-  },
-  {
-    name: 'Teh Panas',
-    price: 3000,
-    key: '6',
-    quantity: 0,
-    jenis: 'Minuman',
-    orderColor: 'orange',
-    orderText: 'Order',
-    order: false,
-    edit: false,
-  },
-  {
-    name: 'Americano',
-    price: 15000,
-    key: '7',
-    quantity: 0,
-    jenis: 'Minuman',
-    orderColor: 'orange',
-    orderText: 'Order',
-    order: false,
-    edit: false,
-  },
-  {
-    name: 'Es Jeruk',
-    price: 5000,
-    key: '8',
-    quantity: 0,
-    jenis: 'Minuman',
-    orderColor: 'orange',
-    orderText: 'Order',
-    order: false,
-    edit: false,
-  },
-];
 const initialValue = {
   item: [],
   loading: true,
   button: true,
 };
-
-// nama dan action untuk update
 // kalo nggak di buat ada error di async function
 const reducer = (state = initialValue, action) => {
   switch (action.type) {
@@ -294,6 +201,7 @@ const reducerDua = (state = initialValueDua, action) => {
   }
 };
 
+// initial value untuk lapraon
 const initialValueTiga = {
   laporan: [],
 };

@@ -32,7 +32,7 @@ import ModalDetail from '../../shared/modalDetail';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {fetchLaporan, laporanUrut, tanggal} from '../../reducer/actionRedux';
-
+import {selectLaporan, changePicker} from '../../shared/utils';
 export default function Laporan({visible, hideModal, showModal, navigation}) {
   // laporan dari redux
   const laporans = useSelector((state) => state.projectTiga);
@@ -45,29 +45,7 @@ export default function Laporan({visible, hideModal, showModal, navigation}) {
 
   // disable button sebelum fetch data
   const button = useSelector((state) => state.project.button);
-
-  // pelanggan
-  const data = [
-    {
-      data: 'Pelanggan',
-      key: '1',
-    },
-  ];
-
-  // search
-  const [searchQuery, setSearchQuery] = React.useState('');
-  const onChangeSearch = (query) => setSearchQuery(query);
   // select
-  const sekarang = new Date(Date.now() - 1 * 24 * 60 * 60 * 1000);
-  const seminggu = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-  const sebulan = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
-  const setahun = new Date(Date.now() - 365 * 24 * 60 * 60 * 1000);
-  const select = [
-    {label: 'Satu Hari Ini', value: 'hariIni', key: '1'},
-    {label: '7 Minggu Terakhir', value: 'seminggu', key: '2'},
-    {label: 'Sebulan Terakhir', value: 'sebualn', key: '3'},
-    {label: 'Setahun ini', value: 'setahun', key: '4'},
-  ];
 
   // date
   Moment.locale('id');
@@ -85,20 +63,6 @@ export default function Laporan({visible, hideModal, showModal, navigation}) {
   // state label waktu laporan
   const [label, setLabel] = useState('Semua');
   // onchange picker
-  const changePicker = (kode, value) => {
-    console.log(kode);
-    if (kode == 'hariIni') {
-      dispatch(laporanUrut(sekarang));
-    } else if (kode == 'seminggu') {
-      dispatch(laporanUrut(seminggu));
-    } else if (kode == 'sebulan') {
-      dispatch(laporanUrut(sebulan));
-    } else if (kode == 'setahun') {
-      dispatch(laporanUrut(setahun));
-    }
-    // setLabel(value);
-    // dispatch(laporanUrut(kode));
-  };
 
   // handle change tanggal dari date picker
   const handleConfirm = (date) => {
@@ -183,7 +147,7 @@ export default function Laporan({visible, hideModal, showModal, navigation}) {
                   ? dispatch(fetchLaporan())
                   : changePicker(value, value);
               }}
-              items={select}
+              items={selectLaporan}
             />
             <TouchableOpacity
               disabled={button}

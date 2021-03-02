@@ -3,11 +3,10 @@ import {StyleSheet, View, Text, TextInput, ScrollView} from 'react-native';
 import {IconButton, Button, Avatar} from 'react-native-paper';
 import RNPickerSelect from 'react-native-picker-select';
 import {Formik} from 'formik';
-import * as yup from 'yup';
 import {update, tambahItem} from '../../reducer/actionRedux';
 // dispatch
 import {useDispatch, useSelector} from 'react-redux';
-
+import {select, menuSchema, simpan} from '../../shared/utils';
 import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 
 export default function addItem({pindahPage, params, route, navigation}) {
@@ -30,54 +29,9 @@ export default function addItem({pindahPage, params, route, navigation}) {
   const [focus, setFocus] = useState(false);
   const [focusDua, setFocusDua] = useState(false);
 
-  // select
-  const select = [
-    {label: 'Makanan', value: 'Makanan', key: '1'},
-    {label: 'Minuman', value: 'Minuman', key: '2'},
-    {label: 'Cemilan', value: 'Cemilan', key: '3'},
-    {label: 'Buah', value: 'Buah', key: '4'},
-    {label: 'Kerupuk', value: 'Kerupuk', key: '4'},
-    {label: 'Kopi', value: 'Kopi', key: '4'},
-  ];
-
   const routeName = getFocusedRouteNameFromRoute(route);
   // onsubmit
   const [kalimat, setKalimat] = useState('');
-  const simpan = (data, {resetForm}) => {
-    if (route.name == 'Tambah') {
-      const newItem = {
-        name: data.namaMenu,
-        price: data.hargaMenu,
-        jenis: data.jenisMenu,
-      };
-      setKalimat('Tambah');
-      dispatch(tambahItem(newItem));
-      pindahPage.navigate('Home');
-    } else {
-      dispatch(
-        update(route.params.key, data.namaMenu, data.hargaMenu, data.jenisMenu),
-      );
-      setKalimat('Update');
-      navigation.navigate('Home');
-    }
-    resetForm();
-  };
-
-  // schema
-  const menuSchema = yup.object().shape({
-    namaMenu: yup
-      .string()
-      .min(4, 'Terlalu Pendek !')
-      .max(15, 'Terlalu Panjang !')
-      .required('Required !'),
-    jenisMenu: yup.string().required('Required !'),
-    hargaMenu: yup
-      .number()
-      .integer('Invalid Decimal !')
-      .required('Required !')
-      .typeError('Harus Angka Decimal !'),
-  });
-
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -118,7 +72,17 @@ export default function addItem({pindahPage, params, route, navigation}) {
                         hargaMenu: '',
                       }
                 }
-                onSubmit={simpan}>
+                onSubmit={(data, {resetForm}) =>
+                  simpan(
+                    data,
+                    resetForm,
+                    setKalimat,
+                    dispatch,
+                    pindahPage,
+                    update,
+                    navigation,
+                  )
+                }>
                 {({
                   values,
                   handleChange,

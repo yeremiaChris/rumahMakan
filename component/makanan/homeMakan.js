@@ -32,25 +32,11 @@ export default function homeMakan({
   const dispatch = useDispatch();
   // increment
   const increment = (index) => {
-    // setItem(
-    //   item.map((item) =>
-    //     item.key === index && item.quantity >= 0
-    //       ? {...item, quantity: item.quantity + 1}
-    //       : item,
-    //   ),
-    // );
     dispatch(incrementOrder(index));
   };
 
   // decrement
   const decrement = (index) => {
-    // setItem(
-    //   item.map((item) =>
-    //     item.key === index && item.quantity > 0
-    //       ? {...item, quantity: item.quantity - 1}
-    //       : item,
-    //   ),
-    // );
     dispatch(decrementOrder(index));
   };
 
@@ -61,13 +47,6 @@ export default function homeMakan({
 
   // change color order and order Text
   const orderColor = (key, totalQuantity, price, totalPrice, name) => {
-    // setItem(
-    //   item.map((item) =>
-    //     item.key === key && item.quantity > 0
-    //       ? {...item, orderColor: '#114444', orderText: 'Ordered', order: true}
-    //       : item,
-    //   ),
-    // );
     dispatch(orderItem(key));
     if (totalQuantity > 0) {
       setOrderan([
@@ -87,13 +66,6 @@ export default function homeMakan({
   // cancel order
   const cancelOrder = (key, totalPrice) => {
     setOrderan(orderan.filter((item) => item.key !== key));
-    // setItem(
-    //   item.map((item) =>
-    //     item.key === key && item.order === true
-    //       ? {...item, orderColor: 'orange', orderText: 'Order', order: false}
-    //       : item,
-    //   ),
-    // );
     dispatch(cancelOrderItem(key));
     setTotalHarga((prev) => prev - totalPrice);
   };
@@ -108,19 +80,6 @@ export default function homeMakan({
     setOrderan([]);
     setTotalHarga(0);
     dispatch(resetAction());
-    // setItem([
-    //   ...item.map((data) => {
-    //     setOrderan([]);
-    //     setTotalHarga(0);
-    //     return {
-    //       ...data,
-    //       orderColor: 'orange',
-    //       orderText: 'Order',
-    //       order: false,
-    //       quantity: 0,
-    //     };
-    //   }),
-    // ]);
   };
   // modal pay
   const [visible, setVisible] = useState(false);
@@ -140,7 +99,6 @@ export default function homeMakan({
 
   // membuat button disable ketika belum memenuhi syaratnya
   const [button, setButton] = useState(true);
-
   return (
     <>
       <View style={styles.container}>

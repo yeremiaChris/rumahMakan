@@ -21,33 +21,33 @@ import firestore from '@react-native-firebase/firestore';
 import {useSelector} from 'react-redux';
 import {useState} from 'react';
 // action function fetch data
+const db = firestore().collection('menu');
 export const fetchMenu = () => {
   return (dispatch, getState) => {
     try {
-      firestore()
-        .collection('menu')
-        .onSnapshot((doc) => {
-          let data = [];
-          doc._docs.forEach((items) => {
-            const item = {
-              key: items.id,
-              name: items.data().name,
-              price: items.data().price,
-              quantity: 0,
-              jenis: items.data().jenis,
-              orderColor: 'orange',
-              orderText: 'order',
-              order: false,
-            };
-            data.push(item);
-          });
-          dispatch({
-            type: FETCH_MENU,
-            item: data,
-            loading: false,
-            button: false,
-          });
+      db.onSnapshot((doc) => {
+        let data = [];
+        console.log(doc._docs);
+        doc._docs.forEach((items) => {
+          const item = {
+            key: items.id,
+            name: items.data().name,
+            price: items.data().price,
+            quantity: 0,
+            jenis: items.data().jenis,
+            orderColor: 'orange',
+            orderText: 'order',
+            order: false,
+          };
+          data.push(item);
         });
+        dispatch({
+          type: FETCH_MENU,
+          item: data,
+          loading: false,
+          button: false,
+        });
+      });
     } catch (error) {
       dispatch({type: ERROR, err: error});
     }
@@ -57,9 +57,7 @@ export const fetchMenu = () => {
 // update data
 export const update = (key, name, price, jenis, update) => {
   return (dispatch) => {
-    firestore()
-      .collection('menu')
-      .doc(key)
+    db.doc(key)
       .update({
         name,
         price,
@@ -73,13 +71,6 @@ export const update = (key, name, price, jenis, update) => {
         dispatch({type: ERROR});
       });
   };
-  // return {
-  //   type: UPDATE,
-  //   key,
-  //   name,
-  //   price,
-  //   jenis,
-  // };
 };
 
 // tambah jumlah atau quantity orderan
@@ -132,13 +123,11 @@ export const resetAction = () => {
 // tambah menu
 export const tambahItem = (newItem, tambah) => {
   return (dispatch, getState) => {
-    firestore()
-      .collection('menu')
-      .add({
-        name: newItem.name,
-        jenis: newItem.jenis,
-        price: newItem.price,
-      })
+    db.add({
+      name: newItem.name,
+      jenis: newItem.jenis,
+      price: newItem.price,
+    })
       .then(() => {
         dispatch({type: TAMBAH_ITEM});
         dispatch({type: SUCCESS, kalimat: 'Tambah'});
@@ -152,9 +141,7 @@ export const tambahItem = (newItem, tambah) => {
 // hapus item firestore
 export const hapusItem = (key) => {
   return (dispatch) => {
-    firestore()
-      .collection('menu')
-      .doc(key)
+    db.doc(key)
       .delete()
       .then(() => dispatch({type: HAPUS_ITEM, key: key}))
       .catch((err) => dispatch({type: ERROR, err: err}));
@@ -164,9 +151,7 @@ export const hapusItem = (key) => {
 // mengapus seluruh item
 export const hapusSemua = () => {
   return (dispatch) => {
-    firestore()
-      .collection('menu')
-      .get()
+    db.get()
       .then((res) => {
         res._docs.forEach((element) => {
           element.ref.delete();
@@ -187,29 +172,28 @@ export const dismiss = () => {
 };
 
 // fetch data untuk di tampilkan di laporan component
+const dbLaporan = firestore().collection('laporan');
 
 export const fetchLaporan = () => {
   return (dispatch) => {
-    firestore()
-      .collection('laporan')
-      .onSnapshot((doc) => {
-        let list = [];
-        doc._docs.forEach((element) => {
-          if (element._exists) {
-            const data = {
-              nama: element.data().nama,
-              jumlahBeli: element.data().jumlahBeli,
-              totalHarga: element.data().totalHarga,
-              item: element.data().item,
-              key: element.id,
-            };
-            list.push(data);
-          } else {
-            null;
-          }
-        });
-        dispatch({type: FETCH_LAPORAN, laporan: list});
+    dbLaporan.onSnapshot((doc) => {
+      let list = [];
+      doc._docs.forEach((element) => {
+        if (element._exists) {
+          const data = {
+            nama: element.data().nama,
+            jumlahBeli: element.data().jumlahBeli,
+            totalHarga: element.data().totalHarga,
+            item: element.data().item,
+            key: element.id,
+          };
+          list.push(data);
+        } else {
+          null;
+        }
       });
+      dispatch({type: FETCH_LAPORAN, laporan: list});
+    });
   };
 };
 
@@ -225,8 +209,7 @@ export const addLaporan = (
   return (dispatch, getState) => {
     const date = new Date();
     try {
-      firestore()
-        .collection('laporan')
+      dbLaporan
         .add({
           nama,
           jumlahBeli,
@@ -257,8 +240,7 @@ export const laporanUrut = (start) => {
   const sebulan = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
   const setahun = new Date(Date.now() - 365 * 24 * 60 * 60 * 1000);
   return (dispatch) => {
-    firestore()
-      .collection('laporan')
+    dbLaporan
       .where('createAt', '>=', start)
       .where('createAt', '<=', end)
       .onSnapshot((doc) => {
@@ -284,55 +266,50 @@ export const laporanUrut = (start) => {
 
 export const tanggal = (start) => {
   return (dispatch) => {
-    firestore()
-      .collection('laporan')
-      .where('tanggal', '==', start)
-      .onSnapshot((doc) => {
-        let list = [];
-        doc._docs.forEach((element) => {
-          if (element._exists) {
-            const data = {
-              nama: element.data().nama,
-              jumlahBeli: element.data().jumlahBeli,
-              totalHarga: element.data().totalHarga,
-              item: element.data().item,
-              key: element.id,
-            };
-            list.push(data);
-          } else {
-            null;
-          }
-        });
-        dispatch({type: FETCH_LAPORAN, laporan: list});
+    dbLaporan.where('tanggal', '==', start).onSnapshot((doc) => {
+      let list = [];
+      doc._docs.forEach((element) => {
+        if (element._exists) {
+          const data = {
+            nama: element.data().nama,
+            jumlahBeli: element.data().jumlahBeli,
+            totalHarga: element.data().totalHarga,
+            item: element.data().item,
+            key: element.id,
+          };
+          list.push(data);
+        } else {
+          null;
+        }
       });
+      dispatch({type: FETCH_LAPORAN, laporan: list});
+    });
   };
 };
 
 // filter
 export const filter = (text) => {
   return (dispatch) => {
-    firestore()
-      .collection('menu')
-      .onSnapshot((doc) => {
-        let data = [];
-        doc._docs.forEach((items) => {
-          const item = {
-            key: items.id,
-            name: items.data().name,
-            price: items.data().price,
-            quantity: 0,
-            jenis: items.data().jenis,
-            orderColor: 'orange',
-            orderText: 'order',
-            order: false,
-          };
-          data.push(item);
-        });
-        dispatch({
-          type: FILTER,
-          item: data,
-          text: text,
-        });
+    dbLaporan.onSnapshot((doc) => {
+      let data = [];
+      doc._docs.forEach((items) => {
+        const item = {
+          key: items.id,
+          name: items.data().name,
+          price: items.data().price,
+          quantity: 0,
+          jenis: items.data().jenis,
+          orderColor: 'orange',
+          orderText: 'order',
+          order: false,
+        };
+        data.push(item);
       });
+      dispatch({
+        type: FILTER,
+        item: data,
+        text: text,
+      });
+    });
   };
 };

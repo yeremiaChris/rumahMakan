@@ -14,10 +14,20 @@ import {View, Text} from 'react-native';
 
 import Login from '../component/authentication/login';
 import Register from '../component/authentication/register';
+import {fetchMenu} from '../reducer/actionRedux';
+import {useDispatch} from 'react-redux';
 
 const Drawer = createDrawerNavigator();
 
 function drawerNav(props) {
+  // dispatch hapus item
+  const dispatch = useDispatch();
+
+  // useEffect untuk fetch data dari firebase redux
+  useEffect(() => {
+    dispatch(fetchMenu());
+  }, [dispatch]);
+
   // laporan
   const [laporan, setLaporan] = useState([]);
   // jumlah kuantitas beli laporan

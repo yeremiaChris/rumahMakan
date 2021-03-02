@@ -12,42 +12,8 @@ import {TextInput, Button, IconButton} from 'react-native-paper';
 import {Formik} from 'formik';
 import * as yup from 'yup';
 import auth from '@react-native-firebase/auth';
-const validationSchemas = yup.object().shape({
-  email: yup.string().email('Invalid Email').required('Required'),
-  password: yup
-    .string()
-    .required('Required.')
-    .min(8, 'Password minimal terdiri dari 8 karakter')
-    .matches(/[a-zA-Z]/, 'Harus ada tulisan latin'),
-  passwordConfirmation: yup
-    .string()
-    .oneOf([yup.ref('password'), null], 'Passwords must match'),
-});
+import {validationSchemasRegis, submitRegis} from '../../shared/utils';
 export default function register({navigation}) {
-  // alert error
-  const createTwoButtonAlert = () =>
-    Alert.alert(
-      '',
-      'EMAIL SUDAH TERDAFTAR, GUNAKAN AKUN LAIN',
-      [{text: 'OK', onPress: () => console.log('OK Pressed')}],
-      {cancelable: false},
-    );
-
-  // submit
-  const submit = (value) => {
-    auth()
-      .createUserWithEmailAndPassword(value.email, value.password)
-      .then(() => {
-        console.log('success');
-      })
-      .catch((error) => {
-        switch (error.code) {
-          case 'auth/email-already-in-use':
-            createTwoButtonAlert();
-            break;
-        }
-      });
-  };
   return (
     <>
       <View style={styles.header}>
@@ -63,8 +29,8 @@ export default function register({navigation}) {
             <Text style={styles.textLogin}>REGISTER</Text>
           </View>
           <Formik
-            onSubmit={submit}
-            validationSchema={validationSchemas}
+            onSubmit={submitRegis}
+            validationSchema={validationSchemasRegis}
             initialValues={{email: '', password: '', passwordConfirmation: ''}}>
             {({
               values,

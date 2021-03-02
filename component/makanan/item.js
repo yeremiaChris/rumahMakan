@@ -28,7 +28,7 @@ import {
 // accesing global state redux
 import {useSelector, useDispatch} from 'react-redux';
 import {useFirestoreConnect} from 'react-redux-firebase';
-
+import {ya, tidak} from '../../shared/utils';
 function item({
   pilihPage,
   increment,
@@ -38,14 +38,6 @@ function item({
   params,
   nav,
 }) {
-  // dispatch hapus item
-  const dispatch = useDispatch();
-
-  // useEffect untuk fetch data dari firebase redux
-  useEffect(() => {
-    dispatch(fetchMenu());
-  }, []);
-
   // accessing global state from redux
   const data = useSelector((state) => state.project);
 
@@ -83,24 +75,6 @@ function item({
 
   // key extractor
   const keyExtractor = (item) => item.key;
-
-  // button di modal
-  const ya = () => {
-    if (semua) {
-      dispatch(hapusSemua());
-      hideDialog();
-      close(false);
-    } else {
-      dispatch(hapusItem(itemHapus.key));
-      hideDialog();
-      close(false);
-    }
-    setSemua(false);
-  };
-  const tidak = () => {
-    hideDialog();
-    setSemua(false);
-  };
 
   // func menampilkan modal delete semua
   const deleteSemua = () => {
@@ -337,10 +311,26 @@ function item({
               </Dialog.Title>
             )}
             <Dialog.Actions>
-              <Button color="white" onPress={ya} disabled={data.button}>
+              <Button
+                color="white"
+                onPress={() =>
+                  ya(
+                    semua,
+                    dispatch,
+                    hapusSemua,
+                    hideDialog,
+                    close,
+                    hapusItem,
+                    setSemua,
+                  )
+                }
+                disabled={data.button}>
                 Ya
               </Button>
-              <Button color="white" onPress={tidak} disabled={data.button}>
+              <Button
+                color="white"
+                onPress={() => tidak(hideDialog, setSemua)}
+                disabled={data.button}>
                 Tidak
               </Button>
             </Dialog.Actions>

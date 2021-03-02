@@ -5,62 +5,15 @@ import {
   Text,
   TouchableOpacity,
   ScrollView,
-  Alert,
 } from 'react-native';
 import {TextInput, Button, IconButton} from 'react-native-paper';
 import {Formik} from 'formik';
 import * as yup from 'yup';
-import auth from '@react-native-firebase/auth';
-// validation schema
-const validationSchemas = yup.object().shape({
-  email: yup.string().email('Invalid Email').required('Required'),
-  password: yup
-    .string()
-    .required('Required.')
-    .min(8, 'Password minimal terdiri dari 8 karakter')
-    .matches(/[a-zA-Z]/, 'Harus ada tulisan latin'),
-});
+import {submit, validationSchemas} from '../../shared/utils';
 
 export default function login({navigation}) {
   // alert error
   const [error, setError] = React.useState('');
-  const createTwoButtonAlert = (code) => {
-    Alert.alert(
-      '',
-      code == 'auth/wrong-password' ? 'Password Salah' : 'Akun tidak terdaftar',
-      [{text: 'OK', onPress: () => console.log('OK Pressed')}],
-      {cancelable: false},
-    );
-  };
-  const manyRequest = (code) => {
-    Alert.alert(
-      '',
-      'Silahkan coba lagi nanti. ',
-      [{text: 'OK', onPress: () => console.log('OK Pressed')}],
-      {cancelable: false},
-    );
-  };
-  // submit
-  const submit = (value) => {
-    auth()
-      .signInWithEmailAndPassword(value.email, value.password)
-      .then(() => {
-        console.log('User account created & signed in!');
-      })
-      .catch((error) => {
-        switch (error.code) {
-          case 'auth/wrong-password':
-            createTwoButtonAlert(error.code);
-            break;
-          case 'auth/user-not-found':
-            createTwoButtonAlert(error.code);
-            break;
-          case 'auth/too-many-requests':
-        }
-        console.log(error);
-      });
-  };
-
   const [text, setText] = React.useState('');
   return (
     <>
