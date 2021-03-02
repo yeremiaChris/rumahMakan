@@ -81,6 +81,8 @@ export default function addItem({pindahPage, params, route, navigation}) {
                     pindahPage,
                     update,
                     navigation,
+                    route,
+                    tambahItem,
                   )
                 }>
                 {({

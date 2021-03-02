@@ -33,6 +33,7 @@ import {useSelector, useDispatch} from 'react-redux';
 
 import {fetchLaporan, laporanUrut, tanggal} from '../../reducer/actionRedux';
 import {selectLaporan, changePicker} from '../../shared/utils';
+
 export default function Laporan({visible, hideModal, showModal, navigation}) {
   // laporan dari redux
   const laporans = useSelector((state) => state.projectTiga);
@@ -142,10 +143,10 @@ export default function Laporan({visible, hideModal, showModal, navigation}) {
               style={pickerSelectStyles}
               useNativeAndroidPickerStyle={true}
               fixAndroidTouchableBug
-              onValueChange={(value) => {
+              onValueChange={(kode) => {
                 value == 'Semua'
                   ? dispatch(fetchLaporan())
-                  : changePicker(value, value);
+                  : changePicker(kode, value, dispatch, laporanUrut);
               }}
               items={selectLaporan}
             />

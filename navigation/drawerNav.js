@@ -27,7 +27,6 @@ function drawerNav(props) {
   useEffect(() => {
     dispatch(fetchMenu());
   }, [dispatch]);
-
   // laporan
   const [laporan, setLaporan] = useState([]);
   // jumlah kuantitas beli laporan

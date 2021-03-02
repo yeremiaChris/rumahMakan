@@ -36,6 +36,8 @@ export const simpan = (
   pindahPage,
   update,
   navigation,
+  route,
+  tambahItem,
 ) => {
   if (route.name == 'Tambah') {
     const newItem = {

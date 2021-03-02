@@ -27,7 +27,6 @@ export const fetchMenu = () => {
     try {
       db.onSnapshot((doc) => {
         let data = [];
-        console.log(doc._docs);
         doc._docs.forEach((items) => {
           const item = {
             key: items.id,
