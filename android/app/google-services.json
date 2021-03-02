@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "1008475593761",
-    "project_id": "salessystem-74e7b",
-    "storage_bucket": "salessystem-74e7b.appspot.com"
+    "project_number": "425861637042",
+    "project_id": "rumahmakan-9ea87",
+    "storage_bucket": "rumahmakan-9ea87.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1008475593761:android:199961970dcffdcf7e9760",
+        "mobilesdk_app_id": "1:425861637042:android:33bf5f3f04c57b72187aab",
         "android_client_info": {
           "package_name": "com.rumahmakan"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1008475593761-6k0iki6ufljsfrrjesbrlr6fvgun2j5q.apps.googleusercontent.com",
+          "client_id": "425861637042-b9knui9d5p89omhqgp92mb51mp314gpi.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAOcrOSRLrWm04m1kOTNBPFR5aAIIanKxM"
+          "current_key": "AIzaSyCfKiggJqbqn2YwNPwvbFIyv9RRqSbbrLc"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1008475593761-6k0iki6ufljsfrrjesbrlr6fvgun2j5q.apps.googleusercontent.com",
+              "client_id": "425861637042-b9knui9d5p89omhqgp92mb51mp314gpi.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
