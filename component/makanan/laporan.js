@@ -31,8 +31,16 @@ import {convertToRupiah} from '../../shared/rupiah';
 import ModalDetail from '../../shared/modalDetail';
 import {useSelector, useDispatch} from 'react-redux';
 
-import {fetchLaporan, laporanUrut, tanggal} from '../../reducer/actionRedux';
-import {selectLaporan, changePicker} from '../../shared/utils';
+import {fetchLaporan, laporanUrut} from '../../reducer/actionRedux';
+import {
+  selectLaporan,
+  changePicker,
+  handleConfirm,
+  hideDatePicker,
+  showDatePicker,
+  showModalDua,
+  hideModalDua,
+} from '../../shared/utils';
 
 export default function Laporan({visible, hideModal, showModal, navigation}) {
   // laporan dari redux
@@ -50,41 +58,20 @@ export default function Laporan({visible, hideModal, showModal, navigation}) {
 
   // date
   Moment.locale('id');
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [date, setDate] = useState(Moment(new Date()));
-  const showDatePicker = () => {
-    setDatePickerVisibility(true);
-  };
 
-  // menyembunyikan date picker
-  const hideDatePicker = () => {
-    setDatePickerVisibility(false);
-  };
+  // state date picker visibilty
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
+  const [date, setDate] = useState(Moment(new Date()));
 
   // state label waktu laporan
   const [label, setLabel] = useState('Semua');
-  // onchange picker
-
-  // handle change tanggal dari date picker
-  const handleConfirm = (date) => {
-    const tanggalBaru = date.toDateString();
-    tanggal(tanggalBaru);
-    setDate(date);
-    hideDatePicker();
-  };
 
   // modal detail laporan
   const [visibleDua, setVisibleDua] = React.useState(false);
 
   // state detail
   const [detailItems, setDetailItems] = useState({});
-  const showModalDua = (detailItem, pelanggan) => {
-    console.log(detailItem);
-    setVisibleDua(true);
-    setDetailItems({detail: detailItem, pelanggan});
-  };
-  const hideModalDua = () => setVisibleDua(false);
-
   // renderitem
   const renderItem = ({item}) => {
     return (
@@ -94,7 +81,7 @@ export default function Laporan({visible, hideModal, showModal, navigation}) {
             disabled={button}
             activeOpacity={0.4}
             onPress={() => {
-              showModalDua(item.item, item.nama);
+              showModalDua(item.item, item.nama, setVisibleDua, setDetailItems);
             }}>
             <DataTable.Row>
               <DataTable.Cell>{item.nama}</DataTable.Cell>
@@ -143,16 +130,16 @@ export default function Laporan({visible, hideModal, showModal, navigation}) {
               style={pickerSelectStyles}
               useNativeAndroidPickerStyle={true}
               fixAndroidTouchableBug
-              onValueChange={(kode) => {
+              onValueChange={(value) => {
                 value == 'Semua'
                   ? dispatch(fetchLaporan())
-                  : changePicker(kode, value, dispatch, laporanUrut);
+                  : changePicker(value, dispatch, laporanUrut);
               }}
               items={selectLaporan}
             />
             <TouchableOpacity
               disabled={button}
-              onPress={() => showDatePicker()}
+              onPress={() => showDatePicker(setDatePickerVisibility)}
               style={styles.dateCon}>
               <Text>{Moment(date).format('dddd, DD MMM Y')}</Text>
             </TouchableOpacity>
@@ -160,8 +147,8 @@ export default function Laporan({visible, hideModal, showModal, navigation}) {
               disabled={button}
               isVisible={isDatePickerVisible}
               mode="date"
-              onConfirm={handleConfirm}
-              onCancel={hideDatePicker}
+              onConfirm={() => handleConfirm(date, setDate, hideDatePicker)}
+              onCancel={() => hideDatePicker(setDate)}
               value={date}
             />
           </View>
@@ -194,7 +181,7 @@ export default function Laporan({visible, hideModal, showModal, navigation}) {
         </View>
         <ModalDetail
           visible={visibleDua}
-          hideModal={hideModalDua}
+          hideModal={() => hideModalDua(setVisibleDua)}
           detailItems={detailItems}
         />
 

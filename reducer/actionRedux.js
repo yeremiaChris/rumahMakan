@@ -23,7 +23,7 @@ import {useState} from 'react';
 // action function fetch data
 const db = firestore().collection('menu');
 export const fetchMenu = () => {
-  return (dispatch, getState) => {
+  return (dispatch) => {
     try {
       db.onSnapshot((doc) => {
         let data = [];
@@ -121,7 +121,7 @@ export const resetAction = () => {
 
 // tambah menu
 export const tambahItem = (newItem, tambah) => {
-  return (dispatch, getState) => {
+  return (dispatch) => {
     db.add({
       name: newItem.name,
       jenis: newItem.jenis,
@@ -175,74 +175,8 @@ const dbLaporan = firestore().collection('laporan');
 
 export const fetchLaporan = () => {
   return (dispatch) => {
-    dbLaporan.onSnapshot((doc) => {
-      let list = [];
-      doc._docs.forEach((element) => {
-        if (element._exists) {
-          const data = {
-            nama: element.data().nama,
-            jumlahBeli: element.data().jumlahBeli,
-            totalHarga: element.data().totalHarga,
-            item: element.data().item,
-            key: element.id,
-          };
-          list.push(data);
-        } else {
-          null;
-        }
-      });
-      dispatch({type: FETCH_LAPORAN, laporan: list});
-    });
-  };
-};
-
-// membuat laporan
-export const addLaporan = (
-  nama,
-  jumlahBeli,
-  totalHarga,
-  item,
-  uangBayar,
-  kembalian,
-) => {
-  return (dispatch, getState) => {
-    const date = new Date();
     try {
-      dbLaporan
-        .add({
-          nama,
-          jumlahBeli,
-          totalHarga,
-          item,
-          uangBayar,
-          kembalian,
-          createAt: date,
-          tanggal: date.toDateString(),
-        })
-        .then(() => {
-          dispatch({type: TAMBAH_LAPORAN});
-        })
-        .catch(() => {
-          dispatch({type: ERROR});
-        });
-    } catch (error) {
-      dispatch({type: ERROR});
-    }
-  };
-};
-
-// urutkan hari ini
-
-export const laporanUrut = (start) => {
-  const end = new Date();
-  const seminggu = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-  const sebulan = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
-  const setahun = new Date(Date.now() - 365 * 24 * 60 * 60 * 1000);
-  return (dispatch) => {
-    dbLaporan
-      .where('createAt', '>=', start)
-      .where('createAt', '<=', end)
-      .onSnapshot((doc) => {
+      dbLaporan.onSnapshot((doc) => {
         let list = [];
         doc._docs.forEach((element) => {
           if (element._exists) {
@@ -260,55 +194,133 @@ export const laporanUrut = (start) => {
         });
         dispatch({type: FETCH_LAPORAN, laporan: list});
       });
+    } catch (error) {
+      dispatch({type: ERROR, err: error});
+    }
+  };
+};
+
+// membuat laporan
+export const addLaporan = (
+  nama,
+  jumlahBeli,
+  totalHarga,
+  item,
+  uangBayar,
+  kembalian,
+) => {
+  return (dispatch) => {
+    const date = new Date();
+    firestore()
+      .collection('laporan')
+      .add({
+        nama,
+        jumlahBeli,
+        totalHarga,
+        item,
+        uangBayar,
+        kembalian,
+        createAt: date,
+        tanggal: date.toDateString(),
+      })
+      .then((data) => {
+        dispatch({type: TAMBAH_LAPORAN});
+      })
+      .catch((error) => {
+        dispatch({type: ERROR, err: error});
+      });
+  };
+};
+// urutkan hari ini
+
+export const laporanUrut = (start) => {
+  const end = new Date();
+  const seminggu = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+  const sebulan = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+  const setahun = new Date(Date.now() - 365 * 24 * 60 * 60 * 1000);
+  return (dispatch) => {
+    try {
+      dbLaporan
+        .where('createAt', '>=', start)
+        .where('createAt', '<=', end)
+        .onSnapshot((doc) => {
+          let list = [];
+          doc._docs.forEach((element) => {
+            if (element._exists) {
+              const data = {
+                nama: element.data().nama,
+                jumlahBeli: element.data().jumlahBeli,
+                totalHarga: element.data().totalHarga,
+                item: element.data().item,
+                key: element.id,
+              };
+              list.push(data);
+            } else {
+              null;
+            }
+          });
+          dispatch({type: FETCH_LAPORAN, laporan: list});
+        });
+    } catch (error) {
+      dispatch({type: ERROR, err: error});
+    }
   };
 };
 
 export const tanggal = (start) => {
   return (dispatch) => {
-    dbLaporan.where('tanggal', '==', start).onSnapshot((doc) => {
-      let list = [];
-      doc._docs.forEach((element) => {
-        if (element._exists) {
-          const data = {
-            nama: element.data().nama,
-            jumlahBeli: element.data().jumlahBeli,
-            totalHarga: element.data().totalHarga,
-            item: element.data().item,
-            key: element.id,
-          };
-          list.push(data);
-        } else {
-          null;
-        }
+    try {
+      dbLaporan.where('tanggal', '==', start).onSnapshot((doc) => {
+        let list = [];
+        doc._docs.forEach((element) => {
+          if (element._exists) {
+            const data = {
+              nama: element.data().nama,
+              jumlahBeli: element.data().jumlahBeli,
+              totalHarga: element.data().totalHarga,
+              item: element.data().item,
+              key: element.id,
+            };
+            list.push(data);
+          } else {
+            null;
+          }
+        });
+        dispatch({type: FETCH_LAPORAN, laporan: list});
       });
-      dispatch({type: FETCH_LAPORAN, laporan: list});
-    });
+    } catch (error) {
+      dispatch({type: ERROR, err: error});
+    }
   };
 };
 
 // filter
 export const filter = (text) => {
   return (dispatch) => {
-    dbLaporan.onSnapshot((doc) => {
-      let data = [];
-      doc._docs.forEach((items) => {
-        const item = {
-          key: items.id,
-          name: items.data().name,
-          price: items.data().price,
-          quantity: 0,
-          jenis: items.data().jenis,
-          orderColor: 'orange',
-          orderText: 'order',
-          order: false,
-        };
-        data.push(item);
+    try {
+      dbLaporan.onSnapshot((doc) => {
+        let data = [];
+        doc._docs.forEach((items) => {
+          const item = {
+            key: items.id,
+            name: items.data().name,
+            price: items.data().price,
+            quantity: 0,
+            jenis: items.data().jenis,
+            orderColor: 'orange',
+            orderText: 'order',
+            order: false,
+          };
+          data.push(item);
+        });
+        dispatch({
+          type: FILTER,
+          item: data,
+          text: text,
+        });
       });
-      dispatch({
-        type: FILTER,
-        item: data,
-        text: text,
-      });
-    });
+    } catch (error) {
+      dispatch({type: ERROR, err: error});
+    }
   };
 };

@@ -6,6 +6,8 @@ import {filter} from '../reducer/actionRedux';
 import Modal from '../shared/modal';
 function header({navigation}) {
   const button = useSelector((state) => state.project.button);
+  const laporans = useSelector((state) => state.projectTiga);
+
   const [searchQuery, setSearchQuery] = useState('');
   const [state, setstate] = useState([]);
   console.log(searchQuery);
@@ -35,7 +37,7 @@ function header({navigation}) {
           />
           {/* <Text>2</Text> */}
           <Badge style={styles.badgeContent} size={10} icon="basket">
-            2
+            {laporans.laporan.length > 100 ? '...' : laporans.laporan.length}
           </Badge>
         </View>
       </View>

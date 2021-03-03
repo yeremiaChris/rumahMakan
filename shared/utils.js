@@ -1,7 +1,12 @@
 import * as yup from 'yup';
 import Alert from 'react-native';
 import auth from '@react-native-firebase/auth';
-
+import {
+  tanggal,
+  incrementOrder,
+  decrementOrder,
+  orderItem,
+} from '../reducer/actionRedux';
 // select
 export const select = [
   {label: 'Makanan', value: 'Makanan', key: '1'},
@@ -98,7 +103,7 @@ const seminggu = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
 const sebulan = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
 const setahun = new Date(Date.now() - 365 * 24 * 60 * 60 * 1000);
 
-export const changePicker = (kode, value, dispatch, laporanUrut) => {
+export const changePicker = (kode, dispatch, laporanUrut) => {
   if (kode == 'hariIni') {
     dispatch(laporanUrut(sekarang));
   } else if (kode == 'seminggu') {
@@ -195,4 +200,71 @@ export const submitRegis = (value) => {
           break;
       }
     });
+};
+
+// laporan handleconfirm
+// handle change tanggal dari date picker
+// menyembunyikan date picker
+export const hideDatePicker = (setDatePickerVisibility) => {
+  setDatePickerVisibility(false);
+};
+export const showDatePicker = (setDatePickerVisibility) => {
+  setDatePickerVisibility(true);
+};
+export const handleConfirm = (date, setDate) => {
+  const tanggalBaru = date.toDateString();
+  tanggal(tanggalBaru);
+  setDate(date);
+  hideDatePicker();
+};
+
+// modal pada laporan
+export const showModalDua = (
+  detailItem,
+  pelanggan,
+  setVisibleDua,
+  setDetailItems,
+) => {
+  setVisibleDua(true);
+  setDetailItems({detail: detailItem, pelanggan});
+};
+export const hideModalDua = (setVisibleDua) => setVisibleDua(false);
+
+// homeMakan page
+// increment
+export const increment = (index, dispatch) => {
+  dispatch(incrementOrder(index));
+};
+
+// decrement
+export const decrement = (index, dispatch) => {
+  dispatch(decrementOrder(index));
+};
+
+// change color order and order Text
+export const orderColor = (
+  key,
+  totalQuantity,
+  price,
+  totalPrice,
+  name,
+  dispatch,
+  setOrderan,
+  setTotalHarga,
+  orderan,
+) => {
+  dispatch(orderItem(key));
+  if (totalQuantity > 0) {
+    setOrderan([
+      ...orderan,
+      {
+        key,
+        totalQuantity,
+        price,
+        totalPrice,
+        name,
+      },
+    ]);
+    setTotalHarga((prev) => prev + totalPrice);
+  }
 };

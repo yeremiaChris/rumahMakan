@@ -7,14 +7,9 @@ import Items from './item';
 import Modal from '../../shared/modal';
 import ModalPay from '../../shared/modalPay';
 import {useDispatch} from 'react-redux';
-import {
-  incrementOrder,
-  decrementOrder,
-  orderItem,
-  cancelOrderItem,
-  resetAction,
-} from '../../reducer/actionRedux';
+import {cancelOrderItem, resetAction} from '../../reducer/actionRedux';
 import StackNav from '../../navigation/stackNav';
+import {increment, decrement} from '../../shared/utils';
 export default function homeMakan({
   pilihPage,
   setLaporan,
@@ -30,38 +25,11 @@ export default function homeMakan({
 }) {
   // dispatch
   const dispatch = useDispatch();
-  // increment
-  const increment = (index) => {
-    dispatch(incrementOrder(index));
-  };
-
-  // decrement
-  const decrement = (index) => {
-    dispatch(decrementOrder(index));
-  };
 
   // total harga
   const [totalHarga, setTotalHarga] = useState(0);
   const [orderan, setOrderan] = useState([]);
   const total = () => {};
-
-  // change color order and order Text
-  const orderColor = (key, totalQuantity, price, totalPrice, name) => {
-    dispatch(orderItem(key));
-    if (totalQuantity > 0) {
-      setOrderan([
-        ...orderan,
-        {
-          key,
-          totalQuantity,
-          price,
-          totalPrice,
-          name,
-        },
-      ]);
-      setTotalHarga((prev) => prev + totalPrice);
-    }
-  };
 
   // cancel order
   const cancelOrder = (key, totalPrice) => {
@@ -114,18 +82,21 @@ export default function homeMakan({
           paramsKalimat={params}
           kalimat={kalimat}
           pilihPage={pilihPage}
-          increment={increment}
-          decrement={decrement}
-          orderColor={orderColor}
+          increment={(index) => increment(index, dispatch)}
+          decrement={(index) => decrement(index, dispatch)}
+          setOrderan={setOrderan}
+          setTotalHarga={setTotalHarga}
           cancelOrder={cancelOrder}
           kunci={navigation}
           routeName={routeName}
+          orderan={orderan}
         />
         <ModalPay
           totalBarang={totalBarang}
           totalYangDiBeli={totalYangDiBeli}
           laporan={laporan}
           setLaporan={setLaporan}
+          orderan={orderan}
           orderan={orderan}
           visible={visible}
           hideModal={hideModal}

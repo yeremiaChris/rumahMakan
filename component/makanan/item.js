@@ -28,16 +28,19 @@ import {
 // accesing global state redux
 import {useSelector, useDispatch} from 'react-redux';
 import {useFirestoreConnect} from 'react-redux-firebase';
-import {ya, tidak} from '../../shared/utils';
+import {ya, tidak, orderColor} from '../../shared/utils';
 function item({
   pilihPage,
   increment,
   decrement,
-  orderColor,
+  setOrderan,
+  setTotalHarga,
   cancelOrder,
   params,
   nav,
+  orderan,
 }) {
+  const dispatch = useDispatch();
   // accessing global state from redux
   const data = useSelector((state) => state.project);
 
@@ -209,6 +212,10 @@ function item({
                           item.price,
                           item.quantity * item.price,
                           item.name,
+                          dispatch,
+                          setOrderan,
+                          setTotalHarga,
+                          orderan,
                         )
                       : cancelOrder(item.key, item.quantity * item.price);
                   }}>
